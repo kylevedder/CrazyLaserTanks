@@ -40,7 +40,7 @@ public class NonCollideGround extends BaseGround
     }
 
     @Override
-    public void update(Input input)
+    public void update(Input input, int delta)
     {
         //ignored
     }

@@ -70,13 +70,13 @@ public abstract class BaseEntity extends BaseObject
      */
     public float getRotation()
     {
-        return this.vector.getRotation();
+        return this.vector.getAbsRotation();
     }
 
     @Override
     public void render()
     {
-        this.image.setRotation(this.vector.getRotation());
+        this.image.setRotation(this.hitBox.getAngle());
         this.image.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY());
     }
 

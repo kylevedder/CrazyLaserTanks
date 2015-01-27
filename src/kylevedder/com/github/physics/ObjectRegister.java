@@ -38,14 +38,15 @@ public class ObjectRegister
     {
         this.objectsList.add(o);
     }
-    
+
     /**
      * Adds a ground to the register.
-     * @param ground 
+     *
+     * @param ground
      */
     public void addGround(GroundHolder ground)
     {
-        this.ground = ground;        
+        this.ground = ground;
     }
 
     /**
@@ -64,9 +65,9 @@ public class ObjectRegister
             }
         }
         ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(objectChecking.getCenterX(), objectChecking.getCenterY(), 4);
-        for(BaseGround ground: tiles)
+        for (BaseGround ground : tiles)
         {
-            if(objectChecking.getHitBox().collides(ground.getHitBox()))
+            if (objectChecking.getHitBox().collides(ground.getHitBox()))
             {
                 return true;
             }
@@ -87,21 +88,23 @@ public class ObjectRegister
      */
     public boolean checkCollision(CenteredRectangle rect, Object pointer)
     {
-        for (BaseEntity objectItem : objectsList)
+        if (ground != null && rect != null)
         {
+            for (BaseEntity objectItem : objectsList)
+            {
 //            System.out.println(objectItem);
-            if (pointer != objectItem.getHitBox() && rect.collides(objectItem.getHitBox()))
-            {
-                return true;
+                if (pointer != objectItem.getHitBox() && rect.collides(objectItem.getHitBox()))
+                {
+                    return true;
+                }
             }
-        }
-        
-        ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(rect.getCenterX(), rect.getCenterY(), 4);
-        for(BaseGround ground: tiles)
-        {
-            if(rect.collides(ground.getHitBox()))
+            ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(rect.getCenterX(), rect.getCenterY(), 4);
+            for (BaseGround ground : tiles)
             {
-                return true;
+                if (rect.collides(ground.getHitBox()))
+                {
+                    return true;
+                }
             }
         }
         return false;
@@ -130,35 +133,37 @@ public class ObjectRegister
         float tenHitY = tentativeHitBox.getCenterY();
         float tenAngle = tentativeHitBox.getAngle();
 
-        float vectX = finalVector.getXComp()/(1000/delta);//dist/sec
-        float vectY = finalVector.getYComp()/(1000/delta);//dist/sec
-        float vectRotation = finalVector.getRotation()/(1000/delta);//deg/sec
+        float vectX = finalVector.getXComp() / (1000 / delta);//dist/sec
+        float vectY = finalVector.getYComp() / (1000 / delta);//dist/sec
+        float vectAbsRotation = finalVector.getAbsRotation() / (1000 / delta);//deg/sec
 
         float vectXSubs = vectX / subdivisions;
         float vectYSubs = vectY / subdivisions;
-        float vectRotationSubs = vectRotation / subdivisions;
+        float vectRotationSubs = vectAbsRotation / subdivisions;
 
         //cursory collision check
-        tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY + (vectY), tenAngle + (vectRotation));
+//        updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation())
+        tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY - (vectY), tenAngle + (vectAbsRotation));
         if (this.checkCollision(tentativeHitBox, hitBox))
         {
+            System.out.println("COLLIDE!");
             //cursory collision check failed, must be hitting somewhere.
             subdivisionLoop:
             for (int i = 0; i < subdivisions; i++)
             {
                 //update using the given vector
-                tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY + (vectY - vectYSubs * i), tenAngle + (vectRotation - vectRotationSubs * i));
+                tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle + (vectAbsRotation - vectRotationSubs * i));
 
                 //check the tenative
 //            System.out.println(Main.register.checkCollision(tentativeHitBox, this.hitBox));
                 if (!this.checkCollision(tentativeHitBox, hitBox))
                 {
                     //if no collision with other boxes
-                    hitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY + (vectY - vectYSubs * i), tenAngle + (vectRotation - vectRotationSubs*i));
+                    hitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle + (vectAbsRotation - vectRotationSubs * i));
 //                    finalVector = Vector.add(Vector.gravityVector(delta), vector);
 //                    finalVector = Vector.flipAxis(finalVector, false, true);
-                    finalVector.setRotation(0);
                     finalVector.setSpeed(0);
+                    System.out.println("Collision resolved");
                     return new Object[]
                     {
                         hitBox, finalVector
@@ -166,11 +171,11 @@ public class ObjectRegister
                 }
             }
             //not one of the subdivisions, reverting to last position
-            hitBox.updateAbs(tenHitX , tenHitY, tenAngle);
+            hitBox.updateAbs(tenHitX, tenHitY, tenAngle);
 //            finalVector = Vector.add(Vector.gravityVector(delta), vector);
-//            finalVector = Vector.flipAxis(finalVector, false, true);
-            finalVector.setRotation(0);
+//            finalVector = Vector.flipAxis(finalVector, false, true);            
             finalVector.setSpeed(0);
+            System.out.println("collision unresolved");
             return new Object[]
             {
                 hitBox, finalVector
@@ -179,7 +184,8 @@ public class ObjectRegister
         //no collision
         else
         {
-            hitBox.updateDelta(vectX, vectY, vectRotation);
+            System.out.println("CLEAR " + vectAbsRotation);
+            hitBox.updateAbs(tenHitX + vectX, tenHitY-vectY, finalVector.getAbsRotation());
 //            finalVector = Vector.add(Vector.gravityVector(delta), vector);
             return new Object[]
             {

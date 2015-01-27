@@ -13,7 +13,7 @@ import org.newdawn.slick.Input;
  */
 public interface Renderable
 {
-    public void update(Input input);
+    public void update(Input input, int delta);
     
     public void render();
 }

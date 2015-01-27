@@ -66,6 +66,7 @@ public class GameEngine
         tank = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
         register.add(tank);
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
+        register.addGround(ground);
         System.out.println("Game Loaded...");
     }
 
@@ -78,7 +79,7 @@ public class GameEngine
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
-        tank.update(gc.getInput());
+        tank.update(gc.getInput(), deltaTime);
         renderOffsetX = tank.getCenterX() - (MainApp.SCREEN_WIDTH / 2);
         renderOffsetY = tank.getCenterY() - (MainApp.SCREEN_HEIGHT / 2);
     }
@@ -96,7 +97,7 @@ public class GameEngine
         //backgrond
         g.setBackground(new Color(103, 194, 240));
         g.translate(-renderOffsetX, -renderOffsetY);
-        ground.render(renderOffsetX, renderOffsetY);
+        ground.render(g, renderOffsetX, renderOffsetY);
         tank.render();
         tank.renderHelpers(g);
     }

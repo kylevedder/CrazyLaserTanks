@@ -5,6 +5,9 @@
  */
 package kylevedder.com.github.entity;
 
+import kylevedder.com.github.main.MainApp;
+import kylevedder.com.github.physics.CenteredRectangle;
+import kylevedder.com.github.physics.Vector;
 import org.newdawn.slick.Input;
 
 /**
@@ -15,7 +18,7 @@ public class UserTankEntity extends TankEntity
 {
 
     private final float TURN_RATE = 2f;
-    private final float DRIVE_SPEED = 5f;
+    private final float DRIVE_SPEED = 100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
     
     /**
@@ -30,11 +33,19 @@ public class UserTankEntity extends TankEntity
     }
 
     @Override
-    public void update(Input input)
+    public void update(Input input, int delta)
     {
-        super.update(input);
+        super.update(input, delta);
         this.updateDrive(input);
-        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation());
+//        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getAbsRotation());
+//        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation());
+        
+        Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
+        this.vector = (Vector)objects[1];
+        this.hitBox = (CenteredRectangle)objects[0]; 
+        this.vector.setAngle(this.hitBox.getAngle());
+        this.vector.setAbsoluteRotation(this.hitBox.getAngle());
+//        this.hitBox.setAngle(this.vector.getAngle());
         
     }
     
@@ -73,7 +84,7 @@ public class UserTankEntity extends TankEntity
             
             this.vector.setSpeed(tankSpeed);
             this.vector.addAngle(tankAngleAppend);
-            this.vector.setRotation(this.vector.getAngle());
+            this.vector.setAbsoluteRotation(this.vector.getAbsRotation() + tankAngleAppend);
         }
     }
     

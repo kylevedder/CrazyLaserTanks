@@ -7,6 +7,7 @@ package kylevedder.com.github.ground;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -40,8 +41,13 @@ public class CollideGround extends BaseGround
     }
 
     @Override
-    public void update(Input input)
+    public void update(Input input, int delta)
     {
         //ignored
+    }
+    
+    public void renderBB(Graphics g)
+    {
+        g.draw(this.hitBox.getPolygon());
     }
 }

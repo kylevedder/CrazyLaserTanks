@@ -42,7 +42,7 @@ public class TankEntity extends BaseEntity
     
     
     @Override
-    public void update(Input input)
+    public void update(Input input, int delta)
     {
         
     }

@@ -22,7 +22,7 @@ public class Vector
 
     private float speed;
     private float angle;
-    private float rotation;
+    private float absRotation;
 
     public static float ANGLE_MIN = 0;
     public static float ANGLE_MAX = 360;
@@ -42,7 +42,7 @@ public class Vector
     {
         this.speed = Math.abs(speed);
         this.angle = angle;
-        this.rotation = 0;
+        this.absRotation = 0;
     }
 
     public Vector(float xComp, float yComp, int unused)
@@ -50,14 +50,14 @@ public class Vector
         //Pythagorean Therom
         this.speed = (float) Math.sqrt(Math.pow(xComp, 2) + Math.pow(yComp, 2));
         this.angle = Utils.wrapFloat((float) Math.toDegrees(Math.atan2(yComp, xComp)), ANGLE_MIN, ANGLE_MAX);
-        this.rotation = 0;
+        this.absRotation = 0;
     }
 
     public Vector(float speed, float angle, float rotation)
     {
         this.speed = Math.abs(speed);
         this.angle = angle;
-        this.rotation = rotation;
+        this.absRotation = rotation;
     }
 
     public Vector(float xComp, float yComp, float rotation, int unused)
@@ -65,7 +65,7 @@ public class Vector
         //Pythagorean Therom
         this.speed = (float) Math.sqrt(Math.pow(xComp, 2) + Math.pow(yComp, 2));
         this.angle = Utils.wrapFloat((float) Math.toDegrees(Math.atan2(yComp, xComp)), ANGLE_MIN, ANGLE_MAX);
-        this.rotation = rotation;
+        this.absRotation = rotation;
     }
 
     /**
@@ -109,34 +109,26 @@ public class Vector
     }
 
     /**
-     * Gets the rotation of the object.
+     * Gets the absolute Rotation of the object in degrees.
      *
      * @return
      */
-    public float getRotation()
+    public float getAbsRotation()
     {
-        return rotation;
+        return absRotation;
     }
-
+    
+    
     /**
-     * Sets the rotation of the object.
+     * Sets the absolute Rotation of the object in degrees.
      *
      * @param rotation
      */
-    public void setRotation(float rotation)
+    public void setAbsoluteRotation(float rotation)
     {
-        this.rotation = rotation;
+        this.absRotation = Utils.wrapFloat(rotation , 0f, 360f);
     }
 
-    /**
-     * Adds the given rotation to the vector.
-     *
-     * @param rotation
-     */
-    public void addRotation(float rotation)
-    {
-        this.rotation += rotation;
-    }
 
     /**
      * Sets the angle
@@ -182,7 +174,7 @@ public class Vector
     @Override
     public String toString()
     {
-        return "X Comp: " + this.getXComp() + " Y Comp: " + this.getYComp() + " Speed: " + this.getSpeed() + " Angle: " + this.getAngle() + " Rotation: " + this.getRotation();
+        return "X Comp: " + this.getXComp() + " Y Comp: " + this.getYComp() + " Speed: " + this.getSpeed() + " Angle: " + this.getAngle() + " Rotation: " + this.getAbsRotation();
     }
 
     /**
@@ -209,7 +201,7 @@ public class Vector
      */
     public static Vector add(Vector v1, Vector v2)
     {
-        return new Vector(v1.getXComp() + v2.getXComp(), v1.getYComp() + v2.getYComp(), v1.getRotation() + v2.getRotation(), 0/*unused*/);
+        return new Vector(v1.getXComp() + v2.getXComp(), v1.getYComp() + v2.getYComp(), v1.getAbsRotation() + v2.getAbsRotation(), 0/*unused*/);
     }
 
     /**
@@ -222,7 +214,7 @@ public class Vector
      */
     public static Vector flipAxis(Vector v, boolean xAxis, boolean yAxis)
     {
-        return new Vector(v.getXComp() * ((xAxis) ? -1 : 1), v.getYComp() * ((yAxis) ? -1 : 1), v.getRotation(), 0/*unused*/);
+        return new Vector(v.getXComp() * ((xAxis) ? -1 : 1), v.getYComp() * ((yAxis) ? -1 : 1), v.getAbsRotation(), 0/*unused*/);
     }
 
     /**

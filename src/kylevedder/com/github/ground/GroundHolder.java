@@ -6,9 +6,8 @@
 package kylevedder.com.github.ground;
 
 import java.util.ArrayList;
-import kylevedder.com.github.interfaces.Renderable;
 import kylevedder.com.github.utils.Utils;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -61,15 +60,18 @@ public class GroundHolder
     public ArrayList<BaseGround> getCollidableGroundTiles(float x, float y, int radius)
     {
         ArrayList<BaseGround> pieces = new ArrayList<>();
-        int tileX = Utils.clampInt((int) (x - x % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.width - 1);
-        int tileY = Utils.clampInt((int) (y - y % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.height - 1);
-        for (int getx = Utils.clampInt(tileX - radius, 0, this.width - 1); getx <= Utils.clampInt(tileX + radius, 0, this.width - 1); getx++)
+        if (ground != null)
         {
-            for (int gety = Utils.clampInt(tileY - radius, 0, this.height - 1); gety <= Utils.clampInt(tileY + radius, 0, this.width - 1); gety++)
+            int tileX = Utils.clampInt((int) (x - x % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.width - 1);
+            int tileY = Utils.clampInt((int) (y - y % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.height - 1);
+            for (int getx = Utils.clampInt(tileX - radius, 0, this.width - 1); getx <= Utils.clampInt(tileX + radius, 0, this.width - 1); getx++)
             {
-                if(this.ground[getx][gety].isCollidable())
+                for (int gety = Utils.clampInt(tileY - radius, 0, this.height - 1); gety <= Utils.clampInt(tileY + radius, 0, this.width - 1); gety++)
                 {
-                    pieces.add(this.ground[getx][gety]);
+                    if (this.ground[getx][gety].isCollidable())
+                    {
+                        pieces.add(this.ground[getx][gety]);
+                    }
                 }
             }
         }
@@ -79,7 +81,7 @@ public class GroundHolder
     /**
      * Renders all the appropriate ground tiles.
      */
-    public void render(float renderOffsetX, float renderOffsetY)
+    public void render(Graphics g, float renderOffsetX, float renderOffsetY)
     {
         for (int x = 0; x < this.width; x++)
         {
@@ -88,6 +90,10 @@ public class GroundHolder
                 if (Utils.isVisible(ground[x][y].getHitBox(), renderOffsetX, renderOffsetY))
                 {
                     ground[x][y].render();
+                    if(ground[x][y].isCollidable())
+                    {
+                        ((CollideGround)ground[x][y]).renderBB(g);
+                    }
                 }
             }
         }

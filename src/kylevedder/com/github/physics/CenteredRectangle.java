@@ -164,6 +164,18 @@ public class CenteredRectangle
     }
 
     /**
+     * Sets the angle of the box in degrees
+     * @param angle 
+     */
+    public void setAngle(float angle)
+    {
+        p = (Polygon) p.transform(Transform.createRotateTransform((float) Math.toRadians(angle - this.angle), centerX, centerY));
+        this.angle = angle;
+    }
+
+    
+    
+    /**
      * Gets the rectangle width
      * @return 
      */
