@@ -16,9 +16,7 @@ import org.newdawn.slick.SlickException;
  * @author Kyle
  */
 public class MainApp extends BasicGame
-{
-    public static final int SCREEN_WIDTH = 800;
-    public static final int SCREEN_HEIGHT = 600;
+{    
     
     public static final int NUM_COLLISION_UPDATES = 16;
     
@@ -41,7 +39,7 @@ public class MainApp extends BasicGame
     private static AppGameContainer initApp(String title) throws SlickException
     {
         app = new AppGameContainer(new MainApp(title));
-        app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
+        app.setDisplayMode(Camera.SCREEN_WIDTH, Camera.SCREEN_HEIGHT, false);
         app.setTargetFrameRate(60);
         app.setAlwaysRender(true);        
         app.start();        

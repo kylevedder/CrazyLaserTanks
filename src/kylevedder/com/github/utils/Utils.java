@@ -5,6 +5,7 @@
  */
 package kylevedder.com.github.utils;
 
+import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
@@ -134,8 +135,8 @@ public class Utils
     public static boolean isVisible(CenteredRectangle rect, float renderOffsetX, float renderOffsetY)
     {
         return //within screen X
-                rect.getMinX() - renderOffsetX + rect.getWidth() > 0 && rect.getMinX() - renderOffsetX < MainApp.SCREEN_WIDTH
+                rect.getMinX() - renderOffsetX + rect.getWidth() > 0 && rect.getMinX() - renderOffsetX < Camera.SCREEN_WIDTH
                 && //within screen Y
-                rect.getMinY() - renderOffsetY + rect.getWidth() > 0 && rect.getMinY() - renderOffsetY < MainApp.SCREEN_WIDTH;
+                rect.getMinY() - renderOffsetY + rect.getWidth() > 0 && rect.getMinY() - renderOffsetY < Camera.SCREEN_WIDTH;
     }    
 }

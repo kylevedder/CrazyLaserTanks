@@ -132,6 +132,7 @@ public class ObjectRegister
         float tenHitX = tentativeHitBox.getCenterX();
         float tenHitY = tentativeHitBox.getCenterY();
         float tenAngle = tentativeHitBox.getAngle();
+        float tenRotation = finalVector.getAbsRotation();
 
         float vectX = finalVector.getXComp() / (1000 / delta);//dist/sec
         float vectY = finalVector.getYComp() / (1000 / delta);//dist/sec
@@ -143,7 +144,7 @@ public class ObjectRegister
 
         //cursory collision check
 //        updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation())
-        tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY - (vectY), tenAngle + (vectAbsRotation));
+        tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY - (vectY), tenAngle);
         if (this.checkCollision(tentativeHitBox, hitBox))
         {
             System.out.println("COLLIDE!");
@@ -152,14 +153,14 @@ public class ObjectRegister
             for (int i = 0; i < subdivisions; i++)
             {
                 //update using the given vector
-                tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle + (vectAbsRotation - vectRotationSubs * i));
+                tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle);
 
                 //check the tenative
 //            System.out.println(Main.register.checkCollision(tentativeHitBox, this.hitBox));
                 if (!this.checkCollision(tentativeHitBox, hitBox))
                 {
                     //if no collision with other boxes
-                    hitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle + (vectAbsRotation - vectRotationSubs * i));
+                    hitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle);
 //                    finalVector = Vector.add(Vector.gravityVector(delta), vector);
 //                    finalVector = Vector.flipAxis(finalVector, false, true);
                     finalVector.setSpeed(0);

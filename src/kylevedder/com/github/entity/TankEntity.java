@@ -7,6 +7,7 @@ package kylevedder.com.github.entity;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kylevedder.com.github.physics.CenteredRectangle;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -39,7 +40,14 @@ public class TankEntity extends BaseEntity
         }
     }
 
-    
+    /**
+     * Gets the hitbox for this object.
+     * @return 
+     */
+    public CenteredRectangle getHitBox()
+    {
+        return this.hitBox;
+    }
     
     @Override
     public void update(Input input, int delta)
