@@ -22,6 +22,8 @@ public class Camera
 
     private float renderOffsetX;
     private float renderOffsetY;
+    
+    private float zoom;
 
     /**
      * Camera class to define rendering values.
@@ -31,16 +33,44 @@ public class Camera
     public Camera(CenteredRectangle rect)
     {
         update(rect);
+        this.zoom = 1;
     }
 
     /**
      * Camera class to define rendering values.
      *
-     * @param rect
+     * @param posX
+     * @param posY
      */
     public Camera(float posX, float posY)
     {
         update(posX, posY);
+        this.zoom = 1;
+    }
+    
+    /**
+     * Camera class to define rendering values.
+     *
+     * @param rect - Rectangle to center the camera around.
+     * @param zoom
+     */
+    public Camera(CenteredRectangle rect, float zoom)
+    {
+        update(rect);
+        this.zoom = zoom;
+    }
+
+    /**
+     * Camera class to define rendering values.
+     *
+     * @param posX
+     * @param posY
+     * @param zoom
+     */
+    public Camera(float posX, float posY, float zoom)
+    {
+        update(posX, posY);
+        this.zoom = zoom;
     }
 
     /**
@@ -63,14 +93,52 @@ public class Camera
     public void update(float posX, float posY)
     {
         //gets the basic render offset
-        renderOffsetX = posX - (this.SCREEN_WIDTH / 2);
-        renderOffsetY = posY - (this.SCREEN_HEIGHT / 2);
+        renderOffsetX = (posX - this.SCREEN_WIDTH / this.getZoom() / 2) * this.getZoom();
+        renderOffsetY = (posY - this.SCREEN_HEIGHT/ this.getZoom() / 2) * this.getZoom();
 
         //calculates offset so that the camera never goes off the edge
-        renderOffsetX = Utils.clampFloat(renderOffsetX, -BaseGround.GROUND_SIZE / 2, GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE / 2 - SCREEN_WIDTH);
-        renderOffsetY = Utils.clampFloat(renderOffsetY, -BaseGround.GROUND_SIZE / 2, GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE / 2 - SCREEN_HEIGHT);
-        System.out.println(renderOffsetX + "," + renderOffsetY);
+        renderOffsetX = Utils.clampFloat(renderOffsetX, - (BaseGround.GROUND_SIZE / 2)* this.getZoom(), (GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2)* this.getZoom() - SCREEN_WIDTH);
+        renderOffsetY = Utils.clampFloat(renderOffsetY, - (BaseGround.GROUND_SIZE / 2)* this.getZoom(), (GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2)* this.getZoom() - SCREEN_HEIGHT);
+    }
+    
+    
+    /**
+     * Useful utility to check if an item needs to be rendered.
+     *
+     * @param rect rectangle of the item
+     * @param image image of the item
+     * @param renderOffsetX renderer offset of the item in the X
+     * @param renderOffsetY renderer offset of the item in the Y
+     * @return
+     */
+    public static boolean isVisible(CenteredRectangle rect, float renderOffsetX, float renderOffsetY)
+    {
+        return //within screen X
+                rect.getMinX() * MainApp.gameEngine.camera.getZoom() - renderOffsetX + rect.getWidth() * MainApp.gameEngine.camera.getZoom() > 0 
+                && (rect.getMinX() * MainApp.gameEngine.camera.getZoom() - renderOffsetX)  * MainApp.gameEngine.camera.getZoom()  < Camera.SCREEN_WIDTH * MainApp.gameEngine.camera.getZoom()
+                
+                && //within screen Y
+                
+                rect.getMinY() * MainApp.gameEngine.camera.getZoom()- renderOffsetY + rect.getWidth() * MainApp.gameEngine.camera.getZoom() > 0 
+                && (rect.getMinY() * MainApp.gameEngine.camera.getZoom() - renderOffsetY) * MainApp.gameEngine.camera.getZoom() < Camera.SCREEN_HEIGHT * MainApp.gameEngine.camera.getZoom();
+    }
 
+    /**
+     * Gets the zoom of the camera. 1 = 1x zoom, 2 = 2x zoom, etc
+     * @return 
+     */
+    public float getZoom()
+    {
+        return zoom;
+    }
+
+    /**
+     * Sets the zoom of the camera. 1 = 1x zoom, 2 = 2x zoom, etc
+     * @param zoom 
+     */
+    public void setZoom(float zoom)
+    {
+        this.zoom = zoom;
     }
 
     /**

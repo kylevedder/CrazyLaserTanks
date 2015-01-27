@@ -18,7 +18,7 @@ public class UserTankEntity extends TankEntity
 {
 
     private final float TURN_RATE = 90f;
-    private final float DRIVE_SPEED = 1000f;//100f;
+    private final float DRIVE_SPEED = 100f;//100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
 
     /**

@@ -6,6 +6,7 @@
 package kylevedder.com.github.ground;
 
 import java.util.ArrayList;
+import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Graphics;
 
@@ -87,7 +88,7 @@ public class GroundHolder
         {
             for (int y = 0; y < this.width; y++)
             {
-                if (Utils.isVisible(ground[x][y].getHitBox(), renderOffsetX, renderOffsetY))
+                if (Camera.isVisible(ground[x][y].getHitBox(), renderOffsetX, renderOffsetY))
                 {
                     ground[x][y].render();
                 }

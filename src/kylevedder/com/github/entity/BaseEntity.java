@@ -6,6 +6,7 @@
 package kylevedder.com.github.entity;
 
 import kylevedder.com.github.interfaces.BaseObject;
+import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.Vector;
 import org.newdawn.slick.Image;

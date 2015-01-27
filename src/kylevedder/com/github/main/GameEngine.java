@@ -71,7 +71,7 @@ public class GameEngine
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
 
-        camera = new Camera(tank.getHitBox());
+        camera = new Camera(tank.getHitBox(), 1f);
         System.out.println("Game Loaded...");
     }
 
@@ -84,9 +84,19 @@ public class GameEngine
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
+        Input input = gc.getInput(); 
+        if(input.isKeyDown(Input.KEY_Q))
+        {
+            camera.setZoom(camera.getZoom() - 0.01f);
+        }
+        if(input.isKeyDown(Input.KEY_E))
+        {
+            camera.setZoom(camera.getZoom() + 0.01f);
+        }
         tank.update(gc.getInput(), deltaTime);
         tankDummy.update(gc.getInput(), deltaTime);
         camera.update(tank.getHitBox());
+               
     }
 
     /**
@@ -102,6 +112,7 @@ public class GameEngine
         //backgrond
         g.setBackground(new Color(103, 194, 240));
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
+        g.scale(MainApp.gameEngine.camera.getZoom(), MainApp.gameEngine.camera.getZoom());
         ground.render(g, camera.getRenderOffsetX(), camera.getRenderOffsetY());
         tankDummy.render();
         tankDummy.renderHelpers(g);

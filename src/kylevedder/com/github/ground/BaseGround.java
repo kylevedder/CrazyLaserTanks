@@ -6,6 +6,7 @@
 package kylevedder.com.github.ground;
 
 import kylevedder.com.github.interfaces.BaseObject;
+import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
 import org.newdawn.slick.Image;
 
@@ -15,7 +16,7 @@ import org.newdawn.slick.Image;
  */
 public abstract class BaseGround extends BaseObject
 {
-    public static final int GROUND_SIZE = 64;
+    public static final int GROUND_SIZE = 64;    
     Image image = null;
     
     protected void init(float x, float y, float scale, Image image)

@@ -148,20 +148,5 @@ public class Utils
         return ((angle + appendValue) % 360f);
     }
 
-    /**
-     * Useful utility to check if an item needs to be rendered.
-     *
-     * @param rect rectangle of the item
-     * @param image image of the item
-     * @param renderOffsetX renderer offset of the item in the X
-     * @param renderOffsetY renderer offset of the item in the Y
-     * @return
-     */
-    public static boolean isVisible(CenteredRectangle rect, float renderOffsetX, float renderOffsetY)
-    {
-        return //within screen X
-                rect.getMinX() - renderOffsetX + rect.getWidth() > 0 && rect.getMinX() - renderOffsetX < Camera.SCREEN_WIDTH
-                && //within screen Y
-                rect.getMinY() - renderOffsetY + rect.getWidth() > 0 && rect.getMinY() - renderOffsetY < Camera.SCREEN_WIDTH;
-    }    
+        
 }
