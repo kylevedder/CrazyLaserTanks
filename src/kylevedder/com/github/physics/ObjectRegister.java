@@ -125,72 +125,104 @@ public class ObjectRegister
     public Object[] updateCollision(CenteredRectangle hitBox, Vector vector, int subdivisions, int delta)
     {
 
+        //create vector which is to be passed back
         Vector finalVector = vector;
-        //create tenativeHitBox
+        //create tenativeHitBox which is to be passed back
         CenteredRectangle tentativeHitBox = new CenteredRectangle(hitBox);
 
         float tenHitX = tentativeHitBox.getCenterX();
         float tenHitY = tentativeHitBox.getCenterY();
-        float tenAngle = tentativeHitBox.getAngle();
-        float tenRotation = finalVector.getAbsRotation();
+        float tenAbsAngle = tentativeHitBox.getAngle();         
 
-        float vectX = finalVector.getXComp() / (1000 / delta);//dist/sec
-        float vectY = finalVector.getYComp() / (1000 / delta);//dist/sec
-        float vectAbsRotation = finalVector.getAbsRotation() / (1000 / delta);//deg/sec
+        //sets the x comp to be a rate
+        float vectX = finalVector.getXComp();//dist/sec
+        //sets the y comp to be a rate
+        float vectY = finalVector.getYComp();//dist/sec        
+        //sets the delta of the angle to a rate
+        float vectAngle = (finalVector.getAngle() - tenAbsAngle);//to keep up with the angle       
 
+        //split the x component into subdivisions
         float vectXSubs = vectX / subdivisions;
+        //split the y component into subdivisions
         float vectYSubs = vectY / subdivisions;
-        float vectRotationSubs = vectAbsRotation / subdivisions;
+        //split the delta rotation into subdivisions
+        float vectAngleSubs = vectAngle / subdivisions;
 
         //cursory collision check
-//        updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation())
-        tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY - (vectY), tenAngle);
-        if (this.checkCollision(tentativeHitBox, hitBox))
+        tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY - (vectY), tenAbsAngle + vectAngle);//updates the tentativeHitBox to be at its final position for this update (check if will collide essentially) 
+        if (this.checkCollision(tentativeHitBox, hitBox))//use the updated tentativeHitBox to check if the tentativeHitBox will collide
         {
-            System.out.println("COLLIDE!");
+            System.out.println("HIT");
+            //
+            //THERE IS A COLLISION!!!
             //cursory collision check failed, must be hitting somewhere.
+            //
+                        
+            //because there is a collision, set the vector speed to zero
+            finalVector.setSpeed(0);
+            
+            
+            //loop that iterates over each subdivision, stepping backwards
+            //each loop until there is no more collision
             subdivisionLoop:
-            for (int i = 0; i < subdivisions; i++)
+            for (int i = 0; i <= subdivisions; i++)
             {
-                //update using the given vector
-                tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle);
+                //update tentativeHitBox to the new position to begin check
+                tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAbsAngle + vectAngle - (vectAngleSubs * i));
+                 
+                //update finalVector to reflect tentativeHitBox angle
+                finalVector.setAngle(tenAbsAngle + vectAngle - (vectAngleSubs * i));
 
-                //check the tenative
-//            System.out.println(Main.register.checkCollision(tentativeHitBox, this.hitBox));
+                //check tentativeHitBox to see if there is no collision
                 if (!this.checkCollision(tentativeHitBox, hitBox))
-                {
-                    //if no collision with other boxes
-                    hitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAngle);
-//                    finalVector = Vector.add(Vector.gravityVector(delta), vector);
-//                    finalVector = Vector.flipAxis(finalVector, false, true);
-                    finalVector.setSpeed(0);
-                    System.out.println("Collision resolved");
+                {                    
+                    System.out.println("FIXED!");
+                    //
+                    //No collision with other boxes!!! Yay!
+                    //
+                                        
+                    //Using the current tentativeHitBox coords as the new position
+                                        
+                    //return the object
                     return new Object[]
                     {
-                        hitBox, finalVector
+                        tentativeHitBox, finalVector
                     };
                 }
-            }
-            //not one of the subdivisions, reverting to last position
-            hitBox.updateAbs(tenHitX, tenHitY, tenAngle);
-//            finalVector = Vector.add(Vector.gravityVector(delta), vector);
-//            finalVector = Vector.flipAxis(finalVector, false, true);            
-            finalVector.setSpeed(0);
-            System.out.println("collision unresolved");
+            }          
+            System.out.println("*SHRUG*");
+            //
+            //If code arrives here, that means no subdivisions were appropriate
+            //AS WELL AS the original position of the hitbox colliding. Bummer...
+            //Best course of action is to leave the hitbox be.            
+            //
+            
+            //The tentativeHitBox is at its initial position thanks to the aboveloop, therefore
+            //the tentativeHitBox can be left as it lies and returned immeditly
+                                    
             return new Object[]
             {
-                hitBox, finalVector
+                tentativeHitBox, finalVector
             };
         }
         //no collision
         else
         {
-            System.out.println("CLEAR " + vectAbsRotation);
-            hitBox.updateAbs(tenHitX + vectX, tenHitY-vectY, finalVector.getAbsRotation());
-//            finalVector = Vector.add(Vector.gravityVector(delta), vector);
+            System.out.println("CLEAR");
+            //
+            //There is no collision, YAY!
+            //Carry on adding the vectors as normal.
+            //            
+            
+            //however, in the initial check, the hitbox was already at its final position.
+            //Therefore, no update is needed
+            
+            //update finalVector to reflect tentativeHitBox angle
+//            finalVector.setAngle(tenAbsAngle + vectAngle);
+            
             return new Object[]
             {
-                hitBox, finalVector
+                tentativeHitBox, finalVector
             };
         }
 

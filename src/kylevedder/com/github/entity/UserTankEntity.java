@@ -17,15 +17,16 @@ import org.newdawn.slick.Input;
 public class UserTankEntity extends TankEntity
 {
 
-    private final float TURN_RATE = 2f;
+    private final float TURN_RATE = 90f;
     private final float DRIVE_SPEED = 100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
-    
+
     /**
      * User controlled tank entity.
+     *
      * @param x
      * @param y
-     * @param angle 
+     * @param angle
      */
     public UserTankEntity(float x, float y, float angle)
     {
@@ -36,58 +37,62 @@ public class UserTankEntity extends TankEntity
     public void update(Input input, int delta)
     {
         super.update(input, delta);
-        this.updateDrive(input);
+        this.updateDrive(input, delta);
+        System.out.println(this.vector);
 //        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getAbsRotation());
 //        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation());
-        
+
         Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
-        this.vector = (Vector)objects[1];
-        this.hitBox = (CenteredRectangle)objects[0]; 
-        this.vector.setAngle(this.hitBox.getAngle());
-        this.vector.setAbsoluteRotation(this.hitBox.getAngle());
+        this.vector = (Vector) objects[1];
+        this.hitBox = (CenteredRectangle) objects[0];
+//        this.vector.setAngle(this.hitBox.getAngle());
+//        this.vector.setAbsoluteRotation(this.hitBox.getAngle());
 //        this.hitBox.setAngle(this.vector.getAngle());
-        
+
     }
-    
-    private void updateDrive(Input input)
+
+    private void updateDrive(Input input, int delta)
     {
         if (input != null)
         {
+            //adds to both the angle of the vector and the rotation of the vector
             float tankAngleAppend = 0;
+            //sets the speed of the vector
             float tankSpeed = 0;
             //drive forward
             if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W))
             {
-                tankSpeed += this.getDriveSpeed();
+                tankSpeed += this.getDriveSpeed() / (1000 / delta);
             }
             //drive forward
-             if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S))
+            if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S))
             {
-                tankSpeed -= this.getDriveSpeed();
+                tankSpeed -= this.getDriveSpeed() / (1000 / delta);
             }
             //turn left
             if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A))
             {
-                tankAngleAppend -= this.getTurnRate();
+                tankAngleAppend -= this.getTurnRate() / (1000 / delta);
             }
             //turn right
             if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D))
             {
-                tankAngleAppend += this.getTurnRate();
+                tankAngleAppend += this.getTurnRate() / (1000 / delta);
             }
 
             //speed multiplier
             if (input.isKeyDown(Input.KEY_LSHIFT))
             {
-                tankSpeed *= this.getDriveSpeedMultiplier();                
+                tankSpeed *= this.getDriveSpeedMultiplier();
             }
-            
+
+            //sets the vector's speed
             this.vector.setSpeed(tankSpeed);
+            //adds to the vector's angle
             this.vector.addAngle(tankAngleAppend);
-            this.vector.setAbsoluteRotation(this.vector.getAbsRotation() + tankAngleAppend);
         }
     }
-    
+
     /**
      * Gets the turn rate for the tank.
      *
@@ -117,5 +122,5 @@ public class UserTankEntity extends TankEntity
     {
         return DRIVE_SPEED_MULTIPLIER;
     }
-    
+
 }

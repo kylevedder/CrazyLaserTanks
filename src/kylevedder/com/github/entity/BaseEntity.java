@@ -70,7 +70,7 @@ public abstract class BaseEntity extends BaseObject
      */
     public float getRotation()
     {
-        return this.vector.getAbsRotation();
+        return this.hitBox.getAngle();
     }
 
     @Override

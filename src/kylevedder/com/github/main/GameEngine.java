@@ -46,6 +46,7 @@ public class GameEngine
     public GroundHolder ground = null;
 
     public UserTankEntity tank = null;
+    public TankEntity tankDummy = null;
 
     public GameEngine()
     {
@@ -61,13 +62,15 @@ public class GameEngine
     public void init(GameContainer gc) throws SlickException
     {
         register = new ObjectRegister();
-        
+
         tank = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
+        tankDummy = new TankEntity(PLAYER_START_X + 200, PLAYER_START_Y + 200, 25);
         register.add(tank);
-        
+        register.add(tankDummy);
+
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
-        
+
         camera = new Camera(tank.getHitBox());
         System.out.println("Game Loaded...");
     }
@@ -82,7 +85,8 @@ public class GameEngine
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
         tank.update(gc.getInput(), deltaTime);
-        camera.update(tank.getHitBox());        
+        tankDummy.update(gc.getInput(), deltaTime);
+        camera.update(tank.getHitBox());
     }
 
     /**
@@ -99,6 +103,8 @@ public class GameEngine
         g.setBackground(new Color(103, 194, 240));
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
         ground.render(g, camera.getRenderOffsetX(), camera.getRenderOffsetY());
+        tankDummy.render();
+        tankDummy.renderHelpers(g);
         tank.render();
         tank.renderHelpers(g);
     }

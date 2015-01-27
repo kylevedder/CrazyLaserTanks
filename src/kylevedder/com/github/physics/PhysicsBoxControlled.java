@@ -24,10 +24,6 @@ public class PhysicsBoxControlled extends PhysicsBox
         super(x, y, width, height, rotation, speed, angle);
     }
 
-    public PhysicsBoxControlled(float x, float y, float width, float height, float rotation, float speed, float angle, float rotationSpeed)
-    {
-        super(x, y, width, height, rotation, speed, angle, rotationSpeed);
-    }
 
     @Override
     public void update(int delta)

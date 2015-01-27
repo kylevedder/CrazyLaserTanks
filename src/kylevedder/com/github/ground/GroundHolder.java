@@ -90,10 +90,10 @@ public class GroundHolder
                 if (Utils.isVisible(ground[x][y].getHitBox(), renderOffsetX, renderOffsetY))
                 {
                     ground[x][y].render();
-                    if(ground[x][y].isCollidable())
-                    {
-                        ((CollideGround)ground[x][y]).renderBB(g);
-                    }
+//                    if(ground[x][y].isCollidable())
+//                    {
+//                        ((CollideGround)ground[x][y]).renderBB(g);
+//                    }
                 }
             }
         }
