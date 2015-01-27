@@ -152,7 +152,6 @@ public class ObjectRegister
         tentativeHitBox.updateAbs(tenHitX + (vectX), tenHitY - (vectY), tenAbsAngle + vectAngle);//updates the tentativeHitBox to be at its final position for this update (check if will collide essentially) 
         if (this.checkCollision(tentativeHitBox, hitBox))//use the updated tentativeHitBox to check if the tentativeHitBox will collide
         {
-            System.out.println("HIT");
             //
             //THERE IS A COLLISION!!!
             //cursory collision check failed, must be hitting somewhere.
@@ -176,7 +175,6 @@ public class ObjectRegister
                 //check tentativeHitBox to see if there is no collision
                 if (!this.checkCollision(tentativeHitBox, hitBox))
                 {                    
-                    System.out.println("FIXED!");
                     //
                     //No collision with other boxes!!! Yay!
                     //
@@ -190,7 +188,6 @@ public class ObjectRegister
                     };
                 }
             }          
-            System.out.println("*SHRUG*");
             //
             //If code arrives here, that means no subdivisions were appropriate
             //AS WELL AS the original position of the hitbox colliding. Bummer...
@@ -208,17 +205,13 @@ public class ObjectRegister
         //no collision
         else
         {
-            System.out.println("CLEAR");
             //
             //There is no collision, YAY!
             //Carry on adding the vectors as normal.
             //            
             
             //however, in the initial check, the hitbox was already at its final position.
-            //Therefore, no update is needed
-            
-            //update finalVector to reflect tentativeHitBox angle
-//            finalVector.setAngle(tenAbsAngle + vectAngle);
+            //Therefore, no update is needed            
             
             return new Object[]
             {

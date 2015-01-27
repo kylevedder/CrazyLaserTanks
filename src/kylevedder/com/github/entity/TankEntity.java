@@ -61,7 +61,7 @@ public class TankEntity extends BaseEntity
     public void renderHelpers(Graphics g)
     {
         g.draw(this.hitBox.getPolygon());
-        this.vector.render(g, this.hitBox.getCenterX(), this.hitBox.getCenterY(), 10/*Speed Scale*/);
+        this.vector.render(g, this.hitBox.getCenterX(), this.hitBox.getCenterY(), 30/*Speed Scale*/);
     }
     
 }

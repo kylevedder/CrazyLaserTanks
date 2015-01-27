@@ -29,8 +29,8 @@ import org.newdawn.slick.geom.Rectangle;
 public class GameEngine
 {
 
-    public final int WORLD_WIDTH = 100;
-    public final int WORLD_HEIGHT = 100;
+    public static final int WORLD_WIDTH = 100;
+    public static final int WORLD_HEIGHT = 100;
 
     public static final int TILE_SIZE = 64;
 

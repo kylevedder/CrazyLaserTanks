@@ -80,6 +80,31 @@ public class Utils
         }
         return val;
     }
+    
+    /**
+     *
+     * If val greater than high, sets val to high (inclusive)
+     * <p>
+     * If val lower than low, sets val to low (inclusive)
+     * </p>
+     *
+     * @param val
+     * @param low
+     * @param high
+     * @return
+     */
+    public static float clampFloat(float val, float low, float high)
+    {
+        if (val > high)
+        {
+            return high;
+        }
+        if (val < low)
+        {
+            return low;
+        }
+        return val;
+    } 
 
     /**
      * Translates an array of x,y floats into an array of points.

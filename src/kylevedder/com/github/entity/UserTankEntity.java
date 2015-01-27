@@ -18,7 +18,7 @@ public class UserTankEntity extends TankEntity
 {
 
     private final float TURN_RATE = 90f;
-    private final float DRIVE_SPEED = 100f;
+    private final float DRIVE_SPEED = 1000f;//100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
 
     /**
@@ -38,17 +38,9 @@ public class UserTankEntity extends TankEntity
     {
         super.update(input, delta);
         this.updateDrive(input, delta);
-        System.out.println(this.vector);
-//        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getAbsRotation());
-//        this.hitBox.updateAbs(this.hitBox.getCenterX() + this.vector.getXComp(), this.hitBox.getCenterY() - this.vector.getYComp(), this.vector.getRotation());
-
         Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
         this.vector = (Vector) objects[1];
         this.hitBox = (CenteredRectangle) objects[0];
-//        this.vector.setAngle(this.hitBox.getAngle());
-//        this.vector.setAbsoluteRotation(this.hitBox.getAngle());
-//        this.hitBox.setAngle(this.vector.getAngle());
-
     }
 
     private void updateDrive(Input input, int delta)

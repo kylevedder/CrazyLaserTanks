@@ -5,7 +5,10 @@
  */
 package kylevedder.com.github.main;
 
+import kylevedder.com.github.ground.BaseGround;
+import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.CenteredRectangle;
+import kylevedder.com.github.utils.Utils;
 
 /**
  *
@@ -49,22 +52,31 @@ public class Camera
     {
         update(rect.getCenterX(), rect.getCenterY());
     }
-    
-    
+
     /**
-     * Updates the position of the camera to be centered around the given x,y position
+     * Updates the position of the camera to be centered around the given x,y
+     * position
+     *
      * @param posX
-     * @param posY 
+     * @param posY
      */
     public void update(float posX, float posY)
     {
+        //gets the basic render offset
         renderOffsetX = posX - (this.SCREEN_WIDTH / 2);
         renderOffsetY = posY - (this.SCREEN_HEIGHT / 2);
+
+        //calculates offset so that the camera never goes off the edge
+        renderOffsetX = Utils.clampFloat(renderOffsetX, -BaseGround.GROUND_SIZE / 2, GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE / 2 - SCREEN_WIDTH);
+        renderOffsetY = Utils.clampFloat(renderOffsetY, -BaseGround.GROUND_SIZE / 2, GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE / 2 - SCREEN_HEIGHT);
+        System.out.println(renderOffsetX + "," + renderOffsetY);
+
     }
 
     /**
      * Amount to shift the camera over in X
-     * @return 
+     *
+     * @return
      */
     public float getRenderOffsetX()
     {
@@ -73,13 +85,12 @@ public class Camera
 
     /**
      * Amount to shift the camera over in Y
-     * @return 
+     *
+     * @return
      */
     public float getRenderOffsetY()
     {
         return renderOffsetY;
     }
-    
-    
 
 }
