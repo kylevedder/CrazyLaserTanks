@@ -7,7 +7,6 @@ package kylevedder.com.github.utils;
 
 import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.main.MainApp;
-import kylevedder.com.github.main.ObjectBoilerplate;
 import kylevedder.com.github.physics.CenteredRectangle;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Line;
@@ -139,15 +138,5 @@ public class Utils
                 rect.getMinX() - renderOffsetX + image.getWidth() * scale > 0 && rect.getMinX() - renderOffsetX < MainApp.SCREEN_WIDTH
                 && //within screen Y
                 rect.getMinY() - renderOffsetY + image.getHeight() * scale > 0 && rect.getMinY() - renderOffsetY < MainApp.SCREEN_WIDTH;
-    }
-
-    public static int convertObjectToGroundTileX(ObjectBoilerplate o)
-    {
-        return (int) o.getRectangle().getCenterX() / GameEngine.TILE_SIZE;
-    }
-
-    public static int convertObjectToGroundTileY(ObjectBoilerplate o)
-    {
-        return (int) o.getRectangle().getCenterY() / GameEngine.TILE_SIZE;
-    }
+    }    
 }

@@ -43,7 +43,7 @@ public class MainApp extends BasicGame
         app = new AppGameContainer(new MainApp(title));
         app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
         app.setTargetFrameRate(60);
-        app.setAlwaysRender(DEBUG);        
+        app.setAlwaysRender(true);        
         app.start();        
         return app;
     }

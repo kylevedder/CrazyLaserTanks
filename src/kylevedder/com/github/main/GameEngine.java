@@ -5,6 +5,7 @@
  */
 package kylevedder.com.github.main;
 
+import kylevedder.com.github.main.MainApp;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,16 +40,13 @@ public class GameEngine
 
     private float tankAngleAppend = 0;
     private float tankSpeed = 0;
-
-    ObjectTankNew tank = null;
+   
     
     public ObjectRegister register = null;    
-    
-    public ObjectGroundBoilerplate[][] tileArray = null;
+        
 
     public GameEngine()
-    {
-        tileArray = new ObjectGroundBoilerplate[WORLD_WIDTH][WORLD_HEIGHT];
+    {    
         register = new ObjectRegister();
     }
 
@@ -59,9 +57,7 @@ public class GameEngine
      * @throws SlickException
      */
     public void init(GameContainer gc) throws SlickException
-    {
-        genGround();        
-        tank = new ObjectTankNew(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
+    {                 
         System.out.println("Game Loaded...");
     }
 
@@ -74,9 +70,6 @@ public class GameEngine
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
-        tank.update(deltaTime, gc.getInput());
-        renderOffsetX = tank.getX() - (MainApp.SCREEN_WIDTH / 2);
-        renderOffsetY = tank.getY() - (MainApp.SCREEN_HEIGHT / 2);
     }
 
     /**
@@ -90,44 +83,9 @@ public class GameEngine
         //clears
         g.clear();
         //backgrond
-        g.setColor(new Color(103, 194, 240));
-        g.fillRect(0, 0, MainApp.SCREEN_WIDTH, MainApp.SCREEN_HEIGHT);
+        g.setBackground(new Color(103, 194, 240));                
 
-        //draws every object
-        ObjectBoilerplate object;
+        
 
-        ObjectGroundBoilerplate grnd;
-        for (int x = 0; x < WORLD_WIDTH; x++)
-        {
-            for (int y = 0; y < WORLD_HEIGHT; y++)
-            {
-                if ((grnd = tileArray[x][y]) != null)
-                {
-                    grnd.render(renderOffsetX, renderOffsetY);
-                    grnd.renderBB(g, renderOffsetX, renderOffsetY);
-                }
-            }
-        }
-        tank.render(renderOffsetX, renderOffsetY);
-        tank.renderBB(g, renderOffsetX, renderOffsetY);
-
-    }
-
-    private void genGround()
-    {
-        for (int x = 0; x < WORLD_WIDTH; x++)
-        {
-            for (int y = 0; y < WORLD_HEIGHT; y++)
-            {
-                if (x == 0 || x == WORLD_WIDTH - 1 || y == 0 || y == WORLD_HEIGHT - 1)
-                {
-                    tileArray[x][y] = new ObjectGroundBarrier(x, y);
-                }
-                else
-                {
-                    tileArray[x][y] = new ObjectGroundDefault(x, y);
-                }
-            }
-        }
-    }
+    }   
 }

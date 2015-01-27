@@ -6,6 +6,12 @@
 package kylevedder.com.github.physics;
 
 import kylevedder.com.github.utils.Utils;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Transform;
 
 /**
  *
@@ -114,14 +120,23 @@ public class Vector
 
     /**
      * Sets the rotation of the object.
-     * @param rotation 
+     *
+     * @param rotation
      */
     public void setRotation(float rotation)
     {
         this.rotation = rotation;
     }
-    
-    
+
+    /**
+     * Adds the given rotation to the vector.
+     *
+     * @param rotation
+     */
+    public void addRotation(float rotation)
+    {
+        this.rotation += rotation;
+    }
 
     /**
      * Sets the angle
@@ -171,6 +186,21 @@ public class Vector
     }
 
     /**
+     * Draws the vector, centered around the given X and Y axis.
+     *
+     * @param g
+     * @param x
+     * @param y
+     * @throws SlickException
+     */
+    public void render(Graphics g, float x, float y) throws SlickException
+    {
+        g.setColor(Color.red);
+        g.drawLine(x, y, x + this.getXComp(), y - this.getYComp());
+        g.draw(new Rectangle(x + this.getXComp() - 4, y - this.getYComp() - 4, 8, 8).transform(Transform.createRotateTransform(this.getRotation(), x + this.getXComp(), y - this.getYComp())));
+    }
+
+    /**
      * Adds two vectors together.
      *
      * @param v1
@@ -184,6 +214,7 @@ public class Vector
 
     /**
      * Flips the axis of the Vector
+     *
      * @param v Vector to flip
      * @param xAxis if flip X
      * @param yAxis if flip Y
