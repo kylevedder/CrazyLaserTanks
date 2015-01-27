@@ -6,6 +6,9 @@
 package kylevedder.com.github.physics;
 
 import java.util.ArrayList;
+import kylevedder.com.github.entity.BaseEntity;
+import kylevedder.com.github.ground.BaseGround;
+import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.CenteredRectangle;
 
 /**
@@ -15,7 +18,8 @@ import kylevedder.com.github.physics.CenteredRectangle;
 public class ObjectRegister
 {
 
-    ArrayList<PhysicsObject> objectsList = null;
+    ArrayList<BaseEntity> objectsList = null;
+    GroundHolder ground = null;
 
     /**
      * Object Physics Registration.
@@ -26,13 +30,22 @@ public class ObjectRegister
     }
 
     /**
-     * Adds an object to the PhysicsObject register.
+     * Adds an object to the BaseEntity register.
      *
      * @param o
      */
-    public void add(PhysicsObject o)
+    public void add(BaseEntity o)
     {
         this.objectsList.add(o);
+    }
+    
+    /**
+     * Adds a ground to the register.
+     * @param ground 
+     */
+    public void addGround(GroundHolder ground)
+    {
+        this.ground = ground;        
     }
 
     /**
@@ -41,11 +54,19 @@ public class ObjectRegister
      * @param objectChecking
      * @return
      */
-    public boolean checkCollision(PhysicsObject objectChecking)
+    public boolean checkCollision(BaseEntity objectChecking)
     {
-        for (PhysicsObject objectItem : objectsList)
+        for (BaseEntity objectItem : objectsList)
         {
-            if (objectChecking != objectItem && objectChecking.hitBox.collides(objectItem.hitBox))
+            if (objectChecking != objectItem && objectChecking.getHitBox().collides(objectItem.getHitBox()))
+            {
+                return true;
+            }
+        }
+        ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(objectChecking.getCenterX(), objectChecking.getCenterY(), 4);
+        for(BaseGround ground: tiles)
+        {
+            if(objectChecking.getHitBox().collides(ground.getHitBox()))
             {
                 return true;
             }
@@ -66,10 +87,19 @@ public class ObjectRegister
      */
     public boolean checkCollision(CenteredRectangle rect, Object pointer)
     {
-        for (PhysicsObject objectItem : objectsList)
+        for (BaseEntity objectItem : objectsList)
         {
 //            System.out.println(objectItem);
-            if (pointer != objectItem.hitBox && rect.collides(objectItem.hitBox))
+            if (pointer != objectItem.getHitBox() && rect.collides(objectItem.getHitBox()))
+            {
+                return true;
+            }
+        }
+        
+        ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(rect.getCenterX(), rect.getCenterY(), 4);
+        for(BaseGround ground: tiles)
+        {
+            if(rect.collides(ground.getHitBox()))
             {
                 return true;
             }

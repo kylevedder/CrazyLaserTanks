@@ -5,13 +5,15 @@
  */
 package kylevedder.com.github.interfaces;
 
+import org.newdawn.slick.Input;
+
 /**
  *
  * @author Kyle
  */
 public interface Renderable
 {
-    public void update();
+    public void update(Input input);
     
     public void render();
 }

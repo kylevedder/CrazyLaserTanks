@@ -9,6 +9,9 @@ import kylevedder.com.github.main.MainApp;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kylevedder.com.github.entity.TankEntity;
+import kylevedder.com.github.entity.UserTankEntity;
+import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.ObjectRegister;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -28,7 +31,7 @@ public class GameEngine
 
     public final int WORLD_WIDTH = 100;
     public final int WORLD_HEIGHT = 100;
-    
+
     public static final int TILE_SIZE = 64;
 
     final float PLAYER_START_X = 500f;
@@ -40,14 +43,15 @@ public class GameEngine
 
     private float tankAngleAppend = 0;
     private float tankSpeed = 0;
-   
-    
-    public ObjectRegister register = null;    
-        
+
+    public ObjectRegister register = null;
+    public GroundHolder ground = null;
+
+    public UserTankEntity tank = null;
 
     public GameEngine()
-    {    
-        register = new ObjectRegister();
+    {
+
     }
 
     /**
@@ -57,7 +61,11 @@ public class GameEngine
      * @throws SlickException
      */
     public void init(GameContainer gc) throws SlickException
-    {                 
+    {
+        register = new ObjectRegister();
+        tank = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
+        register.add(tank);
+        ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         System.out.println("Game Loaded...");
     }
 
@@ -70,6 +78,9 @@ public class GameEngine
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
+        tank.update(gc.getInput());
+        renderOffsetX = tank.getCenterX() - (MainApp.SCREEN_WIDTH / 2);
+        renderOffsetY = tank.getCenterY() - (MainApp.SCREEN_HEIGHT / 2);
     }
 
     /**
@@ -83,9 +94,10 @@ public class GameEngine
         //clears
         g.clear();
         //backgrond
-        g.setBackground(new Color(103, 194, 240));                
-
-        
-        
-    }   
+        g.setBackground(new Color(103, 194, 240));
+        g.translate(-renderOffsetX, -renderOffsetY);
+        ground.render(renderOffsetX, renderOffsetY);
+        tank.render();
+        tank.renderHelpers(g);
+    }
 }

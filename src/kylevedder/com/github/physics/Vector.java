@@ -193,11 +193,11 @@ public class Vector
      * @param y
      * @throws SlickException
      */
-    public void render(Graphics g, float x, float y) throws SlickException
+    public void render(Graphics g, float x, float y)
     {
         g.setColor(Color.red);
         g.drawLine(x, y, x + this.getXComp(), y - this.getYComp());
-        g.draw(new Rectangle(x + this.getXComp() - 4, y - this.getYComp() - 4, 8, 8).transform(Transform.createRotateTransform(this.getRotation(), x + this.getXComp(), y - this.getYComp())));
+        g.drawOval(x + this.getXComp() - 4, y - this.getYComp() - 4, 8, 8);       
     }
 
     /**

@@ -15,7 +15,7 @@ import org.newdawn.slick.SlickException;
  *
  * @author Kyle
  */
-public class CollideGround extends BaseGround
+public class NonCollideGround extends BaseGround
 {
 
     /**
@@ -24,18 +24,18 @@ public class CollideGround extends BaseGround
      * @param x - x position float
      * @param y - y position float
      */
-    public CollideGround(float x, float y)
+    public NonCollideGround(float x, float y)
     {
         try
         {
-            this.collidable = true;
-            this.image = new Image("images/NewGround.png");            
+            this.collidable = false;
+            this.image = new Image("images/Ground.png");            
             //at the given X,Y and a scale set so that the image will always be this.GROUND_SIZE
             this.init(x, y, (float)BaseGround.GROUND_SIZE / (float)this.image.getWidth(), image);
         }
         catch (SlickException ex)
         {
-            Logger.getLogger(CollideGround.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NonCollideGround.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

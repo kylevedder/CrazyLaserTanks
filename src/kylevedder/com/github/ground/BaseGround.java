@@ -13,15 +13,15 @@ import org.newdawn.slick.Image;
  *
  * @author Kyle
  */
-public class BaseGround extends BaseObject
+public abstract class BaseGround extends BaseObject
 {
-
+    public static final int GROUND_SIZE = 64;
     Image image = null;
     
     protected void init(float x, float y, float scale, Image image)
     {
         this.image = image.getScaledCopy(scale);                
-        this.hitBox = new CenteredRectangle(x, y, this.image.getWidth(), this.image.getHeight()* scale, 0);
+        this.hitBox = new CenteredRectangle(x, y, this.image.getWidth(), this.image.getHeight(), 0);
     }
     
     /**
@@ -40,14 +40,7 @@ public class BaseGround extends BaseObject
     public float getHeight()
     {
         return this.image.getHeight();
-    }
-    
-    
-    @Override
-    public void update()
-    {
-        //does nothing.
-    }
+    }        
 
     /**
      * Gets the scaled image of this object.
@@ -58,7 +51,15 @@ public class BaseGround extends BaseObject
         return image;
     }
     
-    
+    /**
+     * Gets the hitbox of the ground in the form of a CenteredRectangle
+     * @return 
+     */
+    public CenteredRectangle getHitBox()
+    {
+        return this.hitBox;
+    }
+        
 
     @Override
     public void render()

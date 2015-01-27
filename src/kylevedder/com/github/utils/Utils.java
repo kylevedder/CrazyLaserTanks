@@ -127,16 +127,15 @@ public class Utils
      *
      * @param rect rectangle of the item
      * @param image image of the item
-     * @param scale scale of the item
      * @param renderOffsetX renderer offset of the item in the X
      * @param renderOffsetY renderer offset of the item in the Y
      * @return
      */
-    public static boolean isVisible(CenteredRectangle rect, Image image, float scale, float renderOffsetX, float renderOffsetY)
+    public static boolean isVisible(CenteredRectangle rect, float renderOffsetX, float renderOffsetY)
     {
         return //within screen X
-                rect.getMinX() - renderOffsetX + image.getWidth() * scale > 0 && rect.getMinX() - renderOffsetX < MainApp.SCREEN_WIDTH
+                rect.getMinX() - renderOffsetX + rect.getWidth() > 0 && rect.getMinX() - renderOffsetX < MainApp.SCREEN_WIDTH
                 && //within screen Y
-                rect.getMinY() - renderOffsetY + image.getHeight() * scale > 0 && rect.getMinY() - renderOffsetY < MainApp.SCREEN_WIDTH;
+                rect.getMinY() - renderOffsetY + rect.getWidth() > 0 && rect.getMinY() - renderOffsetY < MainApp.SCREEN_WIDTH;
     }    
 }
