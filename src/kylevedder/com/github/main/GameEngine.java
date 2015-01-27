@@ -9,6 +9,7 @@ import kylevedder.com.github.main.MainApp;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kylevedder.com.github.controlls.CustomMouseListener;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
@@ -18,6 +19,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
@@ -72,6 +74,9 @@ public class GameEngine
         register.addGround(ground);
 
         camera = new Camera(tank.getHitBox(), 1f);
+
+        gc.getInput().addMouseListener(new CustomMouseListener());
+
         System.out.println("Game Loaded...");
     }
 
@@ -84,19 +89,20 @@ public class GameEngine
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
-        Input input = gc.getInput(); 
-        if(input.isKeyDown(Input.KEY_Q))
+        Input input = gc.getInput();
+        if (input.isKeyDown(Input.KEY_Q))
         {
             camera.setZoom(camera.getZoom() - 0.01f);
         }
-        if(input.isKeyDown(Input.KEY_E))
+        if (input.isKeyDown(Input.KEY_E))
         {
             camera.setZoom(camera.getZoom() + 0.01f);
         }
+//        System.out.println(camera.getZoom());
         tank.update(gc.getInput(), deltaTime);
         tankDummy.update(gc.getInput(), deltaTime);
         camera.update(tank.getHitBox());
-               
+
     }
 
     /**

@@ -6,9 +6,9 @@
 package kylevedder.com.github.main;
 
 import kylevedder.com.github.ground.BaseGround;
-import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.utils.Utils;
+import org.newdawn.slick.Input;
 
 /**
  *
@@ -19,6 +19,8 @@ public class Camera
 
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
+    
+    public static final float ZOOM_AMOUNT = .1f;
 
     private float renderOffsetX;
     private float renderOffsetY;
@@ -33,7 +35,7 @@ public class Camera
     public Camera(CenteredRectangle rect)
     {
         update(rect);
-        this.zoom = 1;
+        this.setZoom(1);
     }
 
     /**
@@ -45,7 +47,7 @@ public class Camera
     public Camera(float posX, float posY)
     {
         update(posX, posY);
-        this.zoom = 1;
+        this.setZoom(1);
     }
     
     /**
@@ -57,7 +59,7 @@ public class Camera
     public Camera(CenteredRectangle rect, float zoom)
     {
         update(rect);
-        this.zoom = zoom;
+        this.setZoom(zoom);
     }
 
     /**
@@ -70,7 +72,7 @@ public class Camera
     public Camera(float posX, float posY, float zoom)
     {
         update(posX, posY);
-        this.zoom = zoom;
+        this.setZoom(zoom);
     }
 
     /**
@@ -101,6 +103,11 @@ public class Camera
         renderOffsetY = Utils.clampFloat(renderOffsetY, - (BaseGround.GROUND_SIZE / 2)* this.getZoom(), (GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2)* this.getZoom() - SCREEN_HEIGHT);
     }
     
+//    public void updateZoom(Input input)
+//    {
+//        if()
+//    }
+    
     
     /**
      * Useful utility to check if an item needs to be rendered.
@@ -127,7 +134,7 @@ public class Camera
      * Gets the zoom of the camera. 1 = 1x zoom, 2 = 2x zoom, etc
      * @return 
      */
-    public float getZoom()
+    public synchronized float getZoom()
     {
         return zoom;
     }
@@ -136,9 +143,18 @@ public class Camera
      * Sets the zoom of the camera. 1 = 1x zoom, 2 = 2x zoom, etc
      * @param zoom 
      */
-    public void setZoom(float zoom)
+    public synchronized void setZoom(float zoom)
     {
-        this.zoom = zoom;
+        this.zoom = Utils.clampFloat(zoom, .4f, 1.5f);
+    }
+    
+    /**
+     * Adds the given value to the zoom of the camera.
+     * @param zoom 
+     */
+    public synchronized void addZoom(float zoom)
+    {
+        this.setZoom(zoom + this.getZoom());
     }
 
     /**
