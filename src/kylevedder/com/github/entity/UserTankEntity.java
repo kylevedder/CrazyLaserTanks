@@ -19,14 +19,7 @@ import org.newdawn.slick.Input;
  * @author Kyle
  */
 public class UserTankEntity extends TankEntity
-{
-
-    private final float TURN_RATE = 90f;
-    private final float TURRET_TURN_RATE = 90f;
-    private final float DRIVE_SPEED = 500f;//100f;
-    private final float DRIVE_SPEED_MULTIPLIER = 2f;
-
-    private final float ANIMATION_BASE_SPEED = 100f;    
+{          
 
     private float mouseX = 0;
     private float mouseY = 0;
@@ -41,6 +34,7 @@ public class UserTankEntity extends TankEntity
     public UserTankEntity(float x, float y, float angle)
     {
         super(x, y, angle);
+        this.SHOT_SPEED = 5;
     }
 
     @Override
@@ -181,36 +175,6 @@ public class UserTankEntity extends TankEntity
         super.renderHelpers(g); //To change body of generated methods, choose Tools | Templates.        
         g.drawOval(mouseX - 8, mouseY - 8, 16, 16);
         g.drawOval(mouseX - 12, mouseY - 12, 24, 24);
-    }
-
-    /**
-     * Gets the turn rate for the tankUser.
-     *
-     * @return
-     */
-    public float getTurnRate()
-    {
-        return TURN_RATE;
-    }
-
-    /**
-     * Get the base drive speed for the tankUser.
-     *
-     * @return
-     */
-    public float getDriveSpeed()
-    {
-        return DRIVE_SPEED;
-    }
-
-    /**
-     * Gets the turbo drive speed multiplier for the tankUser.
-     *
-     * @return
-     */
-    public float getDriveSpeedMultiplier()
-    {
-        return DRIVE_SPEED_MULTIPLIER;
-    }
+    }    
 
 }

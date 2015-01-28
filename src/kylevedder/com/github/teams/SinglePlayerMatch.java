@@ -7,6 +7,7 @@ package kylevedder.com.github.teams;
 
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.main.MainApp;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 /**

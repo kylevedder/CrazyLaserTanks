@@ -28,8 +28,15 @@ public class TankEntity extends BaseEntity
     private final int TRACK_WIDTH = 5;
     private final int TRACK_HEIGHT = 27;
 
-    private final int SHOT_SPEED = 300;
-    private final int SHOT_COOLDOWN = 500;//millis
+    protected int SHOT_SPEED = 300;
+    protected int SHOT_COOLDOWN = 500;//millis
+
+    protected float TURN_RATE = 90f;
+    protected float TURRET_TURN_RATE = 90f;
+    protected float DRIVE_SPEED = 500f;//100f;
+    protected float DRIVE_SPEED_MULTIPLIER = 2f;
+    
+    protected float ANIMATION_BASE_SPEED = 100f;  
 
     protected float turretAngle = 0;
     protected int shotCounter = 0;
@@ -214,6 +221,36 @@ public class TankEntity extends BaseEntity
         g.draw(this.hitBox.getPolygon());
         this.vector.render(g, this.hitBox.getCenterX(), this.hitBox.getCenterY(), 30/*Speed Scale*/);
         g.drawString(String.valueOf(this.health), this.hitBox.getCenterX(), this.getCenterY() + 40);
+    }
+    
+    /**
+     * Gets the turn rate for the tankUser.
+     *
+     * @return
+     */
+    public float getTurnRate()
+    {
+        return TURN_RATE;
+    }
+
+    /**
+     * Get the base drive speed for the tankUser.
+     *
+     * @return
+     */
+    public float getDriveSpeed()
+    {
+        return DRIVE_SPEED;
+    }
+
+    /**
+     * Gets the turbo drive speed multiplier for the tankUser.
+     *
+     * @return
+     */
+    public float getDriveSpeedMultiplier()
+    {
+        return DRIVE_SPEED_MULTIPLIER;
     }
 
 }
