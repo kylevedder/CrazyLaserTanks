@@ -75,7 +75,7 @@ public class GameEngine
 
         camera = new Camera(tank.getHitBox(), 1f);
 
-        gc.getInput().addMouseListener(new CustomMouseListener());
+        gc.getInput().addMouseListener(new CustomMouseListener());        
 
         System.out.println("Game Loaded...");
     }
@@ -92,7 +92,7 @@ public class GameEngine
 //        System.out.println(camera.getZoom());
         tank.update(gc.getInput(), deltaTime);
         tankDummy.update(gc.getInput(), deltaTime);
-        camera.update(tank.getHitBox());
+        camera.update(tank.getHitBox(), gc.getInput());
 
     }
 
