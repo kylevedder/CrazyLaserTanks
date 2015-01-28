@@ -88,16 +88,7 @@ public class GameEngine
      * @throws SlickException
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
-    {
-        Input input = gc.getInput();
-        if (input.isKeyDown(Input.KEY_Q))
-        {
-            camera.setZoom(camera.getZoom() - 0.01f);
-        }
-        if (input.isKeyDown(Input.KEY_E))
-        {
-            camera.setZoom(camera.getZoom() + 0.01f);
-        }
+    {        
 //        System.out.println(camera.getZoom());
         tank.update(gc.getInput(), deltaTime);
         tankDummy.update(gc.getInput(), deltaTime);
