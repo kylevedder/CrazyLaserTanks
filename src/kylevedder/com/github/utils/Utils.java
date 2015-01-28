@@ -80,7 +80,7 @@ public class Utils
         }
         return val;
     }
-    
+
     /**
      *
      * If val greater than high, sets val to high (inclusive)
@@ -104,7 +104,40 @@ public class Utils
             return low;
         }
         return val;
-    } 
+    }
+
+    /**
+     * If float is NaN, sets it to Zero
+     *
+     * @param val
+     * @return
+     */
+    public static float verifyFloat(float val)
+    {
+        if (Float.isNaN(val))
+        {
+            return 0f;
+        }
+        return val;
+    }
+
+    /**
+     * Wraps the delta angle to smooth out degree jumps due to angle roll over
+     * @param val
+     * @return 
+     */
+    public static float wrapAngleDelta(float val)
+    {
+        if (val > 180)
+        {
+            return (val - 360f);
+        }
+        if (val < -180)
+        {
+            return (val + 360f);
+        }
+        return val;
+    }
 
     /**
      * Translates an array of x,y floats into an array of points.
@@ -133,7 +166,7 @@ public class Utils
     {
         return new Line(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
-    
+
     /**
      * Takes the append angle value and appends it to the angle.
      *
@@ -148,5 +181,4 @@ public class Utils
         return ((angle + appendValue) % 360f);
     }
 
-        
 }

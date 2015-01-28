@@ -26,14 +26,17 @@ public class TankEntity extends BaseEntity
     private final int TRACK_WIDTH = 5;
     private final int TRACK_HEIGHT = 27;
 
+    protected float turretAngle = 0;
+    protected boolean speedMuliplied = false;
+
     private final float SCALE = 2f;
 
-    private final float TURRET_Y_OFFSET = -5 * SCALE;
+    private final float TURRET_Y_OFFSET = -4.8f * SCALE;
 
-    private Image turret = null;
-    private Image base = null;
-    private CustomAnimation leftTrack = null;
-    private CustomAnimation rightTrack = null;
+    protected Image turret = null;
+    protected Image base = null;
+    protected CustomAnimation leftTrack = null;
+    protected CustomAnimation rightTrack = null;
 
     public TankEntity(float x, float y, float angle)
     {
@@ -42,8 +45,8 @@ public class TankEntity extends BaseEntity
 //            Image image = new SpriteSheet(new Image("images/tank.png"), TILE_WIDTH, TILE_HEIGHT).getSprite(0, 0);
             base = new Image("images/StaticBase.png").getScaledCopy(SCALE);
             turret = new Image("images/Turret.png").getScaledCopy(SCALE);
-            leftTrack = new CustomAnimation(new SpriteSheet(new Image("images/tracks.png").getScaledCopy(SCALE), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
-            rightTrack = new CustomAnimation(new SpriteSheet(new Image("images/tracks.png").getScaledCopy(SCALE), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
+            leftTrack = new CustomAnimation(new SpriteSheet(new Image("images/tracks.png").getScaledCopy(SCALE).getFlippedCopy(false, true), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
+            rightTrack = new CustomAnimation(new SpriteSheet(new Image("images/tracks.png").getScaledCopy(SCALE).getFlippedCopy(false, true), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
             this.init(x, y, angle, base);
         }
         catch (SlickException ex)
@@ -59,9 +62,10 @@ public class TankEntity extends BaseEntity
         this.hitBox = new CenteredRectangle(x, y, base.getWidth() + leftTrack.getFrame(false).getWidth() * 2, leftTrack.getFrame(false).getHeight(), angle);
         this.image = this.base;
         vector = new Vector(0, angle);
+        this.turretAngle = 0;
+        this.speedMuliplied = false;
     }
 
-    
     @Override
     public void render()
     {
@@ -70,12 +74,12 @@ public class TankEntity extends BaseEntity
         float cos = (float) Math.cos(Math.toRadians(this.hitBox.getAngle()));
 
         //draw right track
-        Image tempImage = this.rightTrack.getFrame(false);
+        Image tempImage = this.rightTrack.getFrame(this.vector.getSpeed() < 0f);
         tempImage.setRotation(this.hitBox.getAngle());
         tempImage.drawCentered(this.hitBox.getCenterX() + cos * (this.base.getWidth() / 2 + tempImage.getWidth() / 2), this.hitBox.getCenterY() + sin * (this.base.getWidth() / 2 + tempImage.getWidth() / 2));
 
         //draw left track
-        tempImage = this.leftTrack.getFrame(false);
+        tempImage = this.leftTrack.getFrame(this.vector.getSpeed() < 0f);
         tempImage.setRotation(this.hitBox.getAngle());
         tempImage.drawCentered(this.hitBox.getCenterX() - cos * (this.base.getWidth() / 2 + tempImage.getWidth() / 2), this.hitBox.getCenterY() - sin * (this.base.getWidth() / 2 + tempImage.getWidth() / 2));
 
@@ -84,9 +88,9 @@ public class TankEntity extends BaseEntity
         this.base.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY());
 
         //draw turret
-        this.turret.setCenterOfRotation(this.turret.getWidth()/2, this.turret.getHeight()/2 - TURRET_Y_OFFSET);
-        this.turret.setRotation(this.hitBox.getAngle());
-        this.turret.drawCentered(this.hitBox.getCenterX() , this.hitBox.getCenterY() + TURRET_Y_OFFSET);
+        this.turret.setCenterOfRotation(this.turret.getWidth() / 2, this.turret.getHeight() / 2 - TURRET_Y_OFFSET);
+        this.turret.setRotation(this.hitBox.getAngle() + this.turretAngle);
+        this.turret.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY() + TURRET_Y_OFFSET);
     }
 
     /**

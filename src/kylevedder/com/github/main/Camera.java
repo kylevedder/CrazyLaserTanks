@@ -25,7 +25,7 @@ public class Camera
     private float renderOffsetX;
     private float renderOffsetY;
     
-    private float zoom;
+    private volatile float zoom;
 
     /**
      * Camera class to define rendering values.

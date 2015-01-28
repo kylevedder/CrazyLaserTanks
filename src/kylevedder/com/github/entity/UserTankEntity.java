@@ -8,6 +8,8 @@ package kylevedder.com.github.entity;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.Vector;
+import kylevedder.com.github.utils.Utils;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 /**
@@ -18,8 +20,14 @@ public class UserTankEntity extends TankEntity
 {
 
     private final float TURN_RATE = 90f;
+    private final float TURRET_TURN_RATE = 90f;
     private final float DRIVE_SPEED = 100f;//100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
+
+    private final float ANIMATION_BASE_SPEED = 100f;
+
+    private float mouseX = 0;
+    private float mouseY = 0;
 
     /**
      * User controlled tank entity.
@@ -37,12 +45,70 @@ public class UserTankEntity extends TankEntity
     public void update(Input input, int delta)
     {
         super.update(input, delta);
+
+        float prevAngle = this.hitBox.getAngle();
+
         this.updateDrive(input, delta);
         Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
         this.vector = (Vector) objects[1];
         this.hitBox = (CenteredRectangle) objects[0];
+        this.updateTurret(input, delta);
+
+        float deltaAngle = Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle);
+
+        updateAnimation(deltaAngle, delta);
     }
 
+    private void updateAnimation(float deltaAngle, int deltaTime)
+    {
+
+        if (deltaAngle == 0 && this.vector.getSpeed() == 0)
+        {
+            this.leftTrack.freeze(deltaTime);
+            this.rightTrack.freeze(deltaTime);
+        }
+        else if (this.vector.getSpeed() == 0f && deltaAngle != 0)
+        {
+            if (deltaAngle > 0)//clockwise
+            {
+                this.leftTrack.setDuration((int) ANIMATION_BASE_SPEED);
+                this.rightTrack.setDuration(-(int) ANIMATION_BASE_SPEED);
+            }
+            else
+            {
+                this.leftTrack.setDuration(-(int) ANIMATION_BASE_SPEED);
+                this.rightTrack.setDuration((int) ANIMATION_BASE_SPEED);
+            }
+            this.leftTrack.update(deltaTime);
+            this.rightTrack.update(deltaTime);
+        }
+        else
+        {
+            float animationDivisor = (this.speedMuliplied) ? this.getDriveSpeedMultiplier() : 1;
+            this.leftTrack.setDuration((int) (ANIMATION_BASE_SPEED / animationDivisor));
+            this.rightTrack.setDuration((int) (ANIMATION_BASE_SPEED / animationDivisor));
+            this.leftTrack.update(deltaTime);
+            this.rightTrack.update(deltaTime);
+        }
+    }
+
+    private void updateTurret(Input input, int delta)
+    {
+        this.mouseX = Utils.verifyFloat((input.getMouseX() + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom());
+        this.mouseY = Utils.verifyFloat((input.getMouseY() + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
+        float desiredTurretAngle = Utils.verifyFloat((float) Math.toDegrees(Math.atan2(mouseY - this.hitBox.getCenterY(), mouseX - this.hitBox.getCenterX())) + 90f - this.hitBox.getAngle());
+        float turretRateCap = this.TURRET_TURN_RATE / (1000 / delta);
+        float deltaTurret = Utils.wrapAngleDelta(desiredTurretAngle - this.turretAngle);
+        //append and wrap the angle
+        this.turretAngle = Utils.wrapAngle(this.turretAngle, Utils.clampFloat(deltaTurret, -turretRateCap, turretRateCap));
+    }
+
+    /**
+     * Updates the driving of the tank via userinput
+     *
+     * @param input
+     * @param delta
+     */
     private void updateDrive(Input input, int delta)
     {
         if (input != null)
@@ -73,7 +139,7 @@ public class UserTankEntity extends TankEntity
             }
 
             //speed multiplier
-            if (input.isKeyDown(Input.KEY_LSHIFT))
+            if (this.speedMuliplied = input.isKeyDown(Input.KEY_LSHIFT))
             {
                 tankSpeed *= this.getDriveSpeedMultiplier();
             }
@@ -83,6 +149,14 @@ public class UserTankEntity extends TankEntity
             //adds to the vector's angle
             this.vector.addAngle(tankAngleAppend);
         }
+    }
+
+    @Override
+    public void renderHelpers(Graphics g)
+    {
+        super.renderHelpers(g); //To change body of generated methods, choose Tools | Templates.        
+        g.drawOval(mouseX - 8, mouseY - 8, 16, 16);
+        g.drawOval(mouseX - 12, mouseY - 12, 24, 24);
     }
 
     /**
