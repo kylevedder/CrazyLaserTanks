@@ -16,11 +16,11 @@ import org.newdawn.slick.SpriteSheet;
 public class CustomAnimation
 {
 
-    private Image[] images = null;
-    private int duration;
-    private int frameCount = 0;
-    private long delta = 0;
-    private boolean frozen = false;
+    protected Image[] images = null;
+    protected int duration;
+    protected int frameCount = 0;
+    protected long delta = 0;
+    protected boolean frozen = false;
 
     /**
      * Sets up an animation using a sheet and a duration

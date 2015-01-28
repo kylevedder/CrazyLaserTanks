@@ -10,6 +10,7 @@ import kylevedder.com.github.entity.BaseEntity;
 import kylevedder.com.github.ground.BaseGround;
 import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.CenteredRectangle;
+import org.newdawn.slick.geom.Shape;
 
 /**
  *
@@ -92,9 +93,9 @@ public class ObjectRegister
         {
             for (BaseEntity objectItem : objectsList)
             {
-//            System.out.println(objectItem);
                 if (pointer != objectItem.getHitBox() && rect.collides(objectItem.getHitBox()))
                 {
+
                     return true;
                 }
             }
@@ -102,6 +103,54 @@ public class ObjectRegister
             for (BaseGround ground : tiles)
             {
                 if (rect.collides(ground.getHitBox()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks to see if an object collides.
+     * <p>
+     * Note: This method has no way of checking if the passed in object collides
+     * with itself; therefore, this function should only be called by unregistered
+     * items.
+     * </p>
+     *
+     * @param shape - Slick shape to collide with.
+     * @param pointer - Pointer to the parent spawner to avoid collisions with.
+     * @return - BaseEntity of the collision, or null if none found
+     */
+    public BaseEntity checkCollisionWithEntity(Shape shape, BaseEntity pointer)
+    {        
+        if (shape != null)
+        {
+            for (BaseEntity objectItem : objectsList)
+            {
+                if (objectItem != pointer && (objectItem.getHitBox().getPolygon()).contains(shape))
+                {
+                    return objectItem;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if object collides with the ground
+     * @param shape
+     * @return - boolean stating if collides
+     */
+    public boolean checkCollisionWithGround(Shape shape)
+    {
+        if (ground != null && shape != null)
+        {
+            ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(shape.getCenterX(), shape.getCenterY(), 4);
+            for (BaseGround ground : tiles)
+            {
+                if ((ground.getHitBox().getPolygon()).contains(shape))
                 {
                     return true;
                 }
@@ -132,7 +181,7 @@ public class ObjectRegister
 
         float tenHitX = tentativeHitBox.getCenterX();
         float tenHitY = tentativeHitBox.getCenterY();
-        float tenAbsAngle = tentativeHitBox.getAngle();         
+        float tenAbsAngle = tentativeHitBox.getAngle();
 
         //sets the x comp to be a rate
         float vectX = finalVector.getXComp();//dist/sec
@@ -156,11 +205,10 @@ public class ObjectRegister
             //THERE IS A COLLISION!!!
             //cursory collision check failed, must be hitting somewhere.
             //
-                        
+
             //because there is a collision, set the vector speed to zero
             finalVector.setSpeed(0);
-            
-            
+
             //loop that iterates over each subdivision, stepping backwards
             //each loop until there is no more collision
             subdivisionLoop:
@@ -168,35 +216,48 @@ public class ObjectRegister
             {
                 //update tentativeHitBox to the new position to begin check
                 tentativeHitBox.updateAbs(tenHitX + (vectX - vectXSubs * i), tenHitY - (vectY - vectYSubs * i), tenAbsAngle + vectAngle - (vectAngleSubs * i));
-                 
+
                 //update finalVector to reflect tentativeHitBox angle
                 finalVector.setAngle(tenAbsAngle + vectAngle - (vectAngleSubs * i));
 
                 //check tentativeHitBox to see if there is no collision
                 if (!this.checkCollision(tentativeHitBox, hitBox))
-                {                    
+                {
                     //
                     //No collision with other boxes!!! Yay!
                     //
-                                        
+
                     //Using the current tentativeHitBox coords as the new position
-                                        
                     //return the object
                     return new Object[]
                     {
                         tentativeHitBox, finalVector
                     };
                 }
-            }          
+            }
+            //
+            //If code arrives here, that means no subdivisions were appropriate
+            //AS WELL AS the original position of the hitbox colliding. Bummer...
+            //Best course of action is to leave the hitbox be.            
+            //          
+            //
+            //If code arrives here, that means no subdivisions were appropriate
+            //AS WELL AS the original position of the hitbox colliding. Bummer...
+            //Best course of action is to leave the hitbox be.            
+            //          
+            //
+            //If code arrives here, that means no subdivisions were appropriate
+            //AS WELL AS the original position of the hitbox colliding. Bummer...
+            //Best course of action is to leave the hitbox be.            
+            //          
             //
             //If code arrives here, that means no subdivisions were appropriate
             //AS WELL AS the original position of the hitbox colliding. Bummer...
             //Best course of action is to leave the hitbox be.            
             //
-            
+
             //The tentativeHitBox is at its initial position thanks to the aboveloop, therefore
             //the tentativeHitBox can be left as it lies and returned immeditly
-                                    
             return new Object[]
             {
                 tentativeHitBox, finalVector
@@ -209,10 +270,9 @@ public class ObjectRegister
             //There is no collision, YAY!
             //Carry on adding the vectors as normal.
             //            
-            
+
             //however, in the initial check, the hitbox was already at its final position.
             //Therefore, no update is needed            
-            
             return new Object[]
             {
                 tentativeHitBox, finalVector

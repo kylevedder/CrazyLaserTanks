@@ -5,6 +5,7 @@
  */
 package kylevedder.com.github.entity;
 
+import kylevedder.com.github.bullet.Bullet;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.Vector;
@@ -44,21 +45,26 @@ public class UserTankEntity extends TankEntity
     @Override
     public void update(Input input, int delta)
     {
-        super.update(input, delta);
 
         float prevAngle = this.hitBox.getAngle();
-
         this.updateDrive(input, delta);
         Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
         this.vector = (Vector) objects[1];
         this.hitBox = (CenteredRectangle) objects[0];
+
         this.updateTurret(input, delta);
+        this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
 
-        float deltaAngle = Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle);
-
-        updateAnimation(deltaAngle, delta);
+        this.updateShoot(input, delta);
+        super.update(input, delta);
     }
 
+    /**
+     * Updates the tracks to animate correctly
+     *
+     * @param deltaAngle
+     * @param deltaTime
+     */
     private void updateAnimation(float deltaAngle, int deltaTime)
     {
 
@@ -92,6 +98,23 @@ public class UserTankEntity extends TankEntity
         }
     }
 
+    private void updateShoot(Input input, int delta)
+    {
+        if (input != null)
+        {
+            if (input.isKeyDown(Input.KEY_SPACE))
+            {
+                this.fire();
+            }
+        }
+    }
+
+    /**
+     * Updates the turret angle
+     *
+     * @param input
+     * @param delta
+     */
     private void updateTurret(Input input, int delta)
     {
         this.mouseX = Utils.verifyFloat((input.getMouseX() + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom());

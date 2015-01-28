@@ -17,37 +17,43 @@ import org.newdawn.slick.Image;
  */
 public abstract class BaseEntity extends BaseObject
 {
+
     protected Vector vector = null;
     protected Image image = null;
-    
-    protected void init(float x, float y, float angle, Image image)    
+    protected float health = 10f;
+
+    protected void init(float x, float y, float angle, Image image)
     {
         this.hitBox = new CenteredRectangle(x, y, image.getWidth(), image.getHeight(), angle);
         this.image = image;
         vector = new Vector(0, angle);
-    } 
-    
+        health = 10f;
+    }
+
     /**
      * Gets the X value of this object's center.
-     * @return 
+     *
+     * @return
      */
     public float getCenterX()
     {
         return this.hitBox.getCenterX();
     }
-    
+
     /**
      * Gets the Y value of this object's center.
-     * @return 
+     *
+     * @return
      */
     public float getCenterY()
     {
         return this.hitBox.getCenterY();
     }
-    
+
     /**
      * Gets the angle of this object.
-     * @return 
+     *
+     * @return
      */
     public float getAngle()
     {
@@ -56,18 +62,28 @@ public abstract class BaseEntity extends BaseObject
 
     /**
      * Gets the hitbox of this object
-     * @return 
+     *
+     * @return
      */
     public CenteredRectangle getHitBox()
     {
         return hitBox;
     }
-    
-    
-    
+
+    /**
+     * Adds damage to the entity, reducing its health
+     *
+     * @param damage
+     */
+    public void addDamage(float damage)
+    {
+        this.health -= damage;
+    }
+
     /**
      * Gets the rotation of this object.
-     * @return 
+     *
+     * @return
      */
     public float getRotation()
     {
@@ -86,7 +102,5 @@ public abstract class BaseEntity extends BaseObject
     {
         return this.vector.toString();
     }
-    
-    
-    
+
 }

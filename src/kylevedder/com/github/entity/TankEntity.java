@@ -5,9 +5,11 @@
  */
 package kylevedder.com.github.entity;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kylevedder.com.github.animation.CustomAnimation;
+import kylevedder.com.github.bullet.Bullet;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.Vector;
 import org.newdawn.slick.Graphics;
@@ -26,12 +28,20 @@ public class TankEntity extends BaseEntity
     private final int TRACK_WIDTH = 5;
     private final int TRACK_HEIGHT = 27;
 
+    private final int SHOT_SPEED = 100;//millis
+    private final int SHOT_COOLDOWN = 500;//millis
+
     protected float turretAngle = 0;
+    protected int shotCounter = 0;
+    protected boolean readyToFire = true;
     protected boolean speedMuliplied = false;
+
+    protected ArrayList<Bullet> bullets = null;
 
     private final float SCALE = 2f;
 
     private final float TURRET_Y_OFFSET = -4.8f * SCALE;
+    private final float TURRET_END_Y_OFFSET = 12f * SCALE - TURRET_Y_OFFSET;
 
     protected Image turret = null;
     protected Image base = null;
@@ -64,6 +74,24 @@ public class TankEntity extends BaseEntity
         vector = new Vector(0, angle);
         this.turretAngle = 0;
         this.speedMuliplied = false;
+        this.shotCounter = 0;
+        this.readyToFire = true;
+        this.bullets = new ArrayList<>();
+    }
+
+    protected void fire()
+    {
+        if (this.readyToFire)
+        {
+            this.readyToFire = false;
+            this.shotCounter = 0;
+            float sin = (float) Math.sin(Math.toRadians(this.turretAngle + this.hitBox.getAngle()));
+            float cos = (float) Math.cos(Math.toRadians(this.turretAngle + this.hitBox.getAngle()));
+            float barrelX = this.hitBox.getCenterX() + sin * TURRET_END_Y_OFFSET;
+            float barrelY = this.hitBox.getCenterY() - cos * TURRET_END_Y_OFFSET;
+            this.bullets.add(new Bullet(barrelX, barrelY, SHOT_SPEED, this.turretAngle + this.hitBox.getAngle(), this));
+            System.out.println("FIRE");
+        }
     }
 
     @Override
@@ -91,6 +119,12 @@ public class TankEntity extends BaseEntity
         this.turret.setCenterOfRotation(this.turret.getWidth() / 2, this.turret.getHeight() / 2 - TURRET_Y_OFFSET);
         this.turret.setRotation(this.hitBox.getAngle() + this.turretAngle);
         this.turret.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY() + TURRET_Y_OFFSET);
+
+        //render all bullets
+        for (Bullet b : bullets)
+        {
+            b.render();
+        }
     }
 
     /**
@@ -106,6 +140,39 @@ public class TankEntity extends BaseEntity
     @Override
     public void update(Input input, int delta)
     {
+        //count up if shot not ready
+        if (!this.readyToFire)
+        {
+            this.shotCounter += delta;
+        }
+
+        //when ready, enable shoot
+        if (this.shotCounter >= this.SHOT_COOLDOWN)
+        {
+            this.readyToFire = true;
+            this.shotCounter = 0;
+        }
+
+        //remove dead bullets
+        int i = 0;
+        while (i < bullets.size())
+        {
+            Bullet b = bullets.get(i);
+            if (!b.doesExist())
+            {
+                bullets.remove(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        //update each bullet
+        for (Bullet b : bullets)
+        {
+            b.update(input, delta);
+        }
     }
 
     /**
