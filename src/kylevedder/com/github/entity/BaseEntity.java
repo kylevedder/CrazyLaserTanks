@@ -21,6 +21,7 @@ public abstract class BaseEntity extends BaseObject
     protected Vector vector = null;
     protected Image image = null;
     protected float health = 10f;
+    protected boolean destroyed = false;
 
     protected void init(float x, float y, float angle, Image image)
     {
@@ -28,8 +29,18 @@ public abstract class BaseEntity extends BaseObject
         this.image = image;
         vector = new Vector(0, angle);
         health = 10f;
+        destroyed = false;
     }
 
+    /**
+     * Checks to see if this entity is destroyed.
+     * @return 
+     */
+    public boolean isDestroyed()
+    {
+        return destroyed;
+    }   
+    
     /**
      * Gets the X value of this object's center.
      *
@@ -77,6 +88,7 @@ public abstract class BaseEntity extends BaseObject
      */
     public void addDamage(float damage)
     {
+        if(!this.destroyed)
         this.health -= damage;
     }
 

@@ -6,6 +6,7 @@
 package kylevedder.com.github.entity;
 
 import kylevedder.com.github.bullet.Bullet;
+import kylevedder.com.github.controlls.CustomMouseListener;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.Vector;
@@ -25,7 +26,7 @@ public class UserTankEntity extends TankEntity
     private final float DRIVE_SPEED = 100f;//100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
 
-    private final float ANIMATION_BASE_SPEED = 100f;
+    private final float ANIMATION_BASE_SPEED = 100f;    
 
     private float mouseX = 0;
     private float mouseY = 0;
@@ -102,10 +103,10 @@ public class UserTankEntity extends TankEntity
     {
         if (input != null)
         {
-            if (input.isKeyDown(Input.KEY_SPACE))
+            if (input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(CustomMouseListener.BUTTON_LEFT))
             {
                 this.fire();
-            }
+            }            
         }
     }
 

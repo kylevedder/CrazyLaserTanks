@@ -20,9 +20,9 @@ public class CustomMouseListener implements MouseListener
     
     private final int TICKS_PER_SCROLL = 120;
     
-    private final int BUTTON_LEFT = 0;
-    private final int BUTTON_RIGHT = 1;
-    private final int BUTTON_MIDDLE = 2;
+    public static final int BUTTON_LEFT = 0;
+    public static final int BUTTON_RIGHT = 1;
+    public static final int BUTTON_MIDDLE = 2;
 
     @Override
     public void mouseWheelMoved(int change)
@@ -36,7 +36,7 @@ public class CustomMouseListener implements MouseListener
     {
         if(button == BUTTON_MIDDLE)
         {
-            MainApp.gameEngine.camera.setZoom(1f);
+            MainApp.gameEngine.camera.setZoom(1f);            
         }
     }
 

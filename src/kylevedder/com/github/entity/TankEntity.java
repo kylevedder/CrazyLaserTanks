@@ -36,6 +36,11 @@ public class TankEntity extends BaseEntity
     protected boolean readyToFire = true;
     protected boolean speedMuliplied = false;
 
+    private final float[] DESTROYED_COLORS = new float[]
+    {
+        0.5f, 0.5f, 0.5f
+    };
+
     protected ArrayList<Bullet> bullets = null;
 
     private final float SCALE = 2f;
@@ -102,22 +107,40 @@ public class TankEntity extends BaseEntity
 
         //draw right track
         Image tempImage = this.rightTrack.getFrame(this.vector.getSpeed() < 0f);
+        if (this.destroyed)
+        {
+            tempImage.setImageColor(DESTROYED_COLORS[0], DESTROYED_COLORS[1], DESTROYED_COLORS[2], 1f);
+        }
         tempImage.setRotation(this.hitBox.getAngle());
         tempImage.drawCentered(this.hitBox.getCenterX() + cos * (this.base.getWidth() / 2 + tempImage.getWidth() / 2), this.hitBox.getCenterY() + sin * (this.base.getWidth() / 2 + tempImage.getWidth() / 2));
 
         //draw left track
         tempImage = this.leftTrack.getFrame(this.vector.getSpeed() < 0f);
+        if (this.destroyed)
+        {
+            tempImage.setImageColor(DESTROYED_COLORS[0], DESTROYED_COLORS[1], DESTROYED_COLORS[2], 1f);
+        }
         tempImage.setRotation(this.hitBox.getAngle());
         tempImage.drawCentered(this.hitBox.getCenterX() - cos * (this.base.getWidth() / 2 + tempImage.getWidth() / 2), this.hitBox.getCenterY() - sin * (this.base.getWidth() / 2 + tempImage.getWidth() / 2));
 
         //draw base
-        this.base.setRotation(this.hitBox.getAngle());
-        this.base.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY());
+        tempImage = this.base;
+        if (this.destroyed)
+        {
+            tempImage.setImageColor(DESTROYED_COLORS[0], DESTROYED_COLORS[1], DESTROYED_COLORS[2], 1f);
+        }
+        tempImage.setRotation(this.hitBox.getAngle());
+        tempImage.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY());
 
         //draw turret
-        this.turret.setCenterOfRotation(this.turret.getWidth() / 2, this.turret.getHeight() / 2 - TURRET_Y_OFFSET);
-        this.turret.setRotation(this.hitBox.getAngle() + this.turretAngle);
-        this.turret.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY() + TURRET_Y_OFFSET);
+        tempImage = this.turret;
+        if (this.destroyed)
+        {
+            tempImage.setImageColor(DESTROYED_COLORS[0], DESTROYED_COLORS[1], DESTROYED_COLORS[2], 1f);
+        }
+        tempImage.setCenterOfRotation(this.turret.getWidth() / 2, this.turret.getHeight() / 2 - TURRET_Y_OFFSET);
+        tempImage.setRotation(this.hitBox.getAngle() + this.turretAngle);
+        tempImage.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY() + TURRET_Y_OFFSET);
 
         //render all bullets
         for (Bullet b : bullets)
@@ -139,38 +162,47 @@ public class TankEntity extends BaseEntity
     @Override
     public void update(Input input, int delta)
     {
-        //count up if shot not ready
-        if (!this.readyToFire)
+        if (!this.destroyed)
         {
-            this.shotCounter += delta;
-        }
-
-        //when ready, enable shoot
-        if (this.shotCounter >= this.SHOT_COOLDOWN)
-        {
-            this.readyToFire = true;
-            this.shotCounter = 0;
-        }
-
-        //remove dead bullets
-        int i = 0;
-        while (i < bullets.size())
-        {
-            Bullet b = bullets.get(i);
-            if (!b.doesExist())
+            //count up if shot not ready
+            if (!this.readyToFire)
             {
-                bullets.remove(i);
+                this.shotCounter += delta;
             }
-            else
-            {
-                i++;
-            }
-        }
 
-        //update each bullet
-        for (Bullet b : bullets)
-        {
-            b.update(input, delta);
+            //when ready, enable shoot
+            if (this.shotCounter >= this.SHOT_COOLDOWN)
+            {
+                this.readyToFire = true;
+                this.shotCounter = 0;
+            }
+
+            //remove dead bullets
+            int i = 0;
+            while (i < bullets.size())
+            {
+                Bullet b = bullets.get(i);
+                if (!b.doesExist())
+                {
+                    bullets.remove(i);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+            //update each bullet
+            for (Bullet b : bullets)
+            {
+                b.update(input, delta);
+            }
+
+            //check for destroy
+            if (this.health <= 0)
+            {
+                this.destroyed = true;
+            }
         }
     }
 
