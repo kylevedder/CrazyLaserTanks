@@ -27,7 +27,7 @@ import org.newdawn.slick.geom.Line;
 public class Bullet implements Renderable
 {
 
-    private final float BALL_SCALE = 0.25f;
+    private final float BALL_SCALE = 0.5f;
     private final float EXPLOSION_SCALE = 2f;
     private final int EXPLOSION_SIZE = 9;
     private final int EXPLOSION_SPEED = 100;
@@ -38,6 +38,7 @@ public class Bullet implements Renderable
     private Image ball = null;
     private TerminalCustomAnimation explosion = null;
     private BaseEntity parentPointer = null;
+    private boolean canDamage = true;
 
     private Image imageToRender = null;
 
@@ -53,6 +54,7 @@ public class Bullet implements Renderable
             this.c = new Circle(x, y, ball.getWidth() / 2);
             this.parentPointer = parentPointer;
             this.exist = true;
+            this.canDamage = true;
         }
         catch (SlickException ex)
         {
@@ -71,7 +73,11 @@ public class Bullet implements Renderable
             BaseEntity be = MainApp.gameEngine.register.checkCollisionWithEntity(line, parentPointer);
             if (be != null)
             {
-                be.addDamage(DAMAGE);
+                if (canDamage)
+                {
+                    be.addDamage(DAMAGE);
+                    canDamage = false;
+                }
                 this.explosion.update(delta);
                 this.imageToRender = this.explosion.getFrame(false);
                 if (this.imageToRender == null)

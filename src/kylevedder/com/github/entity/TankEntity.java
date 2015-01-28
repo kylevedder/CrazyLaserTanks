@@ -28,7 +28,7 @@ public class TankEntity extends BaseEntity
     private final int TRACK_WIDTH = 5;
     private final int TRACK_HEIGHT = 27;
 
-    private final int SHOT_SPEED = 100;//millis
+    private final int SHOT_SPEED = 300;
     private final int SHOT_COOLDOWN = 500;//millis
 
     protected float turretAngle = 0;
@@ -90,7 +90,6 @@ public class TankEntity extends BaseEntity
             float barrelX = this.hitBox.getCenterX() + sin * TURRET_END_Y_OFFSET;
             float barrelY = this.hitBox.getCenterY() - cos * TURRET_END_Y_OFFSET;
             this.bullets.add(new Bullet(barrelX, barrelY, SHOT_SPEED, this.turretAngle + this.hitBox.getAngle(), this));
-            System.out.println("FIRE");
         }
     }
 
@@ -182,6 +181,7 @@ public class TankEntity extends BaseEntity
     {
         g.draw(this.hitBox.getPolygon());
         this.vector.render(g, this.hitBox.getCenterX(), this.hitBox.getCenterY(), 30/*Speed Scale*/);
+        g.drawString(String.valueOf(this.health), this.hitBox.getCenterX(), this.getCenterY() + 40);
     }
 
 }
