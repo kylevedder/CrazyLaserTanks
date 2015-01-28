@@ -37,6 +37,7 @@ public class ObjectRegister
      */
     public void add(BaseEntity o)
     {
+        if(o != null)
         this.objectsList.add(o);
     }
 

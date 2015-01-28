@@ -5,24 +5,17 @@
  */
 package kylevedder.com.github.main;
 
-import kylevedder.com.github.main.MainApp;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kylevedder.com.github.controlls.CustomMouseListener;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.ObjectRegister;
+import kylevedder.com.github.teams.SinglePlayerMatch;
+import kylevedder.com.github.teams.SinglePlayerMatchGenerator;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Rectangle;
 
 /**
  *
@@ -46,8 +39,10 @@ public class GameEngine
     public Camera camera = null;
     public ObjectRegister register = null;
     public GroundHolder ground = null;
+    public SinglePlayerMatchGenerator spMatch = null;
+    public SinglePlayerMatch match = null;
 
-    public UserTankEntity tank = null;
+    public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
 
     public GameEngine()
@@ -65,17 +60,19 @@ public class GameEngine
     {
         register = new ObjectRegister();
 
-        tank = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
-        tankDummy = new TankEntity(PLAYER_START_X + 200, PLAYER_START_Y + 200, 25);
-        register.add(tank);
+        tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
+        register.add(tankUser);
         register.add(tankDummy);
 
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
 
-        camera = new Camera(tank.getHitBox(), 1f);
+        camera = new Camera(tankUser.getHitBox(), 1f);
+        match = new SinglePlayerMatch("Team 1", "Team 2");
+        match.addToYourTeam(tankUser);
+        spMatch = new SinglePlayerMatchGenerator(1, match, tankUser, register);
 
-        gc.getInput().addMouseListener(new CustomMouseListener());        
+        gc.getInput().addMouseListener(new CustomMouseListener());
 
         System.out.println("Game Loaded...");
     }
@@ -88,11 +85,13 @@ public class GameEngine
      * @throws SlickException
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
-    {        
-//        System.out.println(camera.getZoom());
-        tank.update(gc.getInput(), deltaTime);
-        tankDummy.update(gc.getInput(), deltaTime);
-        camera.update(tank.getHitBox(), gc.getInput());
+    {
+
+        spMatch.update(gc.getInput(), deltaTime);
+//            tankUser.update(gc.getInput(), deltaTime);
+//            tankDummy.update(gc.getInput(), deltaTime);            
+
+        camera.update(tankUser.getHitBox(), gc.getInput());
 
     }
 
@@ -111,9 +110,11 @@ public class GameEngine
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
         g.scale(MainApp.gameEngine.camera.getZoom(), MainApp.gameEngine.camera.getZoom());
         ground.render(g, camera.getRenderOffsetX(), camera.getRenderOffsetY());
-        tankDummy.render();
-        tankDummy.renderHelpers(g);
-        tank.render();
-        tank.renderHelpers(g);
+//        tankDummy.render();
+//        tankDummy.renderHelpers(g);
+//        tankUser.render();
+//        tankUser.renderHelpers(g);
+//        match.render(g);
+        spMatch.render(g);
     }
 }

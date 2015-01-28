@@ -23,7 +23,7 @@ public class UserTankEntity extends TankEntity
 
     private final float TURN_RATE = 90f;
     private final float TURRET_TURN_RATE = 90f;
-    private final float DRIVE_SPEED = 100f;//100f;
+    private final float DRIVE_SPEED = 500f;//100f;
     private final float DRIVE_SPEED_MULTIPLIER = 2f;
 
     private final float ANIMATION_BASE_SPEED = 100f;    
@@ -32,7 +32,7 @@ public class UserTankEntity extends TankEntity
     private float mouseY = 0;
 
     /**
-     * User controlled tank entity.
+     * User controlled tankUser entity.
      *
      * @param x
      * @param y
@@ -128,7 +128,7 @@ public class UserTankEntity extends TankEntity
     }
 
     /**
-     * Updates the driving of the tank via userinput
+     * Updates the driving of the tankUser via userinput
      *
      * @param input
      * @param delta
@@ -184,7 +184,7 @@ public class UserTankEntity extends TankEntity
     }
 
     /**
-     * Gets the turn rate for the tank.
+     * Gets the turn rate for the tankUser.
      *
      * @return
      */
@@ -194,7 +194,7 @@ public class UserTankEntity extends TankEntity
     }
 
     /**
-     * Get the base drive speed for the tank.
+     * Get the base drive speed for the tankUser.
      *
      * @return
      */
@@ -204,7 +204,7 @@ public class UserTankEntity extends TankEntity
     }
 
     /**
-     * Gets the turbo drive speed multiplier for the tank.
+     * Gets the turbo drive speed multiplier for the tankUser.
      *
      * @return
      */

@@ -142,8 +142,8 @@ public class Camera
         renderOffsetY = (posY - this.currentResHeight / this.getZoom() / 2) * this.getZoom();
 
         //calculates offset so that the camera never goes off the edge
-        renderOffsetX = Utils.clampFloat(renderOffsetX, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - WINDOWED_SCREEN_WIDTH);
-        renderOffsetY = Utils.clampFloat(renderOffsetY, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - WINDOWED_SCREEN_HEIGHT);
+        renderOffsetX = Utils.clampFloat(renderOffsetX, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.currentResWidth);
+        renderOffsetY = Utils.clampFloat(renderOffsetY, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.currentResHeight);
 
         //update if in fullscreen
         if (input != null)
