@@ -34,7 +34,7 @@ public class TankEntity extends BaseEntity
 
     protected float TURN_RATE = 90f;
     protected float TURRET_TURN_RATE = 90f;
-    protected float DRIVE_SPEED = 500f;//100f;
+    protected float DRIVE_SPEED = 100f;//100f;
     protected float DRIVE_SPEED_MULTIPLIER = 2f;
 
     protected float ANIMATION_BASE_SPEED = 100f;
