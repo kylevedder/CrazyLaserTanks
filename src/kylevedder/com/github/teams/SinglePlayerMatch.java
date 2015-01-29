@@ -6,6 +6,7 @@
 package kylevedder.com.github.teams;
 
 import kylevedder.com.github.entity.TankEntity;
+import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.main.MainApp;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -16,16 +17,19 @@ import org.newdawn.slick.Graphics;
  */
 public class SinglePlayerMatch
 {
+
     private final String STALEMATE = "Stalemate...";
     private final String VICTORY_SUFFIX = " Wins!";
 
     Team yourTeam = null;
     Team opposingTeam = null;
+    UserTankEntity player;
 
-    public SinglePlayerMatch(String yourTeamName, String opposingTeamName)
+    public SinglePlayerMatch(String yourTeamName, String opposingTeamName, UserTankEntity player)
     {
         this.yourTeam = new Team(yourTeamName);
         this.opposingTeam = new Team(opposingTeamName);
+        this.player = player;
     }
 
     /**
@@ -47,41 +51,43 @@ public class SinglePlayerMatch
     {
         opposingTeam.addMember(e);
     }
-    
-    
+
     /**
      * Gets yourTeam size
-     * @return 
+     *
+     * @return
      */
     public int getYourTeamSize()
     {
         return this.yourTeam.size();
     }
-    
-    
+
     /**
      * Gets opposingTeam size
-     * @return 
+     *
+     * @return
      */
     public int getOpposingTeamSize()
     {
         return this.opposingTeam.size();
     }
-    
+
     /**
      * Gets the TankEntity at the given index from team 1.
+     *
      * @param index
-     * @return 
+     * @return
      */
     public TankEntity getYourTeamEntity(int index)
     {
         return this.yourTeam.getEntity(index);
     }
-    
+
     /**
      * Gets the TankEntity at the given index from team 2.
+     *
      * @param index
-     * @return 
+     * @return
      */
     public TankEntity getOpposingTeamEntity(int index)
     {
@@ -103,13 +109,14 @@ public class SinglePlayerMatch
      * <p>
      * Note: will return null if match is not over!
      * </p>
-     * @return 
+     *
+     * @return
      */
     public String getVictor()
     {
         if (isMatchOver())
         {
-            if (this.yourTeam.isTeamAlive())
+            if (this.yourTeam.isTeamAlive() || !this.player.isDestroyed())
             {
                 return this.yourTeam.toString() + this.VICTORY_SUFFIX;
             }
@@ -127,17 +134,18 @@ public class SinglePlayerMatch
             return null;
         }
     }
-    
+
     /**
      * Draws the winner on the screen.
-     * @param g 
+     *
+     * @param g
      */
     public void render(Graphics g)
     {
         if (this.isMatchOver())
         {
-            g.drawString(this.getVictor(), 
-                    (MainApp.gameEngine.camera.getCurrentResWidth() / 2 + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom(), 
+            g.drawString(this.getVictor(),
+                    (MainApp.gameEngine.camera.getCurrentResWidth() / 2 + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom(),
                     (MainApp.gameEngine.camera.getCurrentResHeight() / 2 + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
         }
     }

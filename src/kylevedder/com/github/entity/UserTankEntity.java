@@ -19,7 +19,7 @@ import org.newdawn.slick.Input;
  * @author Kyle
  */
 public class UserTankEntity extends TankEntity
-{          
+{
 
     private float mouseX = 0;
     private float mouseY = 0;
@@ -34,62 +34,25 @@ public class UserTankEntity extends TankEntity
     public UserTankEntity(float x, float y, float angle)
     {
         super(x, y, angle);
-        this.SHOT_SPEED = 5;
     }
 
     @Override
     public void update(Input input, int delta)
     {
 
-        float prevAngle = this.hitBox.getAngle();
-        this.updateDrive(input, delta);
-        Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
-        this.vector = (Vector) objects[1];
-        this.hitBox = (CenteredRectangle) objects[0];
-
-        this.updateTurret(input, delta);
-        this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
-
-        this.updateShoot(input, delta);
-        super.update(input, delta);
-    }
-
-    /**
-     * Updates the tracks to animate correctly
-     *
-     * @param deltaAngle
-     * @param deltaTime
-     */
-    private void updateAnimation(float deltaAngle, int deltaTime)
-    {
-
-        if (deltaAngle == 0 && this.vector.getSpeed() == 0)
+        if (!this.isDestroyed())
         {
-            this.leftTrack.freeze(deltaTime);
-            this.rightTrack.freeze(deltaTime);
-        }
-        else if (this.vector.getSpeed() == 0f && deltaAngle != 0)
-        {
-            if (deltaAngle > 0)//clockwise
-            {
-                this.leftTrack.setDuration((int) ANIMATION_BASE_SPEED);
-                this.rightTrack.setDuration(-(int) ANIMATION_BASE_SPEED);
-            }
-            else
-            {
-                this.leftTrack.setDuration(-(int) ANIMATION_BASE_SPEED);
-                this.rightTrack.setDuration((int) ANIMATION_BASE_SPEED);
-            }
-            this.leftTrack.update(deltaTime);
-            this.rightTrack.update(deltaTime);
-        }
-        else
-        {
-            float animationDivisor = (this.speedMuliplied) ? this.getDriveSpeedMultiplier() : 1;
-            this.leftTrack.setDuration((int) (ANIMATION_BASE_SPEED / animationDivisor));
-            this.rightTrack.setDuration((int) (ANIMATION_BASE_SPEED / animationDivisor));
-            this.leftTrack.update(deltaTime);
-            this.rightTrack.update(deltaTime);
+            float prevAngle = this.hitBox.getAngle();
+            this.updateDrive(input, delta);
+            Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
+            this.vector = (Vector) objects[1];
+            this.hitBox = (CenteredRectangle) objects[0];
+
+            this.updateTurret(input, delta);
+            this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
+
+            this.updateShoot(input, delta);
+            super.update(input, delta);
         }
     }
 
@@ -100,7 +63,7 @@ public class UserTankEntity extends TankEntity
             if (input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(CustomMouseListener.BUTTON_LEFT))
             {
                 this.fire();
-            }            
+            }
         }
     }
 
@@ -115,10 +78,8 @@ public class UserTankEntity extends TankEntity
         this.mouseX = Utils.verifyFloat((input.getMouseX() + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom());
         this.mouseY = Utils.verifyFloat((input.getMouseY() + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
         float desiredTurretAngle = Utils.verifyFloat((float) Math.toDegrees(Math.atan2(mouseY - this.hitBox.getCenterY(), mouseX - this.hitBox.getCenterX())) + 90f - this.hitBox.getAngle());
-        float turretRateCap = this.TURRET_TURN_RATE / (1000 / delta);
-        float deltaTurret = Utils.wrapAngleDelta(desiredTurretAngle - this.turretAngle);
         //append and wrap the angle
-        this.turretAngle = Utils.wrapAngle(this.turretAngle, Utils.clampFloat(deltaTurret, -turretRateCap, turretRateCap));
+        this.addTurretAngle(desiredTurretAngle - this.turretAngle, delta);
     }
 
     /**
@@ -175,6 +136,6 @@ public class UserTankEntity extends TankEntity
         super.renderHelpers(g); //To change body of generated methods, choose Tools | Templates.        
         g.drawOval(mouseX - 8, mouseY - 8, 16, 16);
         g.drawOval(mouseX - 12, mouseY - 12, 24, 24);
-    }    
+    }
 
 }

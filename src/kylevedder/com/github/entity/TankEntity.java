@@ -12,6 +12,7 @@ import kylevedder.com.github.animation.CustomAnimation;
 import kylevedder.com.github.bullet.Bullet;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.Vector;
+import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -28,15 +29,15 @@ public class TankEntity extends BaseEntity
     private final int TRACK_WIDTH = 5;
     private final int TRACK_HEIGHT = 27;
 
-    protected int SHOT_SPEED = 300;
+    protected int SHOT_SPEED = 600;
     protected int SHOT_COOLDOWN = 500;//millis
 
     protected float TURN_RATE = 90f;
     protected float TURRET_TURN_RATE = 90f;
     protected float DRIVE_SPEED = 500f;//100f;
     protected float DRIVE_SPEED_MULTIPLIER = 2f;
-    
-    protected float ANIMATION_BASE_SPEED = 100f;  
+
+    protected float ANIMATION_BASE_SPEED = 100f;
 
     protected float turretAngle = 0;
     protected int shotCounter = 0;
@@ -91,6 +92,61 @@ public class TankEntity extends BaseEntity
         this.bullets = new ArrayList<>();
     }
 
+    /**
+     * Adds to the turret angle, but rate limiting the turning.
+     *
+     * @param deltaTurretAngle
+     * @param delta
+     */
+    protected void addTurretAngle(float deltaTurretAngle, int delta)
+    {
+        float cleanDeltaTurret = Utils.wrapAngleDelta(deltaTurretAngle);
+        float turretRateCap = this.TURRET_TURN_RATE / (1000 / delta);
+        this.turretAngle = Utils.wrapAngle(this.turretAngle, Utils.clampFloat(cleanDeltaTurret, -turretRateCap, turretRateCap));
+    }
+
+    /**
+     * Updates the tracks to animate correctly
+     *
+     * @param deltaAngle
+     * @param deltaTime
+     */
+    protected void updateAnimation(float deltaAngle, int deltaTime)
+    {
+
+        if (deltaAngle == 0 && this.vector.getSpeed() == 0)
+        {
+            this.leftTrack.freeze(deltaTime);
+            this.rightTrack.freeze(deltaTime);
+        }
+        else if (this.vector.getSpeed() == 0f && deltaAngle != 0)
+        {
+            if (deltaAngle > 0)//clockwise
+            {
+                this.leftTrack.setDuration((int) ANIMATION_BASE_SPEED);
+                this.rightTrack.setDuration(-(int) ANIMATION_BASE_SPEED);
+            }
+            else
+            {
+                this.leftTrack.setDuration(-(int) ANIMATION_BASE_SPEED);
+                this.rightTrack.setDuration((int) ANIMATION_BASE_SPEED);
+            }
+            this.leftTrack.update(deltaTime);
+            this.rightTrack.update(deltaTime);
+        }
+        else
+        {
+            float animationDivisor = (this.speedMuliplied) ? this.getDriveSpeedMultiplier() : 1;
+            this.leftTrack.setDuration((int) (ANIMATION_BASE_SPEED / animationDivisor));
+            this.rightTrack.setDuration((int) (ANIMATION_BASE_SPEED / animationDivisor));
+            this.leftTrack.update(deltaTime);
+            this.rightTrack.update(deltaTime);
+        }
+    }
+
+    /**
+     * Fires a bullet if ready to do so.
+     */
     protected void fire()
     {
         if (this.readyToFire)
@@ -183,34 +239,34 @@ public class TankEntity extends BaseEntity
                 this.readyToFire = true;
                 this.shotCounter = 0;
             }
-
-            //remove dead bullets
-            int i = 0;
-            while (i < bullets.size())
+        }
+        //remove dead bullets
+        int i = 0;
+        while (i < bullets.size())
+        {
+            Bullet b = bullets.get(i);
+            if (!b.doesExist())
             {
-                Bullet b = bullets.get(i);
-                if (!b.doesExist())
-                {
-                    bullets.remove(i);
-                }
-                else
-                {
-                    i++;
-                }
+                bullets.remove(i);
             }
-
-            //update each bullet
-            for (Bullet b : bullets)
+            else
             {
-                b.update(input, delta);
-            }
-
-            //check for destroy
-            if (this.health <= 0)
-            {
-                this.destroyed = true;
+                i++;
             }
         }
+
+        //update each bullet
+        for (Bullet b : bullets)
+        {
+            b.update(input, delta);
+        }
+
+        //check for destroy
+        if (this.health <= 0)
+        {
+            this.destroyed = true;
+        }
+
     }
 
     /**
@@ -222,7 +278,7 @@ public class TankEntity extends BaseEntity
         this.vector.render(g, this.hitBox.getCenterX(), this.hitBox.getCenterY(), 30/*Speed Scale*/);
         g.drawString(String.valueOf(this.health), this.hitBox.getCenterX(), this.getCenterY() + 40);
     }
-    
+
     /**
      * Gets the turn rate for the tankUser.
      *

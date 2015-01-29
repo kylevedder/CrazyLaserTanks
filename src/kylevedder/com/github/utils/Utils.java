@@ -21,6 +21,30 @@ public class Utils
 {
 
     /**
+     * Calculates the distance between the two rectangles.
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public static float getDistanceBetween(CenteredRectangle c1, CenteredRectangle c2)
+    {
+        return (float) Math.sqrt(Math.abs(c1.getCenterX() - c2.getCenterX()) + Math.abs(c1.getCenterY() - c2.getCenterY()));
+    }
+
+    /**
+     * Calculates the angle between the anchor and the other item.
+     *
+     * @param anchor
+     * @param other
+     * @return
+     */
+    public static float calculateAngle(CenteredRectangle anchor, CenteredRectangle other)
+    {
+        return (float) Math.toDegrees(Math.atan2(other.getCenterY() - anchor.getCenterY(), other.getCenterX() - anchor.getCenterX())) + 90f - anchor.getAngle();
+    }
+
+    /**
      *
      * If val greater than high, wraps val to # above high to low (inclusive)
      * <p>
@@ -123,8 +147,9 @@ public class Utils
 
     /**
      * Wraps the delta angle to smooth out degree jumps due to angle roll over
+     *
      * @param val
-     * @return 
+     * @return
      */
     public static float wrapAngleDelta(float val)
     {

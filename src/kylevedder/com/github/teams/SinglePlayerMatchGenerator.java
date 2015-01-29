@@ -7,6 +7,7 @@ package kylevedder.com.github.teams;
 
 import java.util.ArrayList;
 import java.util.Random;
+import kylevedder.com.github.entity.AITankEntity;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.BaseGround;
@@ -49,13 +50,13 @@ public class SinglePlayerMatchGenerator
         yourTeam = new ArrayList<TankEntity>();
         opposingTeam = new ArrayList<TankEntity>();
 
-        TankEntity yourEntity;
-        TankEntity opposingEntity;
+        AITankEntity yourEntity;
+        AITankEntity opposingEntity;
 
         //setup your team
         for (int i = 0; i < this.teamSize - 1; i++)
         {
-            yourEntity = new TankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/);
+            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, this.match.opposingTeam);
             match.addToYourTeam(yourEntity);
             this.yourTeam.add(yourEntity);
         }        
@@ -63,7 +64,7 @@ public class SinglePlayerMatchGenerator
         for (int i = 0; i < this.teamSize; i++)
         {
 
-            opposingEntity = new TankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/);
+            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, this.match.yourTeam);
             match.addToOpposingTeam(opposingEntity);
             this.opposingTeam.add(opposingEntity);
 

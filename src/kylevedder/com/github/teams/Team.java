@@ -50,6 +50,15 @@ public class Team
     }
     
     /**
+     * Gets the team's entity list.
+     * @return 
+     */
+    public ArrayList<TankEntity> getEntityList()
+    {
+        return teamList;
+    }
+    
+    /**
      * Gets the TankEntity at the given index.
      * @param index
      * @return 

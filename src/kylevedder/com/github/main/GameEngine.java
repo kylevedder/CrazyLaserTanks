@@ -68,9 +68,9 @@ public class GameEngine
         register.addGround(ground);
 
         camera = new Camera(tankUser.getHitBox(), 1f);
-        match = new SinglePlayerMatch("Team 1", "Team 2");
+        match = new SinglePlayerMatch("Team 1", "Team 2", tankUser);
         match.addToYourTeam(tankUser);
-        spMatch = new SinglePlayerMatchGenerator(1, match, tankUser, register);
+        spMatch = new SinglePlayerMatchGenerator(2, match, tankUser, register);
 
         gc.getInput().addMouseListener(new CustomMouseListener());
 
