@@ -23,8 +23,9 @@ public class AITankEntity extends TankEntity
     private Team enemyTeam = null;
     private float pastTurretUpdateDelta = 0f;
     private final float SHOOT_ANGLE_OFF_THRESHOLD = 0.5f;
-    private final float DRIVE_TO_DIST = BaseGround.GROUND_SIZE * 6f;
+    private final float DRIVE_TO_DIST = BaseGround.GROUND_SIZE * 4f;
     private final float DRIVE_ANGLE_OFF_THRESHOLD = 0.5f;
+    private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 45f;
 
     public AITankEntity(float x, float y, float angle, Team enemyTeam)
     {
@@ -40,7 +41,8 @@ public class AITankEntity extends TankEntity
         if (target != null)
         {
             float prevAngle = this.hitBox.getAngle();
-            if (!this.destroyed)this.updateDrive(target, delta);
+
+            this.updateDrive(target, delta);
             Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
             this.vector = (Vector) objects[1];
             this.hitBox = (CenteredRectangle) objects[0];
@@ -50,12 +52,15 @@ public class AITankEntity extends TankEntity
                 this.updateTurret(target, delta);
                 this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
                 this.updateShoot();
+
             }
-            super.update(input, delta);
         }
+        super.update(input, delta);
+
     }
-    
+
     private int driveDirecton = 1;
+
     /**
      * Updates the driving of the enemy
      *
@@ -63,48 +68,50 @@ public class AITankEntity extends TankEntity
      */
     private void updateDrive(TankEntity target, int delta)
     {
-        if(MainApp.gameEngine.register.checkCollision(this))
-        {
-            driveDirecton *= -1;
-        }
-        //adds to both the angle of the vector and the rotation of the vector
-        float tankAngleAppend = 0;
-        //sets the speed of the vector
-        float tankSpeed = 0;
+        if (!this.destroyed)
+        {                        
+            //sets the speed of the vector
+            float tankSpeed = 0;
 
-        float desiredAngle = Utils.calculateAngle(this.hitBox, target.getHitBox());
-        float distToTarget = Utils.getDistanceBetween(this.hitBox, target.getHitBox());
+            float desiredAngle = Utils.calculateAngle(this.hitBox, target.getHitBox());
+            float distToTarget = Utils.getDistanceBetween(this.hitBox, target.getHitBox());
 
-        //need to drive there
-        if (Math.abs(distToTarget) <= this.DRIVE_TO_DIST)//circle target
-        {
-            desiredAngle += 90f;
+            float deltaAngle = Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle());
 
-        }
-        //else: drive at it
+            float driveRate = this.getDriveSpeed() / (1000 / delta);
 
-        tankSpeed = this.getDriveSpeed() / (1000 / delta);
-        //angle not OK
-        if (Math.abs(desiredAngle) > this.SHOOT_ANGLE_OFF_THRESHOLD)
-        {
-            //angle too big
-            if (this.hitBox.getAngle() > desiredAngle)
+            //if at acceptable angle to drive
+            if (Math.abs(deltaAngle) <= NO_DRIVE_ANGLE_OFF_THRESHOLD)
             {
-                tankAngleAppend -= this.getTurnRate() / (1000 / delta);
+                
+                if (Math.abs(distToTarget) >= this.DRIVE_TO_DIST)//drive to target
+                {
+                    tankSpeed = driveRate;
+                }
+
             }
-            //angle  too small
-            else if (this.hitBox.getAngle() < desiredAngle)
-            {
-                tankAngleAppend += this.getTurnRate() / (1000 / delta);
-            }
+            this.setVector(tankSpeed, desiredAngle, delta);
         }
-        tankSpeed *= driveDirecton;
+        else
+        {
+            this.vector.setSpeed(0);
+        }
+    }
 
-        //sets the vector's speed
-        this.vector.setSpeed(tankSpeed);
-        //adds to the vector's angle
-        this.vector.addAngle(tankAngleAppend);
+    /**
+     * Sets the vector and adds the given angle
+     * @param speed
+     * @param angle
+     * @param delta 
+     */
+    private void setVector(float speed, float angle, int delta)
+    {
+        float turnRate = this.getTurnRate() / (1000 / delta);
+        float deltaAngle = Utils.wrapAngleDelta(angle - this.vector.getAngle());
+        deltaAngle = Utils.clampFloat(deltaAngle, -turnRate, turnRate);
 
+        this.vector.setSpeed(speed);
+        this.vector.addAngle(deltaAngle);
     }
 
     /**
@@ -114,7 +121,7 @@ public class AITankEntity extends TankEntity
     {
         if (target != null)
         {
-            float desiredTurretAngle = Utils.calculateAngle(this.hitBox, target.getHitBox());
+            float desiredTurretAngle = Utils.calculateTurretAngle(this.hitBox, target.getHitBox());
             this.addTurretAngle(desiredTurretAngle - this.turretAngle, delta);
             //intentionally done after turret has been moved.
             //this way, if pastTurretUpdateDelta != 0, we will know we have not reached our desired shoot angle
