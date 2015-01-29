@@ -120,9 +120,9 @@ public class SinglePlayerMatch
             {
                 return this.yourTeam.toString() + this.VICTORY_SUFFIX;
             }
-            else if (this.yourTeam.isTeamAlive())
+            else if (this.opposingTeam.isTeamAlive())
             {
-                return this.yourTeam.toString() + this.VICTORY_SUFFIX;
+                return this.opposingTeam.toString() + this.VICTORY_SUFFIX;
             }
             else
             {
