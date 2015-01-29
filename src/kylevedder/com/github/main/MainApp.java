@@ -42,8 +42,8 @@ public class MainApp extends BasicGame
         app.setDisplayMode(Camera.WINDOWED_SCREEN_WIDTH, Camera.WINDOWED_SCREEN_HEIGHT, false);
         app.setMouseGrabbed(false);
         app.setVSync(true);        
-        app.setTargetFrameRate(60);
-        app.setAlwaysRender(true);        
+        app.setTargetFrameRate(60);  
+        app.setSmoothDeltas(true);
         app.start();        
         return app;
     }

@@ -87,7 +87,7 @@ public class AITankEntity extends TankEntity
                 if (Math.abs(distToTarget) >= this.DRIVE_TO_DIST)//drive to target
                 {
                     tankSpeed = driveRate;
-                }
+                }                
 
             }
             this.setVector(tankSpeed, desiredAngle, delta);

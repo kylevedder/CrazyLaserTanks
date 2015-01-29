@@ -29,7 +29,20 @@ public class Utils
      */
     public static float getDistanceBetween(CenteredRectangle c1, CenteredRectangle c2)
     {
-        return (float) Math.sqrt(Math.abs(c1.getCenterX() - c2.getCenterX()) + Math.abs(c1.getCenterY() - c2.getCenterY()));
+        return (float) Math.sqrt(Math.pow(c1.getCenterX() - c2.getCenterX(), 2) + Math.pow(c1.getCenterY() - c2.getCenterY(), 2));
+    }
+
+    /**
+     * Calculates the angle between the anchor and the other item for the
+     * turret.
+     *
+     * @param anchor
+     * @param other
+     * @return
+     */
+    public static float calculateTurretAngle(CenteredRectangle anchor, CenteredRectangle other)
+    {
+        return (float) Math.toDegrees(Math.atan2(other.getCenterY() - anchor.getCenterY(), other.getCenterX() - anchor.getCenterX())) + 90f - anchor.getAngle();
     }
 
     /**
@@ -41,7 +54,7 @@ public class Utils
      */
     public static float calculateAngle(CenteredRectangle anchor, CenteredRectangle other)
     {
-        return (float) Math.toDegrees(Math.atan2(other.getCenterY() - anchor.getCenterY(), other.getCenterX() - anchor.getCenterX())) + 90f - anchor.getAngle();
+        return (float) Math.toDegrees(Math.atan2(other.getCenterY() - anchor.getCenterY(), other.getCenterX() - anchor.getCenterX())) + 90f;
     }
 
     /**

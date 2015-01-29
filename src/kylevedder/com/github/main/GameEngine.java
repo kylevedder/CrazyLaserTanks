@@ -24,14 +24,16 @@ import org.newdawn.slick.SlickException;
 public class GameEngine
 {
 
-    public static final int WORLD_WIDTH = 100;
-    public static final int WORLD_HEIGHT = 100;
+    public static final int WORLD_WIDTH = 40;
+    public static final int WORLD_HEIGHT = 40;
 
     public static final int TILE_SIZE = 64;
 
     final float PLAYER_START_X = 500f;
     final float PLAYER_START_Y = 500f;
     final float PLAYER_START_ANGLE = 0f;
+    
+    final int TEAM_SIZE = 1;
 
     private float tankAngleAppend = 0;
     private float tankSpeed = 0;
@@ -70,7 +72,7 @@ public class GameEngine
         camera = new Camera(tankUser.getHitBox(), 1f);
         match = new SinglePlayerMatch("Team 1", "Team 2", tankUser);
         match.addToYourTeam(tankUser);
-        spMatch = new SinglePlayerMatchGenerator(2, match, tankUser, register);
+        spMatch = new SinglePlayerMatchGenerator(TEAM_SIZE, match, tankUser, register);
 
         gc.getInput().addMouseListener(new CustomMouseListener());
 
