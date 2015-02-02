@@ -50,6 +50,9 @@ public class StateSinglePlayer implements BasicState
     public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
     
+    
+    private MusicPlayer musicPlayer = null;
+    
 
     public StateSinglePlayer()
     {        
@@ -60,6 +63,8 @@ public class StateSinglePlayer implements BasicState
     @Override
     public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
     {   
+        this.musicPlayer = musicPlayer;
+        this.musicPlayer.startGameMusic();
         camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.gameEngine.screenManager);
         register = new ObjectRegister();
 
@@ -75,9 +80,7 @@ public class StateSinglePlayer implements BasicState
         match.addToYourTeam(tankUser);
         spMatch = new SinglePlayerMatchGenerator(TEAM_SIZE, match, tankUser, register);
 
-        gc.getInput().addMouseListener(new CustomMouseListener());
-
-        System.out.println("Game Loaded...");
+        gc.getInput().addMouseListener(new CustomMouseListener());        
     }
 
     @Override
