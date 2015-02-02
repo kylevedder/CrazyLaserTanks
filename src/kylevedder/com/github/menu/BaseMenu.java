@@ -6,6 +6,8 @@
 package kylevedder.com.github.menu;
 
 import kylevedder.com.github.gui.FontLoader;
+import kylevedder.com.github.states.StateManager;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -31,7 +33,7 @@ public class BaseMenu
     
     FontLoader fontLoader;
 
-    public BaseMenu() throws SlickException
+    public BaseMenu(GameContainer gc, StateManager stateManager) throws SlickException
     {
         normalImage = new Image("images/buttons/normal.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);        
         hovImage = new Image("images/buttons/hover.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);

@@ -31,7 +31,7 @@ public class InGameMenu extends BaseMenu
 
     public InGameMenu(GameContainer gc, StateManager stateManager) throws SlickException
     {
-        super();
+        super(gc, stateManager);
         this.stateManager = stateManager;
         this.gc = gc;
 
