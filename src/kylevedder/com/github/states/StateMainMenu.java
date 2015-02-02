@@ -8,16 +8,12 @@ package kylevedder.com.github.states;
 import java.util.ArrayList;
 import kylevedder.com.github.gui.FontLoader;
 import kylevedder.com.github.gui.GUIButton;
-import kylevedder.com.github.gui.GUIButtonLayout;
 import kylevedder.com.github.gui.GUIMouseOverContent;
-import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.music.MusicPlayer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Music;
-import org.newdawn.slick.MusicListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 
