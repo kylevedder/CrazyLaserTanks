@@ -117,9 +117,19 @@ public class SinglePlayerMatchGenerator
         {
             e.render();
             e.renderHelpers(g);
-        }
+        }        
         this.player.render();
         this.player.renderHelpers(g);
+        
+        for(TankEntity e: opposingTeam)
+        {
+            e.renderProjectiles();
+        }    
+        for(TankEntity e: yourTeam)
+        {
+            e.renderProjectiles();
+        }
+        
         this.match.render(g);
     }
 

@@ -100,7 +100,7 @@ public class StateSinglePlayer implements BasicState
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
         g.scale(camera.getZoom(), camera.getZoom());
         ground.render(g, camera);
-        spMatch.render(g);
+        spMatch.render(g);        
     }
     
 }

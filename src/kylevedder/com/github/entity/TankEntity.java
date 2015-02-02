@@ -207,14 +207,21 @@ public class TankEntity extends BaseEntity
         tempImage.setCenterOfRotation(this.turret.getWidth() / 2, this.turret.getHeight() / 2 - TURRET_Y_OFFSET);
         tempImage.setRotation(this.hitBox.getAngle() + this.turretAngle);
         tempImage.drawCentered(this.hitBox.getCenterX(), this.hitBox.getCenterY() + TURRET_Y_OFFSET);
+        
+    }
 
+    /**
+     * Renders all projectiles of the tank
+     */
+    public void renderProjectiles()
+    {
         //render all bullets
         for (Bullet b : bullets)
         {
             b.render();
         }
     }
-
+    
     /**
      * Gets the hitbox for this object.
      *
