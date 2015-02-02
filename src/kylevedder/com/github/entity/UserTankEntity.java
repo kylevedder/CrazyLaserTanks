@@ -5,7 +5,7 @@
  */
 package kylevedder.com.github.entity;
 
-import kylevedder.com.github.controlls.CustomMouseListener;
+import kylevedder.com.github.controlls.TankMouseListener;
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
@@ -55,17 +55,17 @@ public class UserTankEntity extends TankEntity
             this.updateTurret(input, delta);
             this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
 
-            this.updateShoot(input, delta);
+            this.updateShoot(input);
             
         }
         super.update(input, delta);
     }
 
-    private void updateShoot(Input input, int delta)
+    private void updateShoot(Input input)
     {
         if (input != null)
         {
-            if (input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(CustomMouseListener.BUTTON_LEFT))
+            if (input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(TankMouseListener.BUTTON_LEFT))
             {
                 this.fire();
             }

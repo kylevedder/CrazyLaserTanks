@@ -128,8 +128,8 @@ public class SinglePlayerMatchGenerator
         for(TankEntity e: yourTeam)
         {
             e.renderProjectiles();
-        }
-        
+        }        
+        this.player.renderProjectiles();
         this.match.render(g);
     }
 

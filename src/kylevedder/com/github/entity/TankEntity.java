@@ -160,7 +160,7 @@ public class TankEntity extends BaseEntity
             float cos = (float) Math.cos(Math.toRadians(this.turretAngle + this.hitBox.getAngle()));
             float barrelX = this.hitBox.getCenterX() + sin * TURRET_END_Y_OFFSET;
             float barrelY = this.hitBox.getCenterY() - cos * TURRET_END_Y_OFFSET;
-            this.bullets.add(new Bullet(barrelX, barrelY, SHOT_SPEED, this.turretAngle + this.hitBox.getAngle(), this, register));
+            this.bullets.add(new Bullet(barrelX, barrelY, SHOT_SPEED, this.turretAngle + this.hitBox.getAngle(), this, register));            
         }
     }
 

@@ -34,6 +34,7 @@ public class Bullet implements Renderable
     private final int EXPLOSION_SPEED = 100;
 
     private boolean exist = true;
+    private boolean exploding = false;
     private Vector vector = null;
     private Circle c = null;
     private Image ball = null;
@@ -57,6 +58,7 @@ public class Bullet implements Renderable
             this.c = new Circle(x, y, ball.getWidth() / 2);
             this.parentPointer = parentPointer;
             this.exist = true;
+            this.exploding = false;
             this.canDamage = true;
         }
         catch (SlickException ex)
@@ -74,37 +76,59 @@ public class Bullet implements Renderable
             float yComp = this.vector.getYComp() / (1000 / delta);
             Line line = new Line(this.c.getCenterX(), this.c.getCenterY(), this.c.getCenterX() + xComp, this.c.getCenterY() + yComp);
             BaseEntity be = register.checkCollisionWithEntity(line, parentPointer);
-            if (be != null)
+            if (exploding)
+            {
+                updateExploding(delta);
+            }
+            else if (be != null)
             {
                 if (canDamage)
                 {
                     be.addDamage(DAMAGE);
                     canDamage = false;
                 }
-                this.explosion.update(delta);
-                this.imageToRender = this.explosion.getFrame(false);
-                if (this.imageToRender == null)
-                {
-                    this.destroy();
-                }
+                updateExploding(delta);
             }
             else if (register.checkCollisionWithGround(line))
             {
-                this.explosion.update(delta);
-                this.imageToRender = this.explosion.getFrame(false);
-                if (this.imageToRender == null)
-                {
-                    this.destroy();
-                }
+                updateExploding(delta);
             }
             else
             {
-                this.c.setCenterX(this.c.getCenterX() + xComp);
-                this.c.setCenterY(this.c.getCenterY() - yComp);
-                this.imageToRender = this.ball;
+                updateTravel(delta, xComp, yComp);
             }
         }
 
+    }
+
+    /**
+     * Updates the explosion of the bullet
+     *
+     * @param delta
+     */
+    private void updateExploding(int delta)
+    {
+        exploding = true;
+        this.explosion.update(delta);
+        this.imageToRender = this.explosion.getFrame(false);
+        if (this.imageToRender == null)
+        {
+            this.destroy();
+        }
+    }
+
+    /**
+     * Updates the travel of the bullet
+     * @param delta
+     * @param xComp
+     * @param yComp 
+     */
+    private void updateTravel(int delta, float xComp, float yComp)
+    {
+        
+        this.c.setCenterX(this.c.getCenterX() + xComp);
+        this.c.setCenterY(this.c.getCenterY() - yComp);
+        this.imageToRender = this.ball;
     }
 
     /**

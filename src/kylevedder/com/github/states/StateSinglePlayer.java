@@ -5,7 +5,7 @@
  */
 package kylevedder.com.github.states;
 
-import kylevedder.com.github.controlls.CustomMouseListener;
+import kylevedder.com.github.controlls.TankMouseListener;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
@@ -18,6 +18,8 @@ import kylevedder.com.github.teams.SinglePlayerMatchGenerator;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -26,8 +28,8 @@ import org.newdawn.slick.SlickException;
  */
 public class StateSinglePlayer implements BasicState
 {
-    
-     public static final int WORLD_WIDTH = 40;
+
+    public static final int WORLD_WIDTH = 40;
     public static final int WORLD_HEIGHT = 40;
 
     public static final int TILE_SIZE = 64;
@@ -35,7 +37,7 @@ public class StateSinglePlayer implements BasicState
     final float PLAYER_START_X = 500f;
     final float PLAYER_START_Y = 500f;
     final float PLAYER_START_ANGLE = 0f;
-    
+
     final int TEAM_SIZE = 4;
 
     private float tankAngleAppend = 0;
@@ -49,20 +51,16 @@ public class StateSinglePlayer implements BasicState
 
     public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
-    
-    
+
     private MusicPlayer musicPlayer = null;
-    
 
     public StateSinglePlayer()
-    {        
+    {
     }
-    
-    
 
     @Override
     public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
-    {   
+    {
         this.musicPlayer = musicPlayer;
         this.musicPlayer.startGameMusic();
         camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.gameEngine.screenManager);
@@ -75,12 +73,12 @@ public class StateSinglePlayer implements BasicState
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
 
-        
         match = new SinglePlayerMatch("Team 1", "Team 2", tankUser, camera);
         match.addToYourTeam(tankUser);
         spMatch = new SinglePlayerMatchGenerator(TEAM_SIZE, match, tankUser, register);
 
-        gc.getInput().addMouseListener(new CustomMouseListener());        
+        //setup mouse
+        gc.getInput().addMouseListener(new TankMouseListener(camera));
     }
 
     @Override
@@ -100,7 +98,7 @@ public class StateSinglePlayer implements BasicState
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
         g.scale(camera.getZoom(), camera.getZoom());
         ground.render(g, camera);
-        spMatch.render(g);        
+        spMatch.render(g);
     }
-    
+
 }

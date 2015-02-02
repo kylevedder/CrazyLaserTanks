@@ -14,7 +14,7 @@ import org.newdawn.slick.MouseListener;
  *
  * @author Kyle
  */
-public class CustomMouseListener implements MouseListener
+public class TankMouseListener implements MouseListener
 {
     private volatile boolean isOperating = true;
     
@@ -23,21 +23,30 @@ public class CustomMouseListener implements MouseListener
     public static final int BUTTON_LEFT = 0;
     public static final int BUTTON_RIGHT = 1;
     public static final int BUTTON_MIDDLE = 2;
+    
+    private Camera camera;
+
+    public TankMouseListener(Camera camera)
+    {
+        this.camera = camera;                
+    }
+    
+    
 
     @Override
     public void mouseWheelMoved(int change)
     {
         //120 is 1 tick scrolled down
-//        MainApp.gameEngine.camera.addZoom(change / TICKS_PER_SCROLL * Camera.ZOOM_AMOUNT);        
+        camera.addZoom(change / TICKS_PER_SCROLL * Camera.ZOOM_AMOUNT);
     }
 
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount)
     {
-//        if(button == BUTTON_MIDDLE)
-//        {
-//            MainApp.gameEngine.camera.setZoom(1f);            
-//        }
+        if(button == BUTTON_MIDDLE)
+        {
+            camera.setZoom(1f);            
+        }
     }
 
     @Override
