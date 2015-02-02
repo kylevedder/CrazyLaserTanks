@@ -40,7 +40,7 @@ public class StateMainMenu implements BasicState
 
         GUIMouseOverContent content = new GUIMouseOverContent("Hello", "World", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
 
-        button = new GUIButton(gc, MainApp.gameEngine.camera.getCurrentResWidth() / 2, MainApp.gameEngine.camera.getCurrentResHeight()/ 2, content.getBaseImage().getWidth(), content.getBaseImage().getHeight(), content);
+        button = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2, MainApp.gameEngine.screenManager.getCurrentResHeight()/ 2, content.getBaseImage().getWidth(), content.getBaseImage().getHeight(), content);
         button.setFont(fontLoader.getSizedFont(32f), fontLoader.getSizedFont(32f));
         button.setFontColors(java.awt.Color.magenta, java.awt.Color.magenta);
         button.setTextPadding(0, -5);

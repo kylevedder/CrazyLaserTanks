@@ -20,23 +20,12 @@ import org.newdawn.slick.SlickException;
 public class Camera
 {
 
-    public static final int WINDOWED_SCREEN_WIDTH = 1280;
-    public static final int WINDOWED_SCREEN_HEIGHT = 720;
-
-    public static final int FULL_SCREEN_WIDTH = 1920;
-    public static final int FULL_SCREEN_HEIGHT = 1080;
-
-    public static final boolean FULLSCREEN_START = false;
-
-    public boolean fullscreen = false;
-
-    public int currentResWidth = (FULLSCREEN_START) ? FULL_SCREEN_WIDTH : WINDOWED_SCREEN_WIDTH;
-    public int currentResHeight = (FULLSCREEN_START) ? FULL_SCREEN_HEIGHT : WINDOWED_SCREEN_HEIGHT;
-
     public static final float ZOOM_AMOUNT = .1f;
 
     private float renderOffsetX;
     private float renderOffsetY;
+    
+    private ScreenManager screenManager = null;
 
     private volatile float zoom;
 
@@ -45,9 +34,9 @@ public class Camera
      *
      * @param rect - Rectangle to center the camera around.
      */
-    public Camera(CenteredRectangle rect)
+    public Camera(CenteredRectangle rect, ScreenManager screenManager) throws SlickException
     {
-        this.fullscreen = FULLSCREEN_START;
+        this.screenManager = screenManager;
         update(rect);
         this.setZoom(1);
     }
@@ -58,9 +47,9 @@ public class Camera
      * @param posX
      * @param posY
      */
-    public Camera(float posX, float posY)
-    {
-        this.fullscreen = FULLSCREEN_START;
+    public Camera(float posX, float posY, ScreenManager screenManager) throws SlickException
+    {    
+        this.screenManager = screenManager;
         update(posX, posY);
         this.setZoom(1);
     }
@@ -71,9 +60,9 @@ public class Camera
      * @param rect - Rectangle to center the camera around.
      * @param zoom
      */
-    public Camera(CenteredRectangle rect, float zoom)
+    public Camera(CenteredRectangle rect, float zoom, ScreenManager screenManager) throws SlickException
     {
-        this.fullscreen = FULLSCREEN_START;
+        this.screenManager = screenManager;
         update(rect);
         this.setZoom(zoom);
     }
@@ -85,9 +74,9 @@ public class Camera
      * @param posY
      * @param zoom
      */
-    public Camera(float posX, float posY, float zoom)
+    public Camera(float posX, float posY, float zoom, ScreenManager screenManager) throws SlickException
     {
-        this.fullscreen = FULLSCREEN_START;
+        this.screenManager = screenManager;
         update(posX, posY);
         this.setZoom(zoom);
     }
@@ -97,21 +86,9 @@ public class Camera
      *
      * @param rect
      */
-    public void update(CenteredRectangle rect)
+    public void update(CenteredRectangle rect) throws SlickException
     {
         update(rect.getCenterX(), rect.getCenterY());
-    }
-
-    /**
-     * Updates the position of the camera to be centered around the rectangle
-     * and allows for fullscreen toggling.
-     *
-     * @param rect
-     * @param input
-     */
-    public void update(CenteredRectangle rect, Input input)
-    {
-        update(rect.getCenterX(), rect.getCenterY(), input);
     }
 
     /**
@@ -120,59 +97,20 @@ public class Camera
      *
      * @param posX
      * @param posY
-     */
-    public void update(float posX, float posY)
-    {
-        this.update(posX, posY, null);
-
-    }
-
-    /**
-     * Updates the position of the camera to be centered around the given x,y
-     * position and allows for fullscreen toggling
-     *
-     * @param posX
-     * @param posY
      * @param input
      */
-    public void update(float posX, float posY, Input input)
+    public void update(float posX, float posY) throws SlickException
     {
         //gets the basic render offset
-        renderOffsetX = (posX - this.currentResWidth / this.getZoom() / 2) * this.getZoom();
-        renderOffsetY = (posY - this.currentResHeight / this.getZoom() / 2) * this.getZoom();
+        renderOffsetX = (posX - this.screenManager.getCurrentResWidth() / this.getZoom() / 2) * this.getZoom();
+        renderOffsetY = (posY - this.screenManager.getCurrentResHeight()/ this.getZoom() / 2) * this.getZoom();
 
         //calculates offset so that the camera never goes off the edge
-        renderOffsetX = Utils.clampFloat(renderOffsetX, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.currentResWidth);
-        renderOffsetY = Utils.clampFloat(renderOffsetY, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.currentResHeight);
-
-        //update if in fullscreen
-        if (input != null)
-        {
-            if (input.isKeyPressed(Input.KEY_F11))
-            {
-                this.toggleFullscreen();
-            }
-        }
+        renderOffsetX = Utils.clampFloat(renderOffsetX, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.screenManager.getCurrentResWidth());
+        renderOffsetY = Utils.clampFloat(renderOffsetY, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (GameEngine.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.screenManager.getCurrentResHeight());
+        
     }
 
-    /**
-     * Gets the current resolution height of the screen.
-     * @return 
-     */
-    public int getCurrentResHeight()
-    {
-        return currentResHeight;
-    }
-
-    /**
-     * Gets the current resolution width of the screen.
-     * @return 
-     */
-    public int getCurrentResWidth()
-    {
-        return currentResWidth;
-    }
-    
     
 
     /**
@@ -188,58 +126,14 @@ public class Camera
     {
         return //within screen X
                 rect.getMinX() * MainApp.gameEngine.camera.getZoom() - renderOffsetX + rect.getWidth() * MainApp.gameEngine.camera.getZoom() > 0
-                && (rect.getMinX() * MainApp.gameEngine.camera.getZoom() - renderOffsetX) * MainApp.gameEngine.camera.getZoom() < MainApp.gameEngine.camera.getCurrentResWidth() * MainApp.gameEngine.camera.getZoom()
+                && (rect.getMinX() * MainApp.gameEngine.camera.getZoom() - renderOffsetX) * MainApp.gameEngine.camera.getZoom() < MainApp.gameEngine.screenManager.getCurrentResWidth() * MainApp.gameEngine.camera.getZoom()
 
                 && //within screen Y
                 rect.getMinY() * MainApp.gameEngine.camera.getZoom() - renderOffsetY + rect.getWidth() * MainApp.gameEngine.camera.getZoom() > 0
-                && (rect.getMinY() * MainApp.gameEngine.camera.getZoom() - renderOffsetY) * MainApp.gameEngine.camera.getZoom() < MainApp.gameEngine.camera.getCurrentResHeight() * MainApp.gameEngine.camera.getZoom();
+                && (rect.getMinY() * MainApp.gameEngine.camera.getZoom() - renderOffsetY) * MainApp.gameEngine.camera.getZoom() < MainApp.gameEngine.screenManager.getCurrentResHeight() * MainApp.gameEngine.camera.getZoom();
     }
 
-    /**
-     * Checks if the game is in full screen
-     *
-     * @return
-     */
-    public boolean isFullscreen()
-    {
-        return fullscreen;
-    }
-
-    /**
-     * Sets the game to be in fullscreen
-     *
-     * @param fullscreen
-     */
-    public void setFullscreen(boolean fullscreen)
-    {
-        this.fullscreen = fullscreen;
-        try
-        {
-            if (fullscreen)
-            {
-                currentResHeight = FULL_SCREEN_HEIGHT;
-                currentResWidth = FULL_SCREEN_WIDTH;                
-            }
-            else
-            {
-                currentResHeight = WINDOWED_SCREEN_HEIGHT;
-                currentResWidth = WINDOWED_SCREEN_WIDTH;                
-            }
-            MainApp.app.setDisplayMode(currentResWidth, currentResHeight, this.fullscreen);
-        }
-        catch (SlickException ex)
-        {
-            Logger.getLogger(Camera.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Toggles the game in and out of fullscreen
-     */
-    public void toggleFullscreen()
-    {
-        setFullscreen(!this.fullscreen);
-    }
+    
 
     /**
      * Gets the zoom of the camera. 1 = 1x zoom, 2 = 2x zoom, etc

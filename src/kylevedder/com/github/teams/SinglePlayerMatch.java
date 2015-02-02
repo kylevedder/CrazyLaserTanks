@@ -145,8 +145,8 @@ public class SinglePlayerMatch
         if (this.isMatchOver())
         {
             g.drawString(this.getVictor(),
-                    (MainApp.gameEngine.camera.getCurrentResWidth() / 2 + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom(),
-                    (MainApp.gameEngine.camera.getCurrentResHeight() / 2 + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
+                    (MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom(),
+                    (MainApp.gameEngine.screenManager.getCurrentResHeight() / 2 + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
         }
     }
 

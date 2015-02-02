@@ -39,7 +39,7 @@ public class MainApp extends BasicGame
     private static AppGameContainer initApp(String title) throws SlickException
     {
         app = new AppGameContainer(new MainApp(title));
-        app.setDisplayMode(Camera.WINDOWED_SCREEN_WIDTH, Camera.WINDOWED_SCREEN_HEIGHT, false);
+        app.setDisplayMode(ScreenManager.WINDOWED_SCREEN_WIDTH, ScreenManager.WINDOWED_SCREEN_HEIGHT, false);
         app.setMouseGrabbed(false);
         app.setVSync(true);        
         app.setTargetFrameRate(60);  

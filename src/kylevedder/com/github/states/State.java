@@ -11,5 +11,5 @@ package kylevedder.com.github.states;
  */
 public enum State
 {
-    MENU, GAME, EXIT
+    MENU, SINGLE_PLAYER, EXIT
 }

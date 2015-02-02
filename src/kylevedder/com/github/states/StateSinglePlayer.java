@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kylevedder.com.github.main;
+package kylevedder.com.github.states;
 
 import kylevedder.com.github.controlls.CustomMouseListener;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
+import kylevedder.com.github.main.Camera;
+import static kylevedder.com.github.main.GameEngine.WORLD_HEIGHT;
+import static kylevedder.com.github.main.GameEngine.WORLD_WIDTH;
+import kylevedder.com.github.main.MainApp;
+import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.teams.SinglePlayerMatch;
 import kylevedder.com.github.teams.SinglePlayerMatchGenerator;
@@ -21,10 +26,10 @@ import org.newdawn.slick.SlickException;
  *
  * @author Kyle
  */
-public class GameEngine
+public class StateSinglePlayer implements BasicState
 {
-
-    public static final int WORLD_WIDTH = 40;
+    
+     public static final int WORLD_WIDTH = 40;
     public static final int WORLD_HEIGHT = 40;
 
     public static final int TILE_SIZE = 64;
@@ -46,24 +51,10 @@ public class GameEngine
 
     public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
-    
-    public ScreenManager screenManager = null;
 
-    public GameEngine()
-    {        
-
-    }
-
-    /**
-     * Sets up the game engine for use
-     *
-     * @param gc
-     * @throws SlickException
-     */
-    public void init(GameContainer gc) throws SlickException
+    @Override
+    public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
     {
-        screenManager = new ScreenManager(gc, false);
-        
         register = new ObjectRegister();
 
         tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
@@ -73,7 +64,7 @@ public class GameEngine
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
 
-        camera = new Camera(tankUser.getHitBox(), 1f, screenManager);
+        camera = new Camera(tankUser.getHitBox(), 1f, MainApp.gameEngine.screenManager);
         match = new SinglePlayerMatch("Team 1", "Team 2", tankUser);
         match.addToYourTeam(tankUser);
         spMatch = new SinglePlayerMatchGenerator(TEAM_SIZE, match, tankUser, register);
@@ -83,30 +74,14 @@ public class GameEngine
         System.out.println("Game Loaded...");
     }
 
-    /**
-     * Called every update cycle for updating movement
-     *
-     * @param gc
-     * @param deltaTime
-     * @throws SlickException
-     */
+    @Override
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
-
         spMatch.update(gc.getInput(), deltaTime);
-//            tankUser.update(gc.getInput(), deltaTime);
-//            tankDummy.update(gc.getInput(), deltaTime);            
-        screenManager.update(gc.getInput());
         camera.update(tankUser.getHitBox());
-
     }
 
-    /**
-     *
-     * @param gc
-     * @param g
-     * @throws SlickException
-     */
+    @Override
     public void render(GameContainer gc, Graphics g) throws SlickException
     {
         //clears
@@ -123,4 +98,5 @@ public class GameEngine
 //        match.render(g);
         spMatch.render(g);
     }
+    
 }
