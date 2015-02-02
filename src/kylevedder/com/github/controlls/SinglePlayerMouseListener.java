@@ -14,7 +14,7 @@ import org.newdawn.slick.MouseListener;
  *
  * @author Kyle
  */
-public class TankMouseListener implements MouseListener
+public class SinglePlayerMouseListener implements MouseListener
 {
     private volatile boolean isOperating = true;
     
@@ -26,7 +26,7 @@ public class TankMouseListener implements MouseListener
     
     private Camera camera;
 
-    public TankMouseListener(Camera camera)
+    public SinglePlayerMouseListener(Camera camera)
     {
         this.camera = camera;                
     }

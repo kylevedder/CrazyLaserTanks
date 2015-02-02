@@ -5,7 +5,7 @@
  */
 package kylevedder.com.github.entity;
 
-import kylevedder.com.github.controlls.TankMouseListener;
+import kylevedder.com.github.controlls.SinglePlayerMouseListener;
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
@@ -65,7 +65,7 @@ public class UserTankEntity extends TankEntity
     {
         if (input != null)
         {
-            if (input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(TankMouseListener.BUTTON_LEFT))
+            if (input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(SinglePlayerMouseListener.BUTTON_LEFT))
             {
                 this.fire();
             }

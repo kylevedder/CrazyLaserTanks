@@ -5,11 +5,17 @@
  */
 package kylevedder.com.github.teams;
 
+import java.util.ArrayList;
+import java.util.Random;
+import kylevedder.com.github.entity.AITankEntity;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
-import kylevedder.com.github.main.Camera;
-import kylevedder.com.github.main.MainApp;
+import kylevedder.com.github.ground.BaseGround;
+import kylevedder.com.github.main.GameEngine;
+import kylevedder.com.github.physics.ObjectRegister;
+import kylevedder.com.github.states.StateSinglePlayer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 
 /**
  *
@@ -18,139 +24,112 @@ import org.newdawn.slick.Graphics;
 public class SinglePlayerMatch
 {
 
-    private final String STALEMATE = "Stalemate...";
-    private final String VICTORY_SUFFIX = " Wins!";
+    private final float IN_FROM_EDGE_POSITIONING = 4f;
+    private final float YOUR_START_X = BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
+    private final float OPPOSING_START_X = StateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
 
-    Team yourTeam = null;
-    Team opposingTeam = null;
+    private final float TANK_SPACING_Y = BaseGround.GROUND_SIZE * 2f;
+
+    private int teamSize = 0;
+    private SinglePlayerMatchData match;
+    ArrayList<TankEntity> yourTeam;
+    ArrayList<TankEntity> opposingTeam;
     UserTankEntity player;
-    
-    Camera camera;
+    Random r;
 
-    public SinglePlayerMatch(String yourTeamName, String opposingTeamName, UserTankEntity player, Camera camera)
+    /**
+     * Generates all the needed entities for a match.
+     *
+     * @param teamSize
+     */
+    public SinglePlayerMatch(int teamSize, SinglePlayerMatchData match, UserTankEntity player, ObjectRegister objRegister)
     {
-        this.yourTeam = new Team(yourTeamName);
-        this.opposingTeam = new Team(opposingTeamName);
+        this.teamSize = teamSize;
+        this.match = match;
         this.player = player;
-        this.camera = camera;
-    }
+        r = new Random(System.currentTimeMillis());
+        yourTeam = new ArrayList<TankEntity>();
+        opposingTeam = new ArrayList<TankEntity>();
 
-    /**
-     * Adds the given member to your team
-     *
-     * @param e
-     */
-    public void addToYourTeam(TankEntity e)
-    {
-        yourTeam.addMember(e);
-    }
+        AITankEntity yourEntity;
+        AITankEntity opposingEntity;
 
-    /**
-     * Adds the given member to opposing team
-     *
-     * @param e
-     */
-    public void addToOpposingTeam(TankEntity e)
-    {
-        opposingTeam.addMember(e);
-    }
-
-    /**
-     * Gets yourTeam size
-     *
-     * @return
-     */
-    public int getYourTeamSize()
-    {
-        return this.yourTeam.size();
-    }
-
-    /**
-     * Gets opposingTeam size
-     *
-     * @return
-     */
-    public int getOpposingTeamSize()
-    {
-        return this.opposingTeam.size();
-    }
-
-    /**
-     * Gets the TankEntity at the given index from team 1.
-     *
-     * @param index
-     * @return
-     */
-    public TankEntity getYourTeamEntity(int index)
-    {
-        return this.yourTeam.getEntity(index);
-    }
-
-    /**
-     * Gets the TankEntity at the given index from team 2.
-     *
-     * @param index
-     * @return
-     */
-    public TankEntity getOpposingTeamEntity(int index)
-    {
-        return this.opposingTeam.getEntity(index);
-    }
-
-    /**
-     * Checks to see if both teams are alive.
-     *
-     * @return
-     */
-    public boolean isMatchOver()
-    {
-        return !(this.yourTeam.isTeamAlive() && this.opposingTeam.isTeamAlive());
-    }
-
-    /**
-     * Gets the name of the winning team.
-     * <p>
-     * Note: will return null if match is not over!
-     * </p>
-     *
-     * @return
-     */
-    public String getVictor()
-    {
-        if (isMatchOver())
+        //setup your team
+        for (int i = 0; i < this.teamSize - 1; i++)
         {
-            if (this.yourTeam.isTeamAlive() || !this.player.isDestroyed())
-            {
-                return this.yourTeam.toString() + this.VICTORY_SUFFIX;
-            }
-            else if (this.opposingTeam.isTeamAlive())
-            {
-                return this.opposingTeam.toString() + this.VICTORY_SUFFIX;
-            }
-            else
-            {
-                return this.STALEMATE;
-            }
+            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/,objRegister, this.match.opposingTeam);
+            match.addToYourTeam(yourEntity);
+            this.yourTeam.add(yourEntity);
+        }        
+        //setup opposing team
+        for (int i = 0; i < this.teamSize; i++)
+        {
+
+            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.yourTeam);
+            match.addToOpposingTeam(opposingEntity);
+            this.opposingTeam.add(opposingEntity);
+
         }
-        else
+        
+        for(TankEntity e: yourTeam)
         {
-            return null;
+            objRegister.add(e);
+        }
+        
+        for(TankEntity e: opposingTeam)
+        {
+            objRegister.add(e);
         }
     }
 
     /**
-     * Draws the winner on the screen.
+     * Updates all Entities in the game.
+     *
+     * @param input
+     * @param delta
+     */
+    public void update(Input input, int delta)
+    {
+        this.player.update(input, delta);
+        for(TankEntity e: yourTeam)
+        {
+            e.update(input, delta);
+        }
+        for(TankEntity e: opposingTeam)
+        {
+            e.update(input, delta);
+        }
+    }
+
+    /**
+     * Renders all entities in the game.
      *
      * @param g
      */
     public void render(Graphics g)
-    {
-        if (this.isMatchOver())
+    {                
+        for(TankEntity e: opposingTeam)
         {
-            g.drawString(this.getVictor(),
-                    (MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 + camera.getRenderOffsetX()) / camera.getZoom(),
-                    (MainApp.gameEngine.screenManager.getCurrentResHeight() / 2 + camera.getRenderOffsetY()) / camera.getZoom());
-        }
+            e.render();
+            e.renderHelpers(g);
+        }    
+        for(TankEntity e: yourTeam)
+        {
+            e.render();
+            e.renderHelpers(g);
+        }        
+        this.player.render();
+        this.player.renderHelpers(g);
+        
+        for(TankEntity e: opposingTeam)
+        {
+            e.renderProjectiles();
+        }    
+        for(TankEntity e: yourTeam)
+        {
+            e.renderProjectiles();
+        }        
+        this.player.renderProjectiles();
+        this.match.render(g);
     }
-
 }

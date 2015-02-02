@@ -14,7 +14,7 @@ import org.newdawn.slick.SlickException;
  *
  * @author Kyle
  */
-public class GUIMouseOverContent
+public class GUIButtonContent
 {
     private String baseText;
     private String hoverText;    
@@ -22,17 +22,17 @@ public class GUIMouseOverContent
     private Image hoverImage = null;
     private Image clickImage = null;
 
-    public GUIMouseOverContent(String baseText, String hoverText, Image baseImage, Image hoverImage, Image clickImage)
+    public GUIButtonContent(String baseText, String hoverText, Image baseImage, Image hoverImage, Image clickImage)
     {
         setup(baseText, hoverText, baseImage, hoverImage, clickImage);
     }
     
-    public GUIMouseOverContent(String baseText, String hoverText, Image baseImage, Image hoverImage)
+    public GUIButtonContent(String baseText, String hoverText, Image baseImage, Image hoverImage)
     {
         setup(baseText, hoverText, baseImage, hoverImage, hoverImage);
     }
     
-    public GUIMouseOverContent(String baseText, String hoverText, String baseImage, String hoverImage)
+    public GUIButtonContent(String baseText, String hoverText, String baseImage, String hoverImage)
     {       
         try
         {
@@ -40,11 +40,11 @@ public class GUIMouseOverContent
         }
         catch (SlickException ex)
         {
-            Logger.getLogger(GUIMouseOverContent.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUIButtonContent.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public GUIMouseOverContent(String baseText, String hoverText, String baseImage, String hoverImage, String clickImage)
+    public GUIButtonContent(String baseText, String hoverText, String baseImage, String hoverImage, String clickImage)
     {       
         try
         {
@@ -52,7 +52,7 @@ public class GUIMouseOverContent
         }
         catch (SlickException ex)
         {
-            Logger.getLogger(GUIMouseOverContent.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUIButtonContent.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

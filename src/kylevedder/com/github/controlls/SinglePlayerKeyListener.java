@@ -5,6 +5,7 @@
  */
 package kylevedder.com.github.controlls;
 
+import kylevedder.com.github.states.StateSinglePlayer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
@@ -12,13 +13,24 @@ import org.newdawn.slick.KeyListener;
  *
  * @author Kyle
  */
-public class CustomKeyListener implements KeyListener
+public class SinglePlayerKeyListener implements KeyListener
 {
+    private final int ESC_KEY = 1;
+    
+    private StateSinglePlayer sp;
 
+    public SinglePlayerKeyListener(StateSinglePlayer sp)
+    {
+        this.sp = sp;
+    }    
+    
     @Override
     public void keyPressed(int key, char c)
     {
-        
+        if(key == ESC_KEY)
+        {
+            this.sp.togglePaused();
+        }
     }
 
     @Override

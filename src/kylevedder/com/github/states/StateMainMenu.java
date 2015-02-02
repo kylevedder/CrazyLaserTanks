@@ -8,10 +8,11 @@ package kylevedder.com.github.states;
 import java.util.ArrayList;
 import kylevedder.com.github.gui.FontLoader;
 import kylevedder.com.github.gui.GUIButton;
-import kylevedder.com.github.gui.GUIMouseOverContent;
+import kylevedder.com.github.gui.GUIButtonContent;
 import kylevedder.com.github.gui.GUIRotatingLogo;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.music.MusicPlayer;
+import kylevedder.com.github.reference.Reference;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -32,7 +33,6 @@ public class StateMainMenu implements BasicState
     private StateManager stateManager = null;
     private MusicPlayer musicPlayer = null;
 
-    private final int BUTTON_TEXT_WIDTH_PADDING = 20;
     private final int BUTTON_TEXT_HEIGHT_PADDING = 10;
 
     private final int BUTTON_WIDTH = 1000;
@@ -48,10 +48,10 @@ public class StateMainMenu implements BasicState
         this.stateManager = stateManager;
         this.musicPlayer = musicPlayer;
 
-        fontLoader = new FontLoader("font/youre-gone/YoureGone.ttf", 128f);
-        UnicodeFont buttonFont = fontLoader.getSizedFont(32f);
+        fontLoader = new FontLoader(Reference.MAIN_FONT, Reference.MENU_FONT_SIZE);
+        UnicodeFont buttonFont = fontLoader.getSizedFont(Reference.MENU_FONT_SIZE);
 
-        GUIMouseOverContent newGameContent = new GUIMouseOverContent("Single Player", "Single Player", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        GUIButtonContent newGameContent = new GUIButtonContent("Single Player", "Single Player", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
         newGameContent.setBaseImage(newGameContent.getBaseImage().getScaledCopy(
                 BUTTON_WIDTH,
                 buttonFont.getHeight(newGameContent.getBaseText()) + BUTTON_TEXT_HEIGHT_PADDING));
@@ -62,7 +62,7 @@ public class StateMainMenu implements BasicState
                 BUTTON_WIDTH,
                 buttonFont.getHeight(newGameContent.getHoverText()) + BUTTON_TEXT_HEIGHT_PADDING));
 
-        GUIMouseOverContent exitContent = new GUIMouseOverContent("Exit", "Exit", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        GUIButtonContent exitContent = new GUIButtonContent("Exit", "Exit", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
         exitContent.setBaseImage(exitContent.getBaseImage().getScaledCopy(
                 BUTTON_WIDTH,
                 buttonFont.getHeight(exitContent.getBaseText()) + BUTTON_TEXT_HEIGHT_PADDING));
@@ -110,7 +110,7 @@ public class StateMainMenu implements BasicState
         if (exitButton.isButtonClicked())
         {
             exitButton.resetButtonClicked();
-            System.exit(0);
+            MainApp.app.exit();
         }
     }
 
@@ -123,5 +123,11 @@ public class StateMainMenu implements BasicState
         newGameButton.render(g);
         exitButton.render(g);
         logo.render(gc);
+    }
+
+    @Override
+    public void cleanup(GameContainer gc) throws SlickException
+    {
+        
     }
 }

@@ -6,7 +6,7 @@
 package kylevedder.com.github.main;
 
 import java.util.HashMap;
-import kylevedder.com.github.controlls.TankMouseListener;
+import kylevedder.com.github.controlls.SinglePlayerMouseListener;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
@@ -18,8 +18,8 @@ import kylevedder.com.github.states.StateExitMenu;
 import kylevedder.com.github.states.StateMainMenu;
 import kylevedder.com.github.states.StateManager;
 import kylevedder.com.github.states.StateSinglePlayer;
+import kylevedder.com.github.teams.SinglePlayerMatchData;
 import kylevedder.com.github.teams.SinglePlayerMatch;
-import kylevedder.com.github.teams.SinglePlayerMatchGenerator;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -93,5 +93,5 @@ public class GameEngine
         //backgrond
         g.setBackground(Color.black);
         stateManager.renderCurrent(gc, g);
-    }
+    }   
 }

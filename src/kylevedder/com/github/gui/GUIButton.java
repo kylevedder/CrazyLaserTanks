@@ -25,7 +25,7 @@ public class GUIButton
 {
 
     private GUIRectangle rect;
-    private GUIMouseOverContent content;
+    private GUIButtonContent content;
     private TextField field = null;
     private MouseOverArea area = null;
 
@@ -39,7 +39,7 @@ public class GUIButton
     private float vertPadding = 0f;
     private float horzPadding = 0f;
 
-    public GUIButton(GameContainer gc, float centerX, float centerY, float width, float height, GUIMouseOverContent content)
+    public GUIButton(GameContainer gc, float centerX, float centerY, float width, float height, GUIButtonContent content)
     {
         this.gc = gc;
         this.rect = new GUIRectangle(centerX, centerY, width, height);
@@ -65,7 +65,7 @@ public class GUIButton
      * Gets the button's content.
      * @return 
      */
-    public GUIMouseOverContent getContent()
+    public GUIButtonContent getContent()
     {
         return content;
     }

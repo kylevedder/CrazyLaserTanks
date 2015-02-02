@@ -9,7 +9,6 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -28,7 +27,7 @@ public class MainApp extends BasicGame
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SlickException
-    {       
+    {                   
         app = initApp("Tank Game Two");
     }
 
@@ -45,6 +44,7 @@ public class MainApp extends BasicGame
         app.setVSync(true);        
         app.setTargetFrameRate(60);  
         app.setSmoothDeltas(true);
+        app.setShowFPS(true);        
         app.start();        
         return app;
     }
@@ -57,9 +57,9 @@ public class MainApp extends BasicGame
     //Main hooks for slick
     @Override
     public void init(GameContainer gc) throws SlickException
-    {             
+    {                  
         gameEngine = new GameEngine();
-        gameEngine.init(gc);
+        gameEngine.init(gc);       
     }
 
     @Override
@@ -72,6 +72,6 @@ public class MainApp extends BasicGame
     public void render(GameContainer gc, Graphics g) throws SlickException
     {
         gameEngine.render(gc, g);        
-    }
+    }    
 
 }

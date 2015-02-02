@@ -33,23 +33,25 @@ public class StateManager
         this.map = map;
         this.setState(state);
     }
-    
+
     /**
      * Updates the current state.
+     *
      * @param gc
      * @param deltaTime
-     * @throws SlickException 
+     * @throws SlickException
      */
     public void updateCurrent(GameContainer gc, int deltaTime) throws SlickException
     {
         this.currentState.update(gc, deltaTime);
     }
-    
+
     /**
      * Renders the current state.
+     *
      * @param gc
      * @param g
-     * @throws SlickException 
+     * @throws SlickException
      */
     public void renderCurrent(GameContainer gc, Graphics g) throws SlickException
     {
@@ -64,6 +66,10 @@ public class StateManager
     public void setState(State state) throws SlickException
     {
         this.state = state;
+        if (this.currentState != null)
+        {
+            this.currentState.cleanup(gc);
+        }
         this.currentState = map.get(this.state);
         this.currentState.init(gc, this, musicPlayer);
     }

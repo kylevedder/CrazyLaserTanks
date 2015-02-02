@@ -22,4 +22,6 @@ public interface BasicState
     public void update(GameContainer gc, int deltaTime) throws SlickException;
 
     public void render(GameContainer gc, Graphics g) throws SlickException;
+    
+    public void cleanup(GameContainer gc) throws SlickException;
 }

@@ -7,10 +7,11 @@ package kylevedder.com.github.states;
 
 import kylevedder.com.github.gui.FontLoader;
 import kylevedder.com.github.gui.GUIButton;
-import kylevedder.com.github.gui.GUIMouseOverContent;
+import kylevedder.com.github.gui.GUIButtonContent;
 import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.music.MusicPlayer;
+import kylevedder.com.github.reference.Reference;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -37,10 +38,10 @@ public class StateExitMenu implements BasicState
         this.musicPlayer = musicPlayer;        
         this.musicPlayer.startGameMusic();
         
-        fontLoader = new FontLoader("font/youre-gone/YoureGone.ttf", 128f);        
+        fontLoader = new FontLoader(Reference.MAIN_FONT, 128f);        
 
-        GUIMouseOverContent exitContent = new GUIMouseOverContent("Exit", "Exit", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
-        GUIMouseOverContent mainMenuContent = new GUIMouseOverContent("Main Menu", "Main Menu", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        GUIButtonContent exitContent = new GUIButtonContent("Exit", "Exit", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        GUIButtonContent mainMenuContent = new GUIButtonContent("Main Menu", "Main Menu", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
 
         exitButton = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 - exitContent.getBaseImage().getWidth() / 2 - BUTTON_SEPERATOR_WIDTH / 2, MainApp.gameEngine.screenManager.getCurrentResHeight()/ 2, exitContent.getBaseImage().getWidth(), exitContent.getBaseImage().getHeight(), exitContent);
         exitButton.setFont(fontLoader.getSizedFont(32f), fontLoader.getSizedFont(32f));
@@ -76,6 +77,12 @@ public class StateExitMenu implements BasicState
         exitButton.render(g);
         mainMenuButton.render(g);
     }    
+
+    @Override
+    public void cleanup(GameContainer gc) throws SlickException
+    {
+        
+    }
 
     
 }
