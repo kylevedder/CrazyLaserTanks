@@ -5,11 +5,19 @@
  */
 package kylevedder.com.github.main;
 
+import java.util.HashMap;
 import kylevedder.com.github.controlls.CustomMouseListener;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
+import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.physics.ObjectRegister;
+import kylevedder.com.github.states.BasicState;
+import kylevedder.com.github.states.State;
+import kylevedder.com.github.states.StateExitMenu;
+import kylevedder.com.github.states.StateMainMenu;
+import kylevedder.com.github.states.StateManager;
+import kylevedder.com.github.states.StateSinglePlayer;
 import kylevedder.com.github.teams.SinglePlayerMatch;
 import kylevedder.com.github.teams.SinglePlayerMatchGenerator;
 import org.newdawn.slick.Color;
@@ -47,6 +55,13 @@ public class GameEngine
     public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
     
+    
+    public StateManager stateManager = null;
+    
+    public StateMainMenu mainMenu = null;
+    public StateExitMenu exitMenu = null;
+    public StateSinglePlayer singlePlayer = null;
+    public MusicPlayer musicPlayer = null;
     public ScreenManager screenManager = null;
 
     public GameEngine()
@@ -64,21 +79,15 @@ public class GameEngine
     {
         screenManager = new ScreenManager(gc, false);
         
-        register = new ObjectRegister();
-
-        tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
-        register.add(tankUser);
-        register.add(tankDummy);
-
-        ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
-        register.addGround(ground);
-
-        camera = new Camera(tankUser.getHitBox(), 1f, screenManager);
-        match = new SinglePlayerMatch("Team 1", "Team 2", tankUser);
-        match.addToYourTeam(tankUser);
-        spMatch = new SinglePlayerMatchGenerator(TEAM_SIZE, match, tankUser, register);
-
-        gc.getInput().addMouseListener(new CustomMouseListener());
+        musicPlayer = new MusicPlayer("music/Ouroboros.ogg", "music/Club_Diver.ogg");        
+        mainMenu = new StateMainMenu();
+        exitMenu = new StateExitMenu();
+        singlePlayer = new StateSinglePlayer();
+        HashMap<State, BasicState> map = new HashMap<State, BasicState>();
+        map.put(State.MENU, mainMenu);
+        map.put(State.EXIT, exitMenu);
+        map.put(State.SINGLE_PLAYER, singlePlayer);
+        stateManager = new StateManager(State.MENU, gc, map, musicPlayer);                
 
         System.out.println("Game Loaded...");
     }
@@ -91,14 +100,9 @@ public class GameEngine
      * @throws SlickException
      */
     public void update(GameContainer gc, int deltaTime) throws SlickException
-    {
-
-        spMatch.update(gc.getInput(), deltaTime);
-//            tankUser.update(gc.getInput(), deltaTime);
-//            tankDummy.update(gc.getInput(), deltaTime);            
+    {        
         screenManager.update(gc.getInput());
-        camera.update(tankUser.getHitBox());
-
+        stateManager.updateCurrent(gc, deltaTime);
     }
 
     /**
@@ -112,15 +116,7 @@ public class GameEngine
         //clears
         g.clear();
         //backgrond
-        g.setBackground(new Color(103, 194, 240));
-        g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
-        g.scale(MainApp.gameEngine.camera.getZoom(), MainApp.gameEngine.camera.getZoom());
-        ground.render(g, camera.getRenderOffsetX(), camera.getRenderOffsetY());
-//        tankDummy.render();
-//        tankDummy.renderHelpers(g);
-//        tankUser.render();
-//        tankUser.renderHelpers(g);
-//        match.render(g);
-        spMatch.render(g);
+        g.setBackground(Color.black);
+        stateManager.renderCurrent(gc, g);
     }
 }
