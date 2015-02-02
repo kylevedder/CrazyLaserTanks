@@ -56,8 +56,9 @@ public class UserTankEntity extends TankEntity
             this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
 
             this.updateShoot(input, delta);
-            super.update(input, delta);
+            
         }
+        super.update(input, delta);
     }
 
     private void updateShoot(Input input, int delta)

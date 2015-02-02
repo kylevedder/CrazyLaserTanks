@@ -41,15 +41,15 @@ public class AITankEntity extends TankEntity
         TankEntity target = this.getClosestEnemy();
         if (target != null)
         {
-            float prevAngle = this.hitBox.getAngle();
-
-            this.updateDrive(target, delta);
-            Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
-            this.vector = (Vector) objects[1];
-            this.hitBox = (CenteredRectangle) objects[0];
-
             if (!this.destroyed)
             {
+                float prevAngle = this.hitBox.getAngle();
+
+                this.updateDrive(target, delta);
+                Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
+                this.vector = (Vector) objects[1];
+                this.hitBox = (CenteredRectangle) objects[0];
+                
                 this.updateTurret(target, delta);
                 this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
                 this.updateShoot();
@@ -70,7 +70,7 @@ public class AITankEntity extends TankEntity
     private void updateDrive(TankEntity target, int delta)
     {
         if (!this.destroyed)
-        {                        
+        {
             //sets the speed of the vector
             float tankSpeed = 0;
 
@@ -84,11 +84,11 @@ public class AITankEntity extends TankEntity
             //if at acceptable angle to drive
             if (Math.abs(deltaAngle) <= NO_DRIVE_ANGLE_OFF_THRESHOLD)
             {
-                
+
                 if (Math.abs(distToTarget) >= this.DRIVE_TO_DIST)//drive to target
                 {
                     tankSpeed = driveRate;
-                }                
+                }
 
             }
             this.setVector(tankSpeed, desiredAngle, delta);
@@ -101,9 +101,10 @@ public class AITankEntity extends TankEntity
 
     /**
      * Sets the vector and adds the given angle
+     *
      * @param speed
      * @param angle
-     * @param delta 
+     * @param delta
      */
     private void setVector(float speed, float angle, int delta)
     {
