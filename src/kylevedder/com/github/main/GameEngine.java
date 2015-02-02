@@ -30,32 +30,7 @@ import org.newdawn.slick.SlickException;
  * @author Kyle
  */
 public class GameEngine
-{
-
-    public static final int WORLD_WIDTH = 40;
-    public static final int WORLD_HEIGHT = 40;
-
-    public static final int TILE_SIZE = 64;
-
-    final float PLAYER_START_X = 500f;
-    final float PLAYER_START_Y = 500f;
-    final float PLAYER_START_ANGLE = 0f;
-    
-    final int TEAM_SIZE = 4;
-
-    private float tankAngleAppend = 0;
-    private float tankSpeed = 0;
-
-    public Camera camera = null;
-    public ObjectRegister register = null;
-    public GroundHolder ground = null;
-    public SinglePlayerMatchGenerator spMatch = null;
-    public SinglePlayerMatch match = null;
-
-    public UserTankEntity tankUser = null;
-    public TankEntity tankDummy = null;
-    
-    
+{   
     public StateManager stateManager = null;
     
     public StateMainMenu mainMenu = null;

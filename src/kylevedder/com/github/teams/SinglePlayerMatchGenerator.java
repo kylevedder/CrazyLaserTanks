@@ -13,6 +13,7 @@ import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.BaseGround;
 import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.physics.ObjectRegister;
+import kylevedder.com.github.states.StateSinglePlayer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
@@ -25,7 +26,7 @@ public class SinglePlayerMatchGenerator
 
     private final float IN_FROM_EDGE_POSITIONING = 4f;
     private final float YOUR_START_X = BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
-    private final float OPPOSING_START_X = GameEngine.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
+    private final float OPPOSING_START_X = StateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
 
     private final float TANK_SPACING_Y = BaseGround.GROUND_SIZE * 2f;
 
@@ -56,7 +57,7 @@ public class SinglePlayerMatchGenerator
         //setup your team
         for (int i = 0; i < this.teamSize - 1; i++)
         {
-            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, this.match.opposingTeam);
+            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/,objRegister, this.match.opposingTeam);
             match.addToYourTeam(yourEntity);
             this.yourTeam.add(yourEntity);
         }        
@@ -64,7 +65,7 @@ public class SinglePlayerMatchGenerator
         for (int i = 0; i < this.teamSize; i++)
         {
 
-            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, this.match.yourTeam);
+            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.yourTeam);
             match.addToOpposingTeam(opposingEntity);
             this.opposingTeam.add(opposingEntity);
 

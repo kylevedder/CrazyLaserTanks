@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import kylevedder.com.github.animation.CustomAnimation;
 import kylevedder.com.github.bullet.Bullet;
 import kylevedder.com.github.physics.CenteredRectangle;
+import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.physics.Vector;
 import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Graphics;
@@ -60,11 +61,13 @@ public class TankEntity extends BaseEntity
     protected Image base = null;
     protected CustomAnimation leftTrack = null;
     protected CustomAnimation rightTrack = null;
+    protected ObjectRegister register = null;
 
-    public TankEntity(float x, float y, float angle)
+    public TankEntity(float x, float y, float angle, ObjectRegister register)
     {
         try
         {
+            this.register = register;
 //            Image image = new SpriteSheet(new Image("images/tank.png"), TILE_WIDTH, TILE_HEIGHT).getSprite(0, 0);
             base = new Image("images/StaticBase.png").getScaledCopy(SCALE);
             turret = new Image("images/Turret.png").getScaledCopy(SCALE);
@@ -157,7 +160,7 @@ public class TankEntity extends BaseEntity
             float cos = (float) Math.cos(Math.toRadians(this.turretAngle + this.hitBox.getAngle()));
             float barrelX = this.hitBox.getCenterX() + sin * TURRET_END_Y_OFFSET;
             float barrelY = this.hitBox.getCenterY() - cos * TURRET_END_Y_OFFSET;
-            this.bullets.add(new Bullet(barrelX, barrelY, SHOT_SPEED, this.turretAngle + this.hitBox.getAngle(), this));
+            this.bullets.add(new Bullet(barrelX, barrelY, SHOT_SPEED, this.turretAngle + this.hitBox.getAngle(), this, register));
         }
     }
 

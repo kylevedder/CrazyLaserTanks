@@ -35,7 +35,7 @@ public class GUIButton
     private UnicodeFont hoverFont = null;
 
     private boolean buttonClicked = false;
-    
+
     private float vertPadding = 0f;
     private float horzPadding = 0f;
 
@@ -62,19 +62,50 @@ public class GUIButton
     }
 
     /**
+     * Gets the button's content.
+     * @return 
+     */
+    public GUIMouseOverContent getContent()
+    {
+        return content;
+    }
+
+    
+    
+    /**
+     * Sets the center of the area to the new location.
+     * @param centerX
+     * @param centerY 
+     */
+    public void setCenter(float centerX, float centerY)
+    {
+        this.area.setLocation(centerX - this.area.getWidth() / 2, centerY - this.area.getHeight() / 2);
+    }
+    
+    /**
+     * Sets the center X of the area.
+     * @param centerX 
+     */
+    public void setCenterX(float centerX)
+    {
+        this.area.setX(centerX - this.area.getWidth()/2);
+    }
+
+    /**
      * Sets the padding for the button text.
      * <p>
-     * Positive values shift text right and down, negative values shift values left and down
-     * </p.
+     * Positive values shift text right and down, negative values shift values
+     * left and down </p.
+     *
      * @param horzPadding
-     * @param vertPadding 
+     * @param vertPadding
      */
-    public void setTextPadding(float horzPadding, float vertPadding)
+    public void setTextOffset(float horzPadding, float vertPadding)
     {
         this.horzPadding = horzPadding;
         this.vertPadding = vertPadding;
     }
-    
+
     /**
      * Sets the defaultFont for the button.
      *
@@ -84,7 +115,7 @@ public class GUIButton
     {
         this.regularFont = regularFont;
         this.hoverFont = hoverFont;
-    }        
+    }
 
     /**
      * Sets the font colors.

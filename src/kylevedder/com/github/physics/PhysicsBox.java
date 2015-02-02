@@ -21,18 +21,20 @@ public class PhysicsBox extends PhysicsObject
     private float y;
     private float width;
     private float height;
+    private ObjectRegister register;
 
-    public PhysicsBox(float x, float y, float width, float height, float rotation, float speed, float angle)
+    public PhysicsBox(float x, float y, float width, float height, float rotation, float speed, float angle, ObjectRegister register)
     {
         this.hitBox = new CenteredRectangle(x, y, width, height, rotation);
         this.vector = new Vector(speed, angle);
+        this.register = register;
     }
     
 
     public void update(int delta)
     {
 //        this.vector = Vector.add(Vector.gravityVector(delta), this.vector);
-        Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
+        Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
         this.hitBox = (CenteredRectangle)objects[0];
         this.vector = (Vector)objects[1];
     }

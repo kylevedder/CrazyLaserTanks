@@ -7,8 +7,8 @@ package kylevedder.com.github.teams;
 
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
+import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -24,12 +24,15 @@ public class SinglePlayerMatch
     Team yourTeam = null;
     Team opposingTeam = null;
     UserTankEntity player;
+    
+    Camera camera;
 
-    public SinglePlayerMatch(String yourTeamName, String opposingTeamName, UserTankEntity player)
+    public SinglePlayerMatch(String yourTeamName, String opposingTeamName, UserTankEntity player, Camera camera)
     {
         this.yourTeam = new Team(yourTeamName);
         this.opposingTeam = new Team(opposingTeamName);
         this.player = player;
+        this.camera = camera;
     }
 
     /**
@@ -145,8 +148,8 @@ public class SinglePlayerMatch
         if (this.isMatchOver())
         {
             g.drawString(this.getVictor(),
-                    (MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom(),
-                    (MainApp.gameEngine.screenManager.getCurrentResHeight() / 2 + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
+                    (MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 + camera.getRenderOffsetX()) / camera.getZoom(),
+                    (MainApp.gameEngine.screenManager.getCurrentResHeight() / 2 + camera.getRenderOffsetY()) / camera.getZoom());
         }
     }
 

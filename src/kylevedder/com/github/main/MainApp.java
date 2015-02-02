@@ -9,6 +9,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -37,7 +38,7 @@ public class MainApp extends BasicGame
      * @throws SlickException 
      */
     private static AppGameContainer initApp(String title) throws SlickException
-    {
+    {        
         app = new AppGameContainer(new MainApp(title));
         app.setDisplayMode(ScreenManager.WINDOWED_SCREEN_WIDTH, ScreenManager.WINDOWED_SCREEN_HEIGHT, false);
         app.setMouseGrabbed(false);
@@ -56,7 +57,7 @@ public class MainApp extends BasicGame
     //Main hooks for slick
     @Override
     public void init(GameContainer gc) throws SlickException
-    {        
+    {             
         gameEngine = new GameEngine();
         gameEngine.init(gc);
     }

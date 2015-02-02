@@ -12,6 +12,7 @@ import kylevedder.com.github.animation.TerminalCustomAnimation;
 import kylevedder.com.github.entity.BaseEntity;
 import kylevedder.com.github.interfaces.Renderable;
 import kylevedder.com.github.main.MainApp;
+import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.physics.Vector;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -41,13 +42,15 @@ public class Bullet implements Renderable
     private boolean canDamage = true;
 
     private Image imageToRender = null;
+    private ObjectRegister register = null;
 
     protected final float DAMAGE = 1f;
 
-    public Bullet(float x, float y, float speed, float angle, BaseEntity parentPointer)
+    public Bullet(float x, float y, float speed, float angle, BaseEntity parentPointer, ObjectRegister register)
     {
         try
         {
+            this.register = register;
             this.vector = new Vector(speed, angle);
             imageToRender = ball = new Image("images/ball.png").getScaledCopy(BALL_SCALE);
             explosion = new TerminalCustomAnimation(new SpriteSheet(new Image("images/explosionNew.png").getScaledCopy(EXPLOSION_SCALE), (int) (EXPLOSION_SIZE * EXPLOSION_SCALE), (int) (EXPLOSION_SIZE * EXPLOSION_SCALE)), EXPLOSION_SPEED);
@@ -70,7 +73,7 @@ public class Bullet implements Renderable
             float xComp = this.vector.getXComp() / (1000 / delta);
             float yComp = this.vector.getYComp() / (1000 / delta);
             Line line = new Line(this.c.getCenterX(), this.c.getCenterY(), this.c.getCenterX() + xComp, this.c.getCenterY() + yComp);
-            BaseEntity be = MainApp.gameEngine.register.checkCollisionWithEntity(line, parentPointer);
+            BaseEntity be = register.checkCollisionWithEntity(line, parentPointer);
             if (be != null)
             {
                 if (canDamage)
@@ -85,7 +88,7 @@ public class Bullet implements Renderable
                     this.destroy();
                 }
             }
-            else if (MainApp.gameEngine.register.checkCollisionWithGround(line))
+            else if (register.checkCollisionWithGround(line))
             {
                 this.explosion.update(delta);
                 this.imageToRender = this.explosion.getFrame(false);

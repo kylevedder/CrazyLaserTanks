@@ -92,7 +92,12 @@ public class GUIMouseOverContent
     public void setHoverText(String hoverText)
     {
         this.hoverText = hoverText;
-    }        
+    }   
+    
+     public void setClickImage(Image clickImage)
+    {
+        this.clickImage = clickImage;
+    }
 
     public String getBaseText()
     {
@@ -117,5 +122,7 @@ public class GUIMouseOverContent
     public Image getClickImage()
     {
         return clickImage;
-    }    
+    }   
+    
+    
 }

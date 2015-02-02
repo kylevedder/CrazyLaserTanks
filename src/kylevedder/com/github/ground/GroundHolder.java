@@ -82,13 +82,13 @@ public class GroundHolder
     /**
      * Renders all the appropriate ground tiles.
      */
-    public void render(Graphics g, float renderOffsetX, float renderOffsetY)
+    public void render(Graphics g, Camera camera)
     {
         for (int x = 0; x < this.width; x++)
         {
             for (int y = 0; y < this.width; y++)
             {
-                if (Camera.isVisible(ground[x][y].getHitBox(), renderOffsetX, renderOffsetY))
+                if (Camera.isVisible(ground[x][y].getHitBox(), camera))
                 {
                     ground[x][y].render();
                 }

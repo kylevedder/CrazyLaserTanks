@@ -45,12 +45,12 @@ public class StateExitMenu implements BasicState
         exitButton = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 - exitContent.getBaseImage().getWidth() / 2 - BUTTON_SEPERATOR_WIDTH / 2, MainApp.gameEngine.screenManager.getCurrentResHeight()/ 2, exitContent.getBaseImage().getWidth(), exitContent.getBaseImage().getHeight(), exitContent);
         exitButton.setFont(fontLoader.getSizedFont(32f), fontLoader.getSizedFont(32f));
         exitButton.setFontColors(java.awt.Color.magenta, java.awt.Color.magenta);
-        exitButton.setTextPadding(0, -5);
+        exitButton.setTextOffset(0, -5);
 
         mainMenuButton = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 + mainMenuContent.getBaseImage().getWidth() / 2 + BUTTON_SEPERATOR_WIDTH / 2, MainApp.gameEngine.screenManager.getCurrentResHeight() / 2, mainMenuContent.getBaseImage().getWidth(), mainMenuContent.getBaseImage().getHeight(), mainMenuContent);
         mainMenuButton.setFont(fontLoader.getSizedFont(32f), fontLoader.getSizedFont(32f));
         mainMenuButton.setFontColors(java.awt.Color.magenta, java.awt.Color.magenta);
-        mainMenuButton.setTextPadding(0, -5);
+        mainMenuButton.setTextOffset(0, -5);
     }
 
     public void update(GameContainer gc, int deltaTime) throws SlickException

@@ -8,6 +8,7 @@ package kylevedder.com.github.entity;
 import kylevedder.com.github.ground.BaseGround;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
+import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.physics.Vector;
 import kylevedder.com.github.teams.Team;
 import kylevedder.com.github.utils.Utils;
@@ -27,9 +28,9 @@ public class AITankEntity extends TankEntity
     private final float DRIVE_ANGLE_OFF_THRESHOLD = 0.5f;
     private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 45f;
 
-    public AITankEntity(float x, float y, float angle, Team enemyTeam)
+    public AITankEntity(float x, float y, float angle, ObjectRegister register, Team enemyTeam)
     {
-        super(x, y, angle);
+        super(x, y, angle, register);
         this.enemyTeam = enemyTeam;
         pastTurretUpdateDelta = 0f;
     }
@@ -43,7 +44,7 @@ public class AITankEntity extends TankEntity
             float prevAngle = this.hitBox.getAngle();
 
             this.updateDrive(target, delta);
-            Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
+            Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
             this.vector = (Vector) objects[1];
             this.hitBox = (CenteredRectangle) objects[0];
 

@@ -10,8 +10,6 @@ import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.main.Camera;
-import static kylevedder.com.github.main.GameEngine.WORLD_HEIGHT;
-import static kylevedder.com.github.main.GameEngine.WORLD_WIDTH;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.physics.ObjectRegister;
@@ -51,21 +49,29 @@ public class StateSinglePlayer implements BasicState
 
     public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
+    
+
+    public StateSinglePlayer()
+    {        
+    }
+    
+    
 
     @Override
     public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
-    {
+    {   
+        camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.gameEngine.screenManager);
         register = new ObjectRegister();
 
-        tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE);
+        tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE, register, camera);
         register.add(tankUser);
         register.add(tankDummy);
 
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
 
-        camera = new Camera(tankUser.getHitBox(), 1f, MainApp.gameEngine.screenManager);
-        match = new SinglePlayerMatch("Team 1", "Team 2", tankUser);
+        
+        match = new SinglePlayerMatch("Team 1", "Team 2", tankUser, camera);
         match.addToYourTeam(tankUser);
         spMatch = new SinglePlayerMatchGenerator(TEAM_SIZE, match, tankUser, register);
 
@@ -89,13 +95,8 @@ public class StateSinglePlayer implements BasicState
         //backgrond
         g.setBackground(new Color(103, 194, 240));
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
-        g.scale(MainApp.gameEngine.camera.getZoom(), MainApp.gameEngine.camera.getZoom());
-        ground.render(g, camera.getRenderOffsetX(), camera.getRenderOffsetY());
-//        tankDummy.render();
-//        tankDummy.renderHelpers(g);
-//        tankUser.render();
-//        tankUser.renderHelpers(g);
-//        match.render(g);
+        g.scale(camera.getZoom(), camera.getZoom());
+        ground.render(g, camera);
         spMatch.render(g);
     }
     

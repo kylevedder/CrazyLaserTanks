@@ -5,10 +5,11 @@
  */
 package kylevedder.com.github.entity;
 
-import kylevedder.com.github.bullet.Bullet;
 import kylevedder.com.github.controlls.CustomMouseListener;
+import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
+import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.physics.Vector;
 import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Graphics;
@@ -23,6 +24,8 @@ public class UserTankEntity extends TankEntity
 
     private float mouseX = 0;
     private float mouseY = 0;
+    
+    private Camera camera = null;
 
     /**
      * User controlled tankUser entity.
@@ -31,9 +34,10 @@ public class UserTankEntity extends TankEntity
      * @param y
      * @param angle
      */
-    public UserTankEntity(float x, float y, float angle)
+    public UserTankEntity(float x, float y, float angle, ObjectRegister register, Camera camera)
     {
-        super(x, y, angle);
+        super(x, y, angle, register);
+        this.camera = camera;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class UserTankEntity extends TankEntity
         {
             float prevAngle = this.hitBox.getAngle();
             this.updateDrive(input, delta);
-            Object[] objects = MainApp.gameEngine.register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
+            Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
             this.vector = (Vector) objects[1];
             this.hitBox = (CenteredRectangle) objects[0];
 
@@ -75,8 +79,8 @@ public class UserTankEntity extends TankEntity
      */
     private void updateTurret(Input input, int delta)
     {
-        this.mouseX = Utils.verifyFloat((input.getMouseX() + MainApp.gameEngine.camera.getRenderOffsetX()) / MainApp.gameEngine.camera.getZoom());
-        this.mouseY = Utils.verifyFloat((input.getMouseY() + MainApp.gameEngine.camera.getRenderOffsetY()) / MainApp.gameEngine.camera.getZoom());
+        this.mouseX = Utils.verifyFloat((input.getMouseX() + camera.getRenderOffsetX()) / camera.getZoom());
+        this.mouseY = Utils.verifyFloat((input.getMouseY() +camera.getRenderOffsetY()) / camera.getZoom());
         float desiredTurretAngle = Utils.verifyFloat((float) Math.toDegrees(Math.atan2(mouseY - this.hitBox.getCenterY(), mouseX - this.hitBox.getCenterX())) + 90f - this.hitBox.getAngle());
         //append and wrap the angle
         this.addTurretAngle(desiredTurretAngle - this.turretAngle, delta);

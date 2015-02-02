@@ -28,16 +28,16 @@ public class CustomMouseListener implements MouseListener
     public void mouseWheelMoved(int change)
     {
         //120 is 1 tick scrolled down
-        MainApp.gameEngine.camera.addZoom(change / TICKS_PER_SCROLL * Camera.ZOOM_AMOUNT);        
+//        MainApp.gameEngine.camera.addZoom(change / TICKS_PER_SCROLL * Camera.ZOOM_AMOUNT);        
     }
 
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount)
     {
-        if(button == BUTTON_MIDDLE)
-        {
-            MainApp.gameEngine.camera.setZoom(1f);            
-        }
+//        if(button == BUTTON_MIDDLE)
+//        {
+//            MainApp.gameEngine.camera.setZoom(1f);            
+//        }
     }
 
     @Override

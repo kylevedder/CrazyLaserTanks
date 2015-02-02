@@ -5,8 +5,10 @@
  */
 package kylevedder.com.github.states;
 
+import java.util.ArrayList;
 import kylevedder.com.github.gui.FontLoader;
 import kylevedder.com.github.gui.GUIButton;
+import kylevedder.com.github.gui.GUIButtonLayout;
 import kylevedder.com.github.gui.GUIMouseOverContent;
 import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.main.MainApp;
@@ -17,6 +19,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.MusicListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 
 /**
  *
@@ -26,32 +29,83 @@ public class StateMainMenu implements BasicState
 {
 
     FontLoader fontLoader = null;
-    GUIButton button;
+    GUIButton newGameButton;
+    GUIButton exitButton;
     private StateManager stateManager = null;
     private MusicPlayer musicPlayer = null;
 
+    private final int BUTTON_TEXT_WIDTH_PADDING = 20;
+    private final int BUTTON_TEXT_HEIGHT_PADDING = 10;
+
+    private final int BUTTON_WIDTH = 1000;
+    private final int VERTICAL_SPACING = 50;
+
+    private ArrayList<GUIButton> buttonList = null;
+
     public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
-    {        
-        this.musicPlayer = musicPlayer;        
-        this.musicPlayer.startMenuMusic();
+    {
         this.stateManager = stateManager;
+        this.musicPlayer = musicPlayer;
+        this.musicPlayer.startMenuMusic();
+
         fontLoader = new FontLoader("font/youre-gone/YoureGone.ttf", 128f);
-        fontLoader.setColor(java.awt.Color.red);
+        UnicodeFont buttonFont = fontLoader.getSizedFont(32f);
 
-        GUIMouseOverContent content = new GUIMouseOverContent("Hello", "World", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        GUIMouseOverContent newGameContent = new GUIMouseOverContent("Single Player", "Single Player", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        newGameContent.setBaseImage(newGameContent.getBaseImage().getScaledCopy(
+                BUTTON_WIDTH,
+                buttonFont.getHeight(newGameContent.getBaseText()) + BUTTON_TEXT_HEIGHT_PADDING));
+        newGameContent.setHoverImage(newGameContent.getHoverImage().getScaledCopy(
+                BUTTON_WIDTH,
+                buttonFont.getHeight(newGameContent.getHoverText()) + BUTTON_TEXT_HEIGHT_PADDING));
+        newGameContent.setClickImage(newGameContent.getClickImage().getScaledCopy(
+                BUTTON_WIDTH,
+                buttonFont.getHeight(newGameContent.getHoverText()) + BUTTON_TEXT_HEIGHT_PADDING));
 
-        button = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2, MainApp.gameEngine.screenManager.getCurrentResHeight()/ 2, content.getBaseImage().getWidth(), content.getBaseImage().getHeight(), content);
-        button.setFont(fontLoader.getSizedFont(32f), fontLoader.getSizedFont(32f));
-        button.setFontColors(java.awt.Color.magenta, java.awt.Color.magenta);
-        button.setTextPadding(0, -5);
+        GUIMouseOverContent exitContent = new GUIMouseOverContent("Exit", "Exit", "images/buttons/normal.png", "images/buttons/hover.png", "images/buttons/hover.png");
+        exitContent.setBaseImage(exitContent.getBaseImage().getScaledCopy(
+                BUTTON_WIDTH,
+                buttonFont.getHeight(exitContent.getBaseText()) + BUTTON_TEXT_HEIGHT_PADDING));
+        exitContent.setHoverImage(exitContent.getHoverImage().getScaledCopy(
+                BUTTON_WIDTH,
+                buttonFont.getHeight(exitContent.getHoverText()) + BUTTON_TEXT_HEIGHT_PADDING));        
+        exitContent.setClickImage(exitContent.getClickImage().getScaledCopy(
+                BUTTON_WIDTH,
+                buttonFont.getHeight(exitContent.getHoverText()) + BUTTON_TEXT_HEIGHT_PADDING));        
+
+        newGameButton = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2, MainApp.gameEngine.screenManager.getCurrentResHeight() / 2, BUTTON_WIDTH, newGameContent.getBaseImage().getHeight(), newGameContent);
+        newGameButton.setFont(buttonFont, buttonFont);
+        newGameButton.setFontColors(java.awt.Color.magenta, java.awt.Color.magenta);
+        newGameButton.setTextOffset(0, -BUTTON_TEXT_HEIGHT_PADDING / 2);
+
+        exitButton = new GUIButton(gc, MainApp.gameEngine.screenManager.getCurrentResWidth() / 2, MainApp.gameEngine.screenManager.getCurrentResHeight() / 2, BUTTON_WIDTH, exitContent.getBaseImage().getHeight(), exitContent);
+        exitButton.setFont(buttonFont, buttonFont);
+        exitButton.setFontColors(java.awt.Color.magenta, java.awt.Color.magenta);
+        exitButton.setTextOffset(0, -BUTTON_TEXT_HEIGHT_PADDING / 2);
+
+        buttonList = new ArrayList<GUIButton>();
+        buttonList.add(newGameButton);
+        buttonList.add(exitButton);        
     }
 
     public void update(GameContainer gc, int deltaTime) throws SlickException
     {
-        if (button.isButtonClicked())
+        //ensure layout reflects screen size
+        for (int i = 0; i < buttonList.size(); i++)
         {
-            button.resetButtonClicked();
-            stateManager.setState(State.EXIT);
+            buttonList.get(i).setCenter(MainApp.gameEngine.screenManager.getCurrentResWidth() / 2, MainApp.gameEngine.screenManager.getCurrentResHeight()/ 2 + i * VERTICAL_SPACING);
+        }
+        
+        //perform updates
+        if (newGameButton.isButtonClicked())
+        {
+            newGameButton.resetButtonClicked();
+            stateManager.setState(State.SINGLE_PLAYER);
+        }
+        if(exitButton.isButtonClicked())
+        {
+            exitButton.resetButtonClicked();
+            System.exit(0);
         }
     }
 
@@ -61,7 +115,7 @@ public class StateMainMenu implements BasicState
         g.clear();
         //backgrond
         g.setBackground(Color.black);
-        g.setColor(Color.red);
-        button.render(g);
-    }    
+        newGameButton.render(g);
+        exitButton.render(g);
+    }
 }
