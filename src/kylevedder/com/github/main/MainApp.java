@@ -59,6 +59,7 @@ public class MainApp extends StateBasedGame
         app.setAlwaysRender(true);        
         app.setSmoothDeltas(true);
         app.setShowFPS(true);        
+        app.setVerbose(true);
         screenManager = new ScreenManager(app, false);        
         app.start();
         return app;

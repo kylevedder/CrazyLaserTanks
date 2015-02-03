@@ -49,6 +49,8 @@ public class SlickStateSinglePlayer extends BasicGameState
     private float tankAngleAppend = 0;
     private float tankSpeed = 0;
 
+    private long prevUpdateTime = 0;//placeholder value
+    
     public Camera camera = null;
     public ObjectRegister register = null;
     public GroundHolder ground = null;
@@ -74,6 +76,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {        
+        
     }
 
     @Override
@@ -89,8 +92,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException
-    {
-        System.out.println("Entering SinglePlayer");
+    {                
         this.gameOverMenu = null;
         this.paused = false;
         pauseMenu = new InGameMenuNew(container, game, "Paused");
@@ -113,14 +115,13 @@ public class SlickStateSinglePlayer extends BasicGameState
         singlePlayerKeyListener = new SinglePlayerKeyListener(this);
 
         container.getInput().addMouseListener(singlePlayerMouseListener);
-        container.getInput().addKeyListener(singlePlayerKeyListener);        
-    }
-
-    
+        container.getInput().addKeyListener(singlePlayerKeyListener);                
+        prevUpdateTime = System.currentTimeMillis();
+    }    
     
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
-    {
+    {        
         //backgrond
         g.setBackground(Color.black);
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
@@ -130,16 +131,15 @@ public class SlickStateSinglePlayer extends BasicGameState
         g.resetTransform();
         pauseMenu.render(g, paused);
         gameOverMenu.render(g, spMatch.isMatchOver());
-        prev = container.getTime();
+
     }
 
-    private long prev = System.currentTimeMillis();
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
-    {                       
-        System.out.println("Real Dlta: " + (container.getTime() - prev) + " reported " + delta);        
-        delta = (int)(container.getTime() - prev);
-        prev = container.getTime();
+    {
+        //set to true delta (THANKS SLICK!!! Your deltas are bad and you should feel bad!!!)
+        delta = (int)(System.currentTimeMillis() - prevUpdateTime);
+        prevUpdateTime = System.currentTimeMillis();
         MainApp.musicPlayer.playGameMusic();
         this.gameOverMenu.update();
         this.pauseMenu.update();
