@@ -5,6 +5,7 @@
  */
 package kylevedder.com.github.main;
 
+import java.lang.reflect.Field;
 import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.slickstates.SlickStateMainMenu;
 import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
@@ -16,6 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * Crazy Laser Tanks!
+ *
  * @author Kyle
  */
 public class MainApp extends StateBasedGame
@@ -23,19 +25,19 @@ public class MainApp extends StateBasedGame
 
     public static final int NUM_COLLISION_UPDATES = 16;
 
-    
-    public static AppGameContainer app;    
+    public static AppGameContainer app;
 
     public static MusicPlayer musicPlayer = null;
     public static ScreenManager screenManager = null;
-    
+
     /**
      * @param args the command line arguments
+     * @throws org.newdawn.slick.SlickException
      */
     public static void main(String[] args) throws SlickException
-    {
-        musicPlayer = new MusicPlayer("music/Ouroboros.ogg", "music/Club_Diver.ogg");        
-        app = initApp("Tank Game Three");                
+    {        
+        musicPlayer = new MusicPlayer("./kylevedder/com/github/resources/music/Ouroboros.ogg", "./kylevedder/com/github/resources/music/Club_Diver.ogg");
+        app = initApp("Tank Game Three");
     }
 
     /**
@@ -62,12 +64,12 @@ public class MainApp extends StateBasedGame
     {
         super(title);
     }
-    
+
     @Override
     public void initStatesList(GameContainer container) throws SlickException
     {
         addState(new SlickStateMainMenu());
         addState(new SlickStateSinglePlayer());
-    }    
+    }
 
 }

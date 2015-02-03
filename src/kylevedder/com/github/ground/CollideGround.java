@@ -30,7 +30,7 @@ public class CollideGround extends BaseGround
         try
         {
             this.collidable = true;
-            this.image = new Image("images/NewGround.png");            
+            this.image = new Image("./kylevedder/com/github/resources/images/NewGround.png");            
             //at the given X,Y and a scale set so that the image will always be this.GROUND_SIZE
             this.init(x, y, (float)BaseGround.GROUND_SIZE / (float)this.image.getWidth(), image);
         }

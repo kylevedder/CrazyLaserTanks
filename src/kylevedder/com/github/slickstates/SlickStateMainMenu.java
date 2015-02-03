@@ -39,7 +39,7 @@ public class SlickStateMainMenu extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
-        this.logo = new GUIRotatingLogo("images/title/full.png", "images/title/wire_frame.png", LOGO_NUM_FRAMES, LOGO_UPDATE_MILLIS, LOGO_Y_POS);
+        this.logo = new GUIRotatingLogo("./kylevedder/com/github/resources/images/title/full.png", "./kylevedder/com/github/resources/images/title/wire_frame.png", LOGO_NUM_FRAMES, LOGO_UPDATE_MILLIS, LOGO_Y_POS);
         this.menu = new MainMenu(container, game);      
     }
 

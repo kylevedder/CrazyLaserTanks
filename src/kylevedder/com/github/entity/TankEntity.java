@@ -69,10 +69,10 @@ public class TankEntity extends BaseEntity
         {
             this.register = register;
 //            Image image = new SpriteSheet(new Image("images/tank.png"), TILE_WIDTH, TILE_HEIGHT).getSprite(0, 0);
-            base = new Image("images/StaticBase.png").getScaledCopy(SCALE);
-            turret = new Image("images/Turret.png").getScaledCopy(SCALE);
-            leftTrack = new CustomAnimation(new SpriteSheet(new Image("images/tracks.png").getScaledCopy(SCALE).getFlippedCopy(false, true), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
-            rightTrack = new CustomAnimation(new SpriteSheet(new Image("images/tracks.png").getScaledCopy(SCALE).getFlippedCopy(false, true), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
+            base = new Image("./kylevedder/com/github/resources/images/StaticBase.png").getScaledCopy(SCALE);
+            turret = new Image("./kylevedder/com/github/resources/images/Turret.png").getScaledCopy(SCALE);
+            leftTrack = new CustomAnimation(new SpriteSheet(new Image("./kylevedder/com/github/resources/images/tracks.png").getScaledCopy(SCALE).getFlippedCopy(false, true), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
+            rightTrack = new CustomAnimation(new SpriteSheet(new Image("./kylevedder/com/github/resources/images/tracks.png").getScaledCopy(SCALE).getFlippedCopy(false, true), (int) (TRACK_WIDTH * SCALE), (int) (TRACK_HEIGHT * SCALE)), 100);
             this.init(x, y, angle, base);
         }
         catch (SlickException ex)
