@@ -56,9 +56,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     public SinglePlayerMatchData match = null;
 
     public UserTankEntity tankUser = null;
-    public TankEntity tankDummy = null;
 
-    private FontLoader fontLoader = null;
 
     public boolean paused = false;
 
@@ -76,15 +74,14 @@ public class SlickStateSinglePlayer extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
+        System.out.println("Init SinglePlayer");
         this.paused = false;
-        menu = new InGameMenuNew(container, game, "Paused");
-        this.fontLoader = new FontLoader(Reference.MAIN_FONT, 32f);
+        menu = new InGameMenuNew(container, game, "Paused");        
         camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.screenManager);
         register = new ObjectRegister();
 
         tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE, register, camera);
         register.add(tankUser);
-        register.add(tankDummy);
 
         ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
         register.addGround(ground);
@@ -119,6 +116,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
     {
+        MainApp.musicPlayer.playGameMusic();
         if (!paused)
         {
             spMatch.update(container.getInput(), delta);

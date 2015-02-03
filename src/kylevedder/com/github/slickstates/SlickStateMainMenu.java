@@ -39,13 +39,14 @@ public class SlickStateMainMenu extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
+        System.out.println("Init MainMenu");
         this.logo = new GUIRotatingLogo("images/title/full.png", "images/title/wire_frame.png", LOGO_NUM_FRAMES, LOGO_UPDATE_MILLIS, LOGO_Y_POS);
         this.menu = new MainMenu(container, game);
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
-    {
+    {        
         menu.render(g, true);
         logo.render(container);
     }
@@ -53,6 +54,7 @@ public class SlickStateMainMenu extends BasicGameState
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
     {
+        MainApp.musicPlayer.playMenuMusic();
         logo.update(delta);
         menu.update();
         MainApp.screenManager.update(container.getInput());

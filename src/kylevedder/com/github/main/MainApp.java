@@ -39,9 +39,8 @@ public class MainApp extends StateBasedGame
      */
     public static void main(String[] args) throws SlickException
     {
-        app = initApp("Tank Game Three");
-        musicPlayer = new MusicPlayer("music/Ouroboros.ogg", "music/Club_Diver.ogg");
-        screenManager = new ScreenManager(app, false);
+        musicPlayer = new MusicPlayer("music/Ouroboros.ogg", "music/Club_Diver.ogg");        
+        app = initApp("Tank Game Three");                
     }
 
     /**
@@ -59,6 +58,7 @@ public class MainApp extends StateBasedGame
         app.setTargetFrameRate(60);
         app.setSmoothDeltas(true);
         app.setShowFPS(true);
+        screenManager = new ScreenManager(app, false);
         app.start();
         return app;
     }

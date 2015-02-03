@@ -27,7 +27,7 @@ public class MusicPlayer
     /**
      * Starts menu music and stops all other music.
      */
-    public void startMenuMusic()
+    public void playMenuMusic()
     {
         if (this.gameMusic.playing())
         {
@@ -42,7 +42,7 @@ public class MusicPlayer
     /**
      * Starts game music and stops all other music.
      */
-    public void startGameMusic()
+    public void playGameMusic()
     {
         if (this.menuMusic.playing())
         {
