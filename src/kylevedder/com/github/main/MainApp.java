@@ -15,7 +15,7 @@ import org.newdawn.slick.loading.LoadingList;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *
+ * Crazy Laser Tanks!
  * @author Kyle
  */
 public class MainApp extends StateBasedGame
