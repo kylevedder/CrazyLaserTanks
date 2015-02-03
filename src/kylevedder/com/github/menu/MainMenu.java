@@ -9,11 +9,11 @@ import java.awt.Color;
 import kylevedder.com.github.gui.GUIButton;
 import kylevedder.com.github.gui.GUIButtonContent;
 import kylevedder.com.github.main.MainApp;
-import kylevedder.com.github.states.State;
-import kylevedder.com.github.states.StateManager;
+import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
@@ -22,16 +22,16 @@ import org.newdawn.slick.SlickException;
 public class MainMenu extends BaseMenu
 {
 
-    GameContainer gc;
-    StateManager stateManager;
+    GameContainer gc;    
+    StateBasedGame game;
     GUIButton newSPGameButton = null;
     GUIButton exitButton = null;
 
-    public MainMenu(GameContainer gc, StateManager stateManager) throws SlickException
+    public MainMenu(GameContainer gc, StateBasedGame game) throws SlickException
     {
-        super(gc, stateManager);
+        super(gc, game);
         this.gc = gc;
-        this.stateManager = stateManager;
+        this.game = game;
         GUIButtonContent newSPContent = new GUIButtonContent("New Game", "New Game", normalImage, hovImage);
         GUIButtonContent exitContent = new GUIButtonContent("Exit", "Exit", normalImage, hovImage);
 
@@ -63,7 +63,7 @@ public class MainMenu extends BaseMenu
         if (newSPGameButton.isButtonClicked())
         {
             newSPGameButton.resetButtonClicked();
-            stateManager.setState(State.SINGLE_PLAYER);
+            game.enterState(SlickStateSinglePlayer.ID);
         }
     }
 

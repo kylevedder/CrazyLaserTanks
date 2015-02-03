@@ -11,9 +11,8 @@ import kylevedder.com.github.entity.AITankEntity;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.BaseGround;
-import kylevedder.com.github.main.GameEngine;
 import kylevedder.com.github.physics.ObjectRegister;
-import kylevedder.com.github.states.StateSinglePlayer;
+import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
@@ -26,7 +25,7 @@ public class SinglePlayerMatch
 
     private final float IN_FROM_EDGE_POSITIONING = 4f;
     private final float YOUR_START_X = BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
-    private final float OPPOSING_START_X = StateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
+    private final float OPPOSING_START_X = SlickStateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
 
     private final float TANK_SPACING_Y = BaseGround.GROUND_SIZE * 2f;
 

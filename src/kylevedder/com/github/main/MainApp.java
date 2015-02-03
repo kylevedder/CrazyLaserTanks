@@ -8,32 +8,40 @@ package kylevedder.com.github.main;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kylevedder.com.github.music.MusicPlayer;
+import kylevedder.com.github.slickstates.SlickStateMainMenu;
+import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
  * @author Kyle
  */
-public class MainApp extends BasicGame
+public class MainApp extends StateBasedGame
 {
 
     public static final int NUM_COLLISION_UPDATES = 16;
 
-    public static final boolean DEBUG = true;
-    public static AppGameContainer app;
-    public static GameEngine gameEngine;
+    
+    public static AppGameContainer app;    
 
+    public static MusicPlayer musicPlayer = null;
+    public static ScreenManager screenManager = null;
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SlickException
     {
-        app = initApp("Tank Game Two");
+        app = initApp("Tank Game Three");
+        musicPlayer = new MusicPlayer("music/Ouroboros.ogg", "music/Club_Diver.ogg");
+        screenManager = new ScreenManager(app, false);
     }
 
     /**
@@ -59,25 +67,12 @@ public class MainApp extends BasicGame
     {
         super(title);
     }
-
-    //Main hooks for slick
+    
     @Override
-    public void init(GameContainer gc) throws SlickException
-    {       
-        gameEngine = new GameEngine();
-        gameEngine.init(gc);
-    }
-
-    @Override
-    public void update(GameContainer gc, int deltaTime) throws SlickException
+    public void initStatesList(GameContainer container) throws SlickException
     {
-        gameEngine.update(gc, deltaTime);
-    }
-
-    @Override
-    public void render(GameContainer gc, Graphics g) throws SlickException
-    {
-        gameEngine.render(gc, g);
+        addState(new SlickStateMainMenu());
+        addState(new SlickStateSinglePlayer());
     }
 
 }

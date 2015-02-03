@@ -5,7 +5,7 @@
  */
 package kylevedder.com.github.controlls;
 
-import kylevedder.com.github.states.StateSinglePlayer;
+import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
@@ -17,9 +17,9 @@ public class SinglePlayerKeyListener implements KeyListener
 {
     private final int ESC_KEY = 1;
     
-    private StateSinglePlayer sp;
+    private SlickStateSinglePlayer sp;
 
-    public SinglePlayerKeyListener(StateSinglePlayer sp)
+    public SinglePlayerKeyListener(SlickStateSinglePlayer sp)
     {
         this.sp = sp;
     }    

@@ -9,12 +9,11 @@ import java.awt.Color;
 import kylevedder.com.github.gui.GUIButton;
 import kylevedder.com.github.gui.GUIButtonContent;
 import kylevedder.com.github.main.MainApp;
-import kylevedder.com.github.reference.Reference;
-import kylevedder.com.github.states.State;
-import kylevedder.com.github.states.StateManager;
+import kylevedder.com.github.slickstates.SlickStateMainMenu;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
@@ -27,14 +26,14 @@ public class InGameMenuNew extends BaseMenu
     private GUIButton mainMenuButton = null;
 
     private GameContainer gc;
-    private StateManager stateManager = null;
+    
+    private StateBasedGame game;
 
-    public InGameMenuNew(GameContainer gc, StateManager stateManager, String title) throws SlickException
+    public InGameMenuNew(GameContainer gc, StateBasedGame game, String title) throws SlickException
     {
-        super(gc, stateManager);
-        this.stateManager = stateManager;
+        super(gc, game);
         this.gc = gc;
-
+        this.game = game;
         GUIButtonContent exitContent = new GUIButtonContent("Exit", "Exit", this.normalImage.getScaledCopy(BUTTON_WIDTH / 2, BUTTON_HEIGHT), this.hovImage.getScaledCopy(BUTTON_WIDTH / 2, BUTTON_HEIGHT));
         GUIButtonContent mainMenuContent = new GUIButtonContent("Main Menu", "Main Menu", this.normalImage.getScaledCopy(BUTTON_WIDTH / 2, BUTTON_HEIGHT), this.hovImage.getScaledCopy(BUTTON_WIDTH / 2, BUTTON_HEIGHT));
 
@@ -69,7 +68,7 @@ public class InGameMenuNew extends BaseMenu
         if (mainMenuButton.isButtonClicked())
         {
             mainMenuButton.resetButtonClicked();
-            stateManager.setState(State.MENU);
+            game.enterState(SlickStateMainMenu.ID);
         }
     }
 

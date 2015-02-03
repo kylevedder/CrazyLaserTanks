@@ -148,8 +148,8 @@ public class SinglePlayerMatchData
         if (this.isMatchOver())
         {
             g.drawString(this.getVictor(),
-                    (MainApp.gameEngine.screenManager.getCurrentResWidth() / 2 + camera.getRenderOffsetX()) / camera.getZoom(),
-                    (MainApp.gameEngine.screenManager.getCurrentResHeight() / 2 + camera.getRenderOffsetY()) / camera.getZoom());
+                    (MainApp.screenManager.getCurrentResWidth() / 2 + camera.getRenderOffsetX()) / camera.getZoom(),
+                    (MainApp.screenManager.getCurrentResHeight() / 2 + camera.getRenderOffsetY()) / camera.getZoom());
         }
     }
 

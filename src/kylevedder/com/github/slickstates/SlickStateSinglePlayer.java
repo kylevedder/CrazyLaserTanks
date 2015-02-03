@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kylevedder.com.github.states;
+package kylevedder.com.github.slickstates;
 
 import kylevedder.com.github.controlls.SinglePlayerKeyListener;
 import kylevedder.com.github.controlls.SinglePlayerMouseListener;
@@ -17,19 +17,23 @@ import kylevedder.com.github.menu.InGameMenuNew;
 import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.reference.Reference;
-import kylevedder.com.github.teams.SinglePlayerMatchData;
 import kylevedder.com.github.teams.SinglePlayerMatch;
+import kylevedder.com.github.teams.SinglePlayerMatchData;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
  * @author Kyle
  */
-public class StateSinglePlayer implements BasicState
+public class SlickStateSinglePlayer extends BasicGameState
 {
+
+    public static final int ID = 1;
 
     public static final int WORLD_WIDTH = 40;
     public static final int WORLD_HEIGHT = 40;
@@ -54,7 +58,6 @@ public class StateSinglePlayer implements BasicState
     public UserTankEntity tankUser = null;
     public TankEntity tankDummy = null;
 
-    private MusicPlayer musicPlayer = null;
     private FontLoader fontLoader = null;
 
     public boolean paused = false;
@@ -64,19 +67,19 @@ public class StateSinglePlayer implements BasicState
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
     private SinglePlayerKeyListener singlePlayerKeyListener = null;
 
-    public StateSinglePlayer()
+    @Override
+    public int getID()
     {
+        return ID;
     }
 
     @Override
-    public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
+    public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
         this.paused = false;
-        menu = new InGameMenuNew(gc, stateManager, "Paused");
+        menu = new InGameMenuNew(container, game, "Paused");
         this.fontLoader = new FontLoader(Reference.MAIN_FONT, 32f);
-        this.musicPlayer = musicPlayer;
-        this.musicPlayer.startGameMusic();
-        camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.gameEngine.screenManager);
+        camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.screenManager);
         register = new ObjectRegister();
 
         tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE, register, camera);
@@ -94,31 +97,12 @@ public class StateSinglePlayer implements BasicState
         singlePlayerMouseListener = new SinglePlayerMouseListener(camera);
         singlePlayerKeyListener = new SinglePlayerKeyListener(this);
 
-        gc.getInput().addMouseListener(singlePlayerMouseListener);
-        gc.getInput().addKeyListener(singlePlayerKeyListener);
-    }
-
-    public void togglePaused()
-    {
-        this.paused = !this.paused;
+        container.getInput().addMouseListener(singlePlayerMouseListener);
+        container.getInput().addKeyListener(singlePlayerKeyListener);
     }
 
     @Override
-    public void update(GameContainer gc, int deltaTime) throws SlickException
-    {
-        if (!paused)
-        {
-            spMatch.update(gc.getInput(), deltaTime);
-        }
-        else
-        {
-            menu.update();
-        }
-        camera.update(tankUser.getHitBox());
-    }
-
-    @Override
-    public void render(GameContainer gc, Graphics g) throws SlickException
+    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
     {
         //clears
         g.clear();
@@ -133,17 +117,26 @@ public class StateSinglePlayer implements BasicState
     }
 
     @Override
-    public void cleanup(GameContainer gc) throws SlickException
-    {   
-        if (singlePlayerMouseListener != null)
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
+    {
+        if (!paused)
         {
-            gc.getInput().removeMouseListener(singlePlayerMouseListener);
+            spMatch.update(container.getInput(), delta);
         }
+        else
+        {
+            menu.update();
+        }
+        MainApp.screenManager.update(container.getInput());
+        camera.update(tankUser.getHitBox());
+    }
 
-        if (singlePlayerKeyListener != null)
-        {
-            gc.getInput().removeKeyListener(singlePlayerKeyListener);
-        }
+    /**
+     * Toggles the state of the game.
+     */
+    public void togglePaused()
+    {
+        this.paused = !this.paused;
     }
 
 }

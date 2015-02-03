@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import kylevedder.com.github.ground.BaseGround;
 import kylevedder.com.github.physics.CenteredRectangle;
-import kylevedder.com.github.states.StateSinglePlayer;
+import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -107,8 +107,8 @@ public class Camera
         renderOffsetY = (posY - this.screenManager.getCurrentResHeight()/ this.getZoom() / 2) * this.getZoom();
 
         //calculates offset so that the camera never goes off the edge
-        renderOffsetX = Utils.clampFloat(renderOffsetX, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (StateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.screenManager.getCurrentResWidth());
-        renderOffsetY = Utils.clampFloat(renderOffsetY, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (StateSinglePlayer.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.screenManager.getCurrentResHeight());
+        renderOffsetX = Utils.clampFloat(renderOffsetX, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (SlickStateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.screenManager.getCurrentResWidth());
+        renderOffsetY = Utils.clampFloat(renderOffsetY, -(BaseGround.GROUND_SIZE / 2) * this.getZoom(), (SlickStateSinglePlayer.WORLD_HEIGHT * BaseGround.GROUND_SIZE) * this.getZoom() - (BaseGround.GROUND_SIZE / 2) * this.getZoom() - this.screenManager.getCurrentResHeight());
         
     }
 
@@ -128,11 +128,11 @@ public class Camera
         
         return //within screen X
                 rect.getMinX() * camera.getZoom() - camera.getRenderOffsetX() + rect.getWidth() * camera.getZoom() > 0
-                && (rect.getMinX() * camera.getZoom() - camera.getRenderOffsetX()) * camera.getZoom() < MainApp.gameEngine.screenManager.getCurrentResWidth() * camera.getZoom()
+                && (rect.getMinX() * camera.getZoom() - camera.getRenderOffsetX()) * camera.getZoom() < MainApp.screenManager.getCurrentResWidth() * camera.getZoom()
 
                 && //within screen Y
                 rect.getMinY() * camera.getZoom() - camera.getRenderOffsetY() + rect.getWidth() * camera.getZoom() > 0
-                && (rect.getMinY() * camera.getZoom() - camera.getRenderOffsetY()) * camera.getZoom() < MainApp.gameEngine.screenManager.getCurrentResHeight() * camera.getZoom();
+                && (rect.getMinY() * camera.getZoom() - camera.getRenderOffsetY()) * camera.getZoom() < MainApp.screenManager.getCurrentResHeight() * camera.getZoom();
     }
 
     
