@@ -8,6 +8,7 @@ package kylevedder.com.github.menu;
 import java.awt.Color;
 import kylevedder.com.github.gui.GUIButton;
 import kylevedder.com.github.gui.GUIButtonContent;
+import kylevedder.com.github.gui.GUILabel;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.slickstates.SlickStateMainMenu;
 import org.newdawn.slick.GameContainer;
@@ -24,7 +25,8 @@ public class InGameMenuNew extends BaseMenu
 
     private GUIButton exitButton = null;
     private GUIButton mainMenuButton = null;
-
+    private GUILabel label = null;
+    
     private GameContainer gc;
     
     private StateBasedGame game;
@@ -38,9 +40,11 @@ public class InGameMenuNew extends BaseMenu
         GUIButtonContent mainMenuContent = new GUIButtonContent("Main Menu", "Main Menu", this.normalImage.getScaledCopy(BUTTON_WIDTH / 2, BUTTON_HEIGHT), this.hovImage.getScaledCopy(BUTTON_WIDTH / 2, BUTTON_HEIGHT));
 
         this.exitButton = new GUIButton(this.gc, gc.getWidth() / 2 - this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2, this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, this.BUTTON_HEIGHT, exitContent);
-        this.mainMenuButton = new GUIButton(this.gc, gc.getWidth() / 2 + this.BUTTON_WIDTH / 2 + this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2, this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, this.BUTTON_HEIGHT, mainMenuContent);
+        this.mainMenuButton = new GUIButton(this.gc, gc.getWidth() / 2 + this.BUTTON_WIDTH / 2 + this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2, this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, this.BUTTON_HEIGHT, mainMenuContent);        
 
         fontLoader.setColor(Color.magenta);        
+        
+        this.label = new GUILabel(gc, gc.getWidth(), gc.getHeight() - this.LABEL_VERT_SPACING, fontLoader.getSizedFont(this.LABEL_TEXT_SIZE), title);
 
         this.exitButton.setFont(fontLoader.getFont(), fontLoader.getFont());
         this.mainMenuButton.setFont(fontLoader.getFont(), fontLoader.getFont());
@@ -48,6 +52,15 @@ public class InGameMenuNew extends BaseMenu
         this.exitButton.setTextOffset(0, this.BUTTON_VERT_TEXT_OFFSET);
         this.mainMenuButton.setTextOffset(0, this.BUTTON_VERT_TEXT_OFFSET);
 
+    }
+    
+    /**
+     * Sets the label's text
+     * @param text 
+     */
+    public void setText(String text)
+    {
+        this.label.setText(text);
     }
 
     /**
@@ -58,6 +71,7 @@ public class InGameMenuNew extends BaseMenu
     {
         this.exitButton.setCenter(gc.getWidth() / 2 - this.BUTTON_WIDTH / 4 - this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2);
         this.mainMenuButton.setCenter(gc.getWidth() / 2 + this.BUTTON_WIDTH / 4 + this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2);
+        this.label.setCenter(gc.getWidth() / 2, gc.getHeight() / 2 - this.LABEL_VERT_SPACING);
 
         if (exitButton.isButtonClicked())
         {
@@ -83,11 +97,12 @@ public class InGameMenuNew extends BaseMenu
     {
         super.render(g, render);
         if (render)
-        {
+        {            
             this.exitButton.render(g);
             this.mainMenuButton.render(g);
+            this.label.render();
         }
 
-    }
+    }   
 
 }

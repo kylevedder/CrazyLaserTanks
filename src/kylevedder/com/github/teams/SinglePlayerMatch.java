@@ -128,7 +128,24 @@ public class SinglePlayerMatch
         {
             e.renderProjectiles();
         }        
-        this.player.renderProjectiles();
-        this.match.render(g);
+        this.player.renderProjectiles();        
+    }
+    
+    /**
+     * Checks to see if the match is over.
+     * @return 
+     */
+    public boolean isMatchOver()
+    {        
+        return this.match.isMatchOver();
+    }
+    
+    /**
+     * Gets the victor of the match.
+     * @return 
+     */
+    public String getVictor()
+    {
+        return this.match.getVictor();
     }
 }

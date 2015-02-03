@@ -18,8 +18,7 @@ import org.newdawn.slick.Graphics;
 public class SinglePlayerMatchData
 {
 
-    private final String STALEMATE = "Stalemate...";
-    private final String VICTORY_SUFFIX = " Wins!";
+    private final String STALEMATE = "Stalemate...";    
 
     Team yourTeam = null;
     Team opposingTeam = null;
@@ -121,11 +120,11 @@ public class SinglePlayerMatchData
         {
             if (this.yourTeam.isTeamAlive() || !this.player.isDestroyed())
             {
-                return this.yourTeam.toString() + this.VICTORY_SUFFIX;
+                return this.yourTeam.toString();
             }
             else if (this.opposingTeam.isTeamAlive())
             {
-                return this.opposingTeam.toString() + this.VICTORY_SUFFIX;
+                return this.opposingTeam.toString();
             }
             else
             {
@@ -136,21 +135,5 @@ public class SinglePlayerMatchData
         {
             return null;
         }
-    }
-
-    /**
-     * Draws the winner on the screen.
-     *
-     * @param g
-     */
-    public void render(Graphics g)
-    {
-        if (this.isMatchOver())
-        {
-            g.drawString(this.getVictor(),
-                    (MainApp.screenManager.getCurrentResWidth() / 2 + camera.getRenderOffsetX()) / camera.getZoom(),
-                    (MainApp.screenManager.getCurrentResHeight() / 2 + camera.getRenderOffsetY()) / camera.getZoom());
-        }
-    }
-
+    }    
 }

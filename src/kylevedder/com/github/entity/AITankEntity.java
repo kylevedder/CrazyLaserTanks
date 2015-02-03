@@ -25,7 +25,6 @@ public class AITankEntity extends TankEntity
     private float pastTurretUpdateDelta = 0f;
     private final float SHOOT_ANGLE_OFF_THRESHOLD = 0.5f;
     private final float DRIVE_TO_DIST = BaseGround.GROUND_SIZE * 4f;
-    private final float DRIVE_ANGLE_OFF_THRESHOLD = 0.5f;
     private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 45f;
 
     public AITankEntity(float x, float y, float angle, ObjectRegister register, Team enemyTeam)
@@ -60,7 +59,6 @@ public class AITankEntity extends TankEntity
 
     }
 
-    private int driveDirecton = 1;
 
     /**
      * Updates the driving of the enemy
@@ -91,6 +89,8 @@ public class AITankEntity extends TankEntity
                 }
 
             }
+            
+            //regardless of if at acceptable angle to drive, turn toward the target
             this.setVector(tankSpeed, desiredAngle, delta);
         }
         else

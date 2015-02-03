@@ -57,14 +57,13 @@ public class SlickStateSinglePlayer extends BasicGameState
 
     public UserTankEntity tankUser = null;
 
-
     public boolean paused = false;
 
-    private InGameMenuNew menu = null;
+    private InGameMenuNew pauseMenu = null;
+    private InGameMenuNew gameOverMenu = null;
 
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
     private SinglePlayerKeyListener singlePlayerKeyListener = null;
-    
 
     @Override
     public int getID()
@@ -75,8 +74,8 @@ public class SlickStateSinglePlayer extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
-                
-    }   
+
+    }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException
@@ -84,14 +83,16 @@ public class SlickStateSinglePlayer extends BasicGameState
         super.leave(container, game);
         //remove key listeners
         container.getInput().removeMouseListener(singlePlayerMouseListener);
-        container.getInput().removeKeyListener(singlePlayerKeyListener);                        
+        container.getInput().removeKeyListener(singlePlayerKeyListener);
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException
     {
+        this.gameOverMenu = null;
         this.paused = false;
-        menu = new InGameMenuNew(container, game, "Paused");        
+        pauseMenu = new InGameMenuNew(container, game, "Paused");
+        gameOverMenu = new InGameMenuNew(container, game, "Winner: None");
         camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.screenManager);
         register = new ObjectRegister();
 
@@ -106,17 +107,13 @@ public class SlickStateSinglePlayer extends BasicGameState
         spMatch = new SinglePlayerMatch(TEAM_SIZE, match, tankUser, register);
 
         //setup mouse and keyboard
-        singlePlayerMouseListener = new SinglePlayerMouseListener(camera);
+        singlePlayerMouseListener = new SinglePlayerMouseListener(this);
         singlePlayerKeyListener = new SinglePlayerKeyListener(this);
 
         container.getInput().addMouseListener(singlePlayerMouseListener);
         container.getInput().addKeyListener(singlePlayerKeyListener);
     }
-    
-    
 
-    
-    
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
     {
@@ -129,23 +126,27 @@ public class SlickStateSinglePlayer extends BasicGameState
         ground.render(g, camera);
         spMatch.render(g);
         g.resetTransform();
-        menu.render(g, paused);
+        pauseMenu.render(g, paused);
+        gameOverMenu.render(g, spMatch.isMatchOver());
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
     {
         MainApp.musicPlayer.playGameMusic();
-        if (!paused)
+        this.gameOverMenu.update();
+        this.pauseMenu.update();
+        if (spMatch.isMatchOver())
+        {
+            this.gameOverMenu.setText("Winner: " + spMatch.getVictor());
+        }
+        else if (!paused)
         {
             spMatch.update(container.getInput(), delta);
+            camera.update(tankUser.getHitBox());
         }
-        else
-        {
-            menu.update();
-        }
-        MainApp.screenManager.update(container.getInput());
-        camera.update(tankUser.getHitBox());
+
+        MainApp.screenManager.update(container.getInput());        
     }
 
     /**
@@ -153,7 +154,28 @@ public class SlickStateSinglePlayer extends BasicGameState
      */
     public void togglePaused()
     {
+        if(!this.spMatch.isMatchOver())
         this.paused = !this.paused;
+    }
+    
+    /**
+     * Adds zoom to the camera.
+     * @param amount
+     */
+    public void addZoom(float amount)
+    {
+        if(!this.paused && !this.spMatch.isMatchOver())
+        this.camera.addZoom(amount);
+    }
+    
+    /**
+     * set zoom of the camera.
+     * @param amount
+     */
+    public void setZoom(float amount)
+    {
+        if(!this.paused && !this.spMatch.isMatchOver())
+        this.camera.setZoom(amount);
     }
 
 }

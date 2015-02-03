@@ -25,7 +25,9 @@ public class BaseMenu
     int BUTTON_VERT_SPACING = 10;
     int BUTTON_VERT_TEXT_OFFSET = -5;
     
-    float TEXT_SIZE = 32f;
+    int LABEL_VERT_SPACING = 100;
+    float LABEL_TEXT_SIZE = 64f;    
+    float BUTTON_TEXT_SIZE = 32f;
 
     Image normalImage;
     Image hovImage;
@@ -39,7 +41,7 @@ public class BaseMenu
         hovImage = new Image("images/buttons/hover.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);
         clickImage = new Image("images/buttons/click.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);
         
-        fontLoader = new FontLoader("font/youre-gone/YoureGone.ttf", TEXT_SIZE);        
+        fontLoader = new FontLoader("font/youre-gone/YoureGone.ttf", BUTTON_TEXT_SIZE);        
     }
     
     public void update() throws SlickException

@@ -7,6 +7,7 @@ package kylevedder.com.github.controlls;
 
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
+import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 
@@ -16,43 +17,39 @@ import org.newdawn.slick.MouseListener;
  */
 public class SinglePlayerMouseListener implements MouseListener
 {
+
     private volatile boolean isOperating = true;
-    
+
     private final int TICKS_PER_SCROLL = 120;
-    
+
     public static final int BUTTON_LEFT = 0;
     public static final int BUTTON_RIGHT = 1;
     public static final int BUTTON_MIDDLE = 2;
-    
-    private Camera camera;
 
-    public SinglePlayerMouseListener(Camera camera)
+    private SlickStateSinglePlayer sp;
+
+    public SinglePlayerMouseListener(SlickStateSinglePlayer sp)
     {
-        this.camera = camera;                
+        this.sp = sp;
     }
-    
-    
 
     @Override
     public void mouseWheelMoved(int change)
     {
         //120 is 1 tick scrolled down
-        camera.addZoom(change / TICKS_PER_SCROLL * Camera.ZOOM_AMOUNT);
+        sp.addZoom(change / TICKS_PER_SCROLL * Camera.ZOOM_AMOUNT);
     }
 
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount)
     {
-        if(button == BUTTON_MIDDLE)
-        {
-            camera.setZoom(1f);            
-        }
+        sp.setZoom(1f);
     }
 
     @Override
     public void mousePressed(int button, int x, int y)
     {
-        
+
     }
 
     @Override
@@ -64,7 +61,7 @@ public class SinglePlayerMouseListener implements MouseListener
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy)
     {
-        
+
     }
 
     @Override
@@ -88,7 +85,7 @@ public class SinglePlayerMouseListener implements MouseListener
     @Override
     public void inputEnded()
     {
-        this.isOperating = false;        
+        this.isOperating = false;
     }
 
     @Override

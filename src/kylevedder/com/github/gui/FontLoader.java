@@ -27,19 +27,22 @@ public class FontLoader
     private UnicodeFont uFont = null;
     private Font awtFont = null;
     private float size = 0f;
+    
+    private Color color = null;
 
     @SuppressWarnings("unchecked")//STFU about the add ColorEffect
     public FontLoader(String fontPath, float defaultSize)
     {
         this.size = defaultSize;
         InputStream inputStream = ResourceLoader.getResourceAsStream(fontPath);
-
+        
+        color = Color.BLACK;
         try
         {
             awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             awtFont = awtFont.deriveFont(defaultSize);
             uFont = new UnicodeFont(awtFont);
-            uFont.getEffects().add(new ColorEffect(java.awt.Color.yellow));
+            uFont.getEffects().add(new ColorEffect(color));
             uFont.addAsciiGlyphs();
             uFont.loadGlyphs();
         }
@@ -77,11 +80,16 @@ public class FontLoader
      * @param size
      * @return
      */
-    public UnicodeFont getSizedFont(float size)
+    @SuppressWarnings("unchecked")//STFU about the add ColorEffect
+    public UnicodeFont getSizedFont(float size) throws SlickException
     {
         if (awtFont != null)
         {
-            return new UnicodeFont(awtFont.deriveFont(size));
+            UnicodeFont newFont = new UnicodeFont(awtFont.deriveFont(size));
+            newFont.getEffects().add(new ColorEffect(color));
+            newFont.addAsciiGlyphs();
+            newFont.loadGlyphs();
+            return newFont;
         }
         else
         {
@@ -96,6 +104,7 @@ public class FontLoader
     @SuppressWarnings("unchecked")//STFU about the add ColorEffect
     public void setColor(Color color)
     {
+        this.color = color;
         try
         {
             this.uFont = new UnicodeFont(awtFont.deriveFont(this.size));            
