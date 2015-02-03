@@ -130,7 +130,7 @@ public class ObjectRegister
         {
             for (BaseEntity objectItem : objectsList)
             {
-                if (objectItem != pointer && (objectItem.getHitBox().getPolygon()).contains(shape))
+                if (objectItem != pointer && (objectItem.getHitBox().getPolygon()).intersects(shape))
                 {
                     return objectItem;
                 }
@@ -151,7 +151,7 @@ public class ObjectRegister
             ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(shape.getCenterX(), shape.getCenterY(), 4);
             for (BaseGround ground : tiles)
             {
-                if ((ground.getHitBox().getPolygon()).contains(shape))
+                if ((ground.getHitBox().getPolygon()).intersects(shape))
                 {
                     return true;
                 }
