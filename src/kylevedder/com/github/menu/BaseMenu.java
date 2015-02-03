@@ -37,11 +37,11 @@ public class BaseMenu
 
     public BaseMenu(GameContainer gc, StateBasedGame game) throws SlickException
     {
-        normalImage = new Image("./kylevedder/com/github/resources/images/buttons/normal.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);        
-        hovImage = new Image("./kylevedder/com/github/resources/images/buttons/hover.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);
-        clickImage = new Image("./kylevedder/com/github/resources/images/buttons/click.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);
+        normalImage = new Image("kylevedder/com/github/resources/images/buttons/normal.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);        
+        hovImage = new Image("kylevedder/com/github/resources/images/buttons/hover.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);
+        clickImage = new Image("kylevedder/com/github/resources/images/buttons/click.png").getScaledCopy(BUTTON_WIDTH, BUTTON_HEIGHT);
         
-        fontLoader = new FontLoader("./kylevedder/com/github/resources/font/youre-gone/YoureGone.ttf", BUTTON_TEXT_SIZE);        
+        fontLoader = new FontLoader("kylevedder/com/github/resources/font/youre-gone/YoureGone.ttf", BUTTON_TEXT_SIZE);        
     }
     
     public void update() throws SlickException

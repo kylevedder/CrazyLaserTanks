@@ -53,8 +53,8 @@ public class Bullet implements Renderable
         {
             this.register = register;
             this.vector = new Vector(speed, angle);
-            imageToRender = ball = new Image("./kylevedder/com/github/resources/images/ball.png").getScaledCopy(BALL_SCALE);
-            explosion = new TerminalCustomAnimation(new SpriteSheet(new Image("./kylevedder/com/github/resources/images/explosionNew.png").getScaledCopy(EXPLOSION_SCALE), (int) (EXPLOSION_SIZE * EXPLOSION_SCALE), (int) (EXPLOSION_SIZE * EXPLOSION_SCALE)), EXPLOSION_SPEED);
+            imageToRender = ball = new Image("kylevedder/com/github/resources/images/ball.png").getScaledCopy(BALL_SCALE);
+            explosion = new TerminalCustomAnimation(new SpriteSheet(new Image("kylevedder/com/github/resources/images/explosionNew.png").getScaledCopy(EXPLOSION_SCALE), (int) (EXPLOSION_SIZE * EXPLOSION_SCALE), (int) (EXPLOSION_SIZE * EXPLOSION_SCALE)), EXPLOSION_SPEED);
             this.c = new Circle(x, y, ball.getWidth() / 2);
             this.parentPointer = parentPointer;
             this.exist = true;

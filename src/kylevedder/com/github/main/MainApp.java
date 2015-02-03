@@ -36,7 +36,7 @@ public class MainApp extends StateBasedGame
      */
     public static void main(String[] args) throws SlickException
     {        
-        musicPlayer = new MusicPlayer("./kylevedder/com/github/resources/music/Ouroboros.ogg", "./kylevedder/com/github/resources/music/Club_Diver.ogg");
+        musicPlayer = new MusicPlayer("kylevedder/com/github/resources/music/Ouroboros.ogg", "kylevedder/com/github/resources/music/Club_Diver.ogg");
         app = initApp("Tank Game Three");
     }
 
