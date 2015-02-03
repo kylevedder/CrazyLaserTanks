@@ -14,6 +14,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.Transition;
 
 /**
  *
@@ -62,7 +63,7 @@ public class MainMenu extends BaseMenu
 
         if (newSPGameButton.isButtonClicked())
         {
-            newSPGameButton.resetButtonClicked();
+            newSPGameButton.resetButtonClicked();                
             game.enterState(SlickStateSinglePlayer.ID);
         }
     }

@@ -48,7 +48,7 @@ public class AITankEntity extends TankEntity
                 Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
                 this.vector = (Vector) objects[1];
                 this.hitBox = (CenteredRectangle) objects[0];
-                
+
                 this.updateTurret(target, delta);
                 this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
                 this.updateShoot();
@@ -58,7 +58,6 @@ public class AITankEntity extends TankEntity
         super.update(input, delta);
 
     }
-
 
     /**
      * Updates the driving of the enemy
@@ -77,7 +76,7 @@ public class AITankEntity extends TankEntity
 
             float deltaAngle = Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle());
 
-            float driveRate = this.getDriveSpeed() / (1000 / delta);
+            float driveRate = (delta > 0) ? this.getDriveSpeed() / (1000 / delta) : 0;
 
             //if at acceptable angle to drive
             if (Math.abs(deltaAngle) <= NO_DRIVE_ANGLE_OFF_THRESHOLD)
@@ -89,7 +88,7 @@ public class AITankEntity extends TankEntity
                 }
 
             }
-            
+
             //regardless of if at acceptable angle to drive, turn toward the target
             this.setVector(tankSpeed, desiredAngle, delta);
         }
@@ -108,7 +107,7 @@ public class AITankEntity extends TankEntity
      */
     private void setVector(float speed, float angle, int delta)
     {
-        float turnRate = this.getTurnRate() / (1000 / delta);
+        float turnRate = (delta > 0) ? this.getTurnRate() / (1000 / delta) : 0;
         float deltaAngle = Utils.wrapAngleDelta(angle - this.vector.getAngle());
         deltaAngle = Utils.clampFloat(deltaAngle, -turnRate, turnRate);
 

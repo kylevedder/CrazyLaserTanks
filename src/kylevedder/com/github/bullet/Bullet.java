@@ -72,8 +72,8 @@ public class Bullet implements Renderable
     {
         if (this.exist)
         {
-            float xComp = this.vector.getXComp() / (1000 / delta);
-            float yComp = this.vector.getYComp() / (1000 / delta);
+            float xComp = (delta > 0) ? this.vector.getXComp() / (1000 / delta) : 0;
+            float yComp = (delta > 0) ? this.vector.getYComp() / (1000 / delta) : 0;
             Line line = new Line(this.c.getCenterX(), this.c.getCenterY(), this.c.getCenterX() + xComp, this.c.getCenterY() + yComp);
             BaseEntity be = register.checkCollisionWithEntity(line, parentPointer);
             if (exploding)

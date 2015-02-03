@@ -63,7 +63,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     private InGameMenuNew gameOverMenu = null;
 
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
-    private SinglePlayerKeyListener singlePlayerKeyListener = null;
+    private SinglePlayerKeyListener singlePlayerKeyListener = null;        
 
     @Override
     public int getID()
@@ -73,8 +73,7 @@ public class SlickStateSinglePlayer extends BasicGameState
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
-    {
-
+    {        
     }
 
     @Override
@@ -86,9 +85,12 @@ public class SlickStateSinglePlayer extends BasicGameState
         container.getInput().removeKeyListener(singlePlayerKeyListener);
     }
 
+    
+    
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException
     {
+        System.out.println("Entering SinglePlayer");
         this.gameOverMenu = null;
         this.paused = false;
         pauseMenu = new InGameMenuNew(container, game, "Paused");
@@ -111,14 +113,14 @@ public class SlickStateSinglePlayer extends BasicGameState
         singlePlayerKeyListener = new SinglePlayerKeyListener(this);
 
         container.getInput().addMouseListener(singlePlayerMouseListener);
-        container.getInput().addKeyListener(singlePlayerKeyListener);
+        container.getInput().addKeyListener(singlePlayerKeyListener);        
     }
 
+    
+    
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
     {
-        //clears
-        g.clear();
         //backgrond
         g.setBackground(Color.black);
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
@@ -128,11 +130,16 @@ public class SlickStateSinglePlayer extends BasicGameState
         g.resetTransform();
         pauseMenu.render(g, paused);
         gameOverMenu.render(g, spMatch.isMatchOver());
+        prev = container.getTime();
     }
 
+    private long prev = System.currentTimeMillis();
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
-    {
+    {                       
+        System.out.println("Real Dlta: " + (container.getTime() - prev) + " reported " + delta);        
+        delta = (int)(container.getTime() - prev);
+        prev = container.getTime();
         MainApp.musicPlayer.playGameMusic();
         this.gameOverMenu.update();
         this.pauseMenu.update();
@@ -145,8 +152,12 @@ public class SlickStateSinglePlayer extends BasicGameState
             spMatch.update(container.getInput(), delta);
             camera.update(tankUser.getHitBox());
         }
+        else
+        {
+//            System.out.println("Delta: " + delta + " Val: " + container.getFPS() * delta);
+        }
 
-        MainApp.screenManager.update(container.getInput());        
+        MainApp.screenManager.update(container.getInput());
     }
 
     /**
@@ -154,28 +165,36 @@ public class SlickStateSinglePlayer extends BasicGameState
      */
     public void togglePaused()
     {
-        if(!this.spMatch.isMatchOver())
-        this.paused = !this.paused;
+        if (!this.spMatch.isMatchOver())
+        {
+            this.paused = !this.paused;
+        }
     }
-    
+
     /**
      * Adds zoom to the camera.
+     *
      * @param amount
      */
     public void addZoom(float amount)
     {
-        if(!this.paused && !this.spMatch.isMatchOver())
-        this.camera.addZoom(amount);
+        if (!this.paused && !this.spMatch.isMatchOver())
+        {
+            this.camera.addZoom(amount);
+        }
     }
-    
+
     /**
      * set zoom of the camera.
+     *
      * @param amount
      */
     public void setZoom(float amount)
     {
-        if(!this.paused && !this.spMatch.isMatchOver())
-        this.camera.setZoom(amount);
+        if (!this.paused && !this.spMatch.isMatchOver())
+        {
+            this.camera.setZoom(amount);
+        }
     }
 
 }

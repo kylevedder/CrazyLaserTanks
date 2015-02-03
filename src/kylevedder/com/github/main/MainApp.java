@@ -23,8 +23,11 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MainApp extends StateBasedGame
 {
 
-    public static final int NUM_COLLISION_UPDATES = 16;
+    public static final int NUM_COLLISION_UPDATES = 16;        
 
+    public static final int MAX_DELTA = 20;
+    public static final int MIN_DELTA = 10;
+    
     public static AppGameContainer app;
 
     public static MusicPlayer musicPlayer = null;
@@ -53,9 +56,10 @@ public class MainApp extends StateBasedGame
         app.setMouseGrabbed(false);
         app.setVSync(true);
         app.setTargetFrameRate(60);
+        app.setAlwaysRender(true);        
         app.setSmoothDeltas(true);
-        app.setShowFPS(true);
-        screenManager = new ScreenManager(app, false);
+        app.setShowFPS(true);        
+        screenManager = new ScreenManager(app, false);        
         app.start();
         return app;
     }

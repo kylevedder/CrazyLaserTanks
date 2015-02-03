@@ -104,7 +104,7 @@ public class TankEntity extends BaseEntity
     protected void addTurretAngle(float deltaTurretAngle, int delta)
     {
         float cleanDeltaTurret = Utils.wrapAngleDelta(deltaTurretAngle);
-        float turretRateCap = this.TURRET_TURN_RATE / (1000 / delta);
+        float turretRateCap = (delta > 0)?this.TURRET_TURN_RATE / (1000 / delta) : 0;
         this.turretAngle = Utils.wrapAngle(this.turretAngle, Utils.clampFloat(cleanDeltaTurret, -turretRateCap, turretRateCap));
     }
 
