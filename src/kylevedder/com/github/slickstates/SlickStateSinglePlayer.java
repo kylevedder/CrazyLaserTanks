@@ -33,7 +33,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class SlickStateSinglePlayer extends BasicGameState
 {
 
-    public static final int ID = 1;
+    public static final int ID = SlickStatesIDLookup.SINGLE_PLAYER;
 
     public static final int WORLD_WIDTH = 40;
     public static final int WORLD_HEIGHT = 40;
@@ -64,6 +64,7 @@ public class SlickStateSinglePlayer extends BasicGameState
 
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
     private SinglePlayerKeyListener singlePlayerKeyListener = null;
+    
 
     @Override
     public int getID()
@@ -74,7 +75,21 @@ public class SlickStateSinglePlayer extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
-        System.out.println("Init SinglePlayer");
+                
+    }   
+
+    @Override
+    public void leave(GameContainer container, StateBasedGame game) throws SlickException
+    {
+        super.leave(container, game);
+        //remove key listeners
+        container.getInput().removeMouseListener(singlePlayerMouseListener);
+        container.getInput().removeKeyListener(singlePlayerKeyListener);                        
+    }
+
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException
+    {
         this.paused = false;
         menu = new InGameMenuNew(container, game, "Paused");        
         camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.screenManager);
@@ -97,7 +112,11 @@ public class SlickStateSinglePlayer extends BasicGameState
         container.getInput().addMouseListener(singlePlayerMouseListener);
         container.getInput().addKeyListener(singlePlayerKeyListener);
     }
+    
+    
 
+    
+    
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
     {

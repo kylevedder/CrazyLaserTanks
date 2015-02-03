@@ -5,16 +5,11 @@
  */
 package kylevedder.com.github.main;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.slickstates.SlickStateMainMenu;
 import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
 import org.newdawn.slick.state.StateBasedGame;
@@ -73,6 +68,6 @@ public class MainApp extends StateBasedGame
     {
         addState(new SlickStateMainMenu());
         addState(new SlickStateSinglePlayer());
-    }
+    }    
 
 }

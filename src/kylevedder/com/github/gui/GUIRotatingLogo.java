@@ -23,7 +23,7 @@ public class GUIRotatingLogo
     private int timePassed = 0;
     
     private final float ANGLE_MULTIPLIER = 10f;
-    private final int FOLLOWER_TIME_SPACING = 100;
+    private final int FOLLOWER_TIME_SPACING = 55;
     
     private final int LOOP_TIME_MILLIS;
     private final int LOGO_Y_LOCAL;

@@ -21,7 +21,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class SlickStateMainMenu extends BasicGameState
 {
 
-    public static final int ID = 0;
+    public static final int ID = SlickStatesIDLookup.MAIN_MENU;
     
     private final int LOGO_NUM_FRAMES = 4;
     private final int LOGO_UPDATE_MILLIS = 2000;
@@ -39,10 +39,17 @@ public class SlickStateMainMenu extends BasicGameState
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
     {
-        System.out.println("Init MainMenu");
         this.logo = new GUIRotatingLogo("images/title/full.png", "images/title/wire_frame.png", LOGO_NUM_FRAMES, LOGO_UPDATE_MILLIS, LOGO_Y_POS);
-        this.menu = new MainMenu(container, game);
+        this.menu = new MainMenu(container, game);      
     }
+
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException
+    {
+        super.enter(container, game);        
+    }
+    
+    
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
