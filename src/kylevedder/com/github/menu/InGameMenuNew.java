@@ -20,7 +20,7 @@ import org.newdawn.slick.SlickException;
  *
  * @author Kyle
  */
-public class InGameMenu extends BaseMenu
+public class InGameMenuNew extends BaseMenu
 {
 
     private GUIButton exitButton = null;
@@ -29,7 +29,7 @@ public class InGameMenu extends BaseMenu
     private GameContainer gc;
     private StateManager stateManager = null;
 
-    public InGameMenu(GameContainer gc, StateManager stateManager, String title) throws SlickException
+    public InGameMenuNew(GameContainer gc, StateManager stateManager, String title) throws SlickException
     {
         super(gc, stateManager);
         this.stateManager = stateManager;

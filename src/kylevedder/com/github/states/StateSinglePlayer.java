@@ -13,7 +13,7 @@ import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.gui.FontLoader;
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
-import kylevedder.com.github.menu.InGameMenu;
+import kylevedder.com.github.menu.InGameMenuNew;
 import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.reference.Reference;
@@ -59,7 +59,7 @@ public class StateSinglePlayer implements BasicState
 
     public boolean paused = false;
 
-    private InGameMenu menu = null;
+    private InGameMenuNew menu = null;
 
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
     private SinglePlayerKeyListener singlePlayerKeyListener = null;
@@ -72,7 +72,7 @@ public class StateSinglePlayer implements BasicState
     public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
     {
         this.paused = false;
-        menu = new InGameMenu(gc, stateManager, "Paused");
+        menu = new InGameMenuNew(gc, stateManager, "Paused");
         this.fontLoader = new FontLoader(Reference.MAIN_FONT, 32f);
         this.musicPlayer = musicPlayer;
         this.musicPlayer.startGameMusic();
