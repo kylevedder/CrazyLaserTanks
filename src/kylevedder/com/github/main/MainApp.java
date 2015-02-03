@@ -55,11 +55,13 @@ public class MainApp extends StateBasedGame
         app.setDisplayMode(ScreenManager.WINDOWED_SCREEN_WIDTH, ScreenManager.WINDOWED_SCREEN_HEIGHT, false);
         app.setMouseGrabbed(false);
         app.setVSync(true);
-        app.setTargetFrameRate(60);
-        app.setAlwaysRender(true);        
+        app.setTargetFrameRate(60);        
         app.setSmoothDeltas(true);
         app.setShowFPS(true);        
         app.setVerbose(true);
+        app.setAlwaysRender(false);
+        if(app.supportsMultiSample())
+            app.setMultiSample(2);
         screenManager = new ScreenManager(app, false);        
         app.start();
         return app;

@@ -17,8 +17,8 @@ import org.newdawn.slick.SlickException;
 public class ScreenManager
 {
 
-    public static final int WINDOWED_SCREEN_WIDTH = 640;
-    public static final int WINDOWED_SCREEN_HEIGHT = 480;    
+    public static final int WINDOWED_SCREEN_WIDTH = 1024;
+    public static final int WINDOWED_SCREEN_HEIGHT = 576;    
     
     private int currentResWidth = WINDOWED_SCREEN_WIDTH;
     private int currentResHeight = WINDOWED_SCREEN_HEIGHT;

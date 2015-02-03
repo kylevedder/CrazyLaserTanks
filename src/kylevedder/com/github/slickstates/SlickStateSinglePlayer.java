@@ -50,7 +50,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     private float tankSpeed = 0;
 
     private long prevUpdateTime = 0;//placeholder value
-    
+
     public Camera camera = null;
     public ObjectRegister register = null;
     public GroundHolder ground = null;
@@ -65,7 +65,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     private InGameMenuNew gameOverMenu = null;
 
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
-    private SinglePlayerKeyListener singlePlayerKeyListener = null;        
+    private SinglePlayerKeyListener singlePlayerKeyListener = null;
 
     @Override
     public int getID()
@@ -75,8 +75,8 @@ public class SlickStateSinglePlayer extends BasicGameState
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException
-    {        
-        
+    {
+
     }
 
     @Override
@@ -88,11 +88,9 @@ public class SlickStateSinglePlayer extends BasicGameState
         container.getInput().removeKeyListener(singlePlayerKeyListener);
     }
 
-    
-    
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException
-    {                
+    {
         this.gameOverMenu = null;
         this.paused = false;
         pauseMenu = new InGameMenuNew(container, game, "Paused");
@@ -115,13 +113,13 @@ public class SlickStateSinglePlayer extends BasicGameState
         singlePlayerKeyListener = new SinglePlayerKeyListener(this);
 
         container.getInput().addMouseListener(singlePlayerMouseListener);
-        container.getInput().addKeyListener(singlePlayerKeyListener);                
+        container.getInput().addKeyListener(singlePlayerKeyListener);
         prevUpdateTime = System.currentTimeMillis();
-    }    
-    
+    }
+
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
-    {        
+    {
         //backgrond
         g.setBackground(Color.black);
         g.translate(-camera.getRenderOffsetX(), -camera.getRenderOffsetY());
@@ -138,26 +136,41 @@ public class SlickStateSinglePlayer extends BasicGameState
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
     {
         //set to true delta (THANKS SLICK!!! Your deltas are bad and you should feel bad!!!)
-        delta = (int)(System.currentTimeMillis() - prevUpdateTime);
+        delta = (int) (System.currentTimeMillis() - prevUpdateTime);
         prevUpdateTime = System.currentTimeMillis();
+        
+        //pause when container lacks focus
+        if (!container.hasFocus() && !paused && !spMatch.isMatchOver())
+        {
+            paused = true;
+        }
+        
         MainApp.musicPlayer.playGameMusic();
         this.gameOverMenu.update();
         this.pauseMenu.update();
+        
+        //show winner menu
         if (spMatch.isMatchOver())
         {
+            container.setMouseGrabbed(false);
             this.gameOverMenu.setText("Winner: " + spMatch.getVictor());
         }
-        else if (!paused)
+        //paused
+        else if (paused)
         {
+            container.setMouseGrabbed(false);
+            this.gameOverMenu.setText("Paused");            
+        }
+        //play game
+        else
+        {
+            container.setMouseGrabbed(true);
             spMatch.update(container.getInput(), delta);
             camera.update(tankUser.getHitBox());
         }
-        else
-        {
-//            System.out.println("Delta: " + delta + " Val: " + container.getFPS() * delta);
-        }
 
         MainApp.screenManager.update(container.getInput());
+
     }
 
     /**
