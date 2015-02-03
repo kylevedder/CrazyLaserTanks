@@ -29,7 +29,7 @@ public class InGameMenu extends BaseMenu
     private GameContainer gc;
     private StateManager stateManager = null;
 
-    public InGameMenu(GameContainer gc, StateManager stateManager) throws SlickException
+    public InGameMenu(GameContainer gc, StateManager stateManager, String title) throws SlickException
     {
         super(gc, stateManager);
         this.stateManager = stateManager;
@@ -41,7 +41,7 @@ public class InGameMenu extends BaseMenu
         this.exitButton = new GUIButton(this.gc, gc.getWidth() / 2 - this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2, this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, this.BUTTON_HEIGHT, exitContent);
         this.mainMenuButton = new GUIButton(this.gc, gc.getWidth() / 2 + this.BUTTON_WIDTH / 2 + this.BUTTON_HORZ_SPACING / 2, gc.getHeight() / 2, this.BUTTON_WIDTH / 2 - this.BUTTON_HORZ_SPACING / 2, this.BUTTON_HEIGHT, mainMenuContent);
 
-        fontLoader.setColor(Color.magenta);
+        fontLoader.setColor(Color.magenta);        
 
         this.exitButton.setFont(fontLoader.getFont(), fontLoader.getFont());
         this.mainMenuButton.setFont(fontLoader.getFont(), fontLoader.getFont());
@@ -54,7 +54,6 @@ public class InGameMenu extends BaseMenu
     /**
      * Updates the menu position.
      */
-
     @Override
     public void update() throws SlickException
     {

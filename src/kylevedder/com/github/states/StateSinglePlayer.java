@@ -72,7 +72,7 @@ public class StateSinglePlayer implements BasicState
     public void init(GameContainer gc, StateManager stateManager, MusicPlayer musicPlayer) throws SlickException
     {
         this.paused = false;
-        menu = new InGameMenu(gc, stateManager);
+        menu = new InGameMenu(gc, stateManager, "Paused");
         this.fontLoader = new FontLoader(Reference.MAIN_FONT, 32f);
         this.musicPlayer = musicPlayer;
         this.musicPlayer.startGameMusic();
