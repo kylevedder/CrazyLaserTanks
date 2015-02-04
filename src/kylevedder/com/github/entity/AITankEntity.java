@@ -51,7 +51,7 @@ public class AITankEntity extends TankEntity
 
                 this.updateTurret(target, delta);
                 this.updateAnimation(Utils.wrapAngleDelta(this.hitBox.getAngle() - prevAngle), delta);
-                this.updateShoot();
+                this.updateShoot(target);
 
             }
         }
@@ -138,9 +138,9 @@ public class AITankEntity extends TankEntity
     /**
      * Updates the firing
      */
-    private void updateShoot()
+    private void updateShoot(TankEntity target)
     {
-        if (Math.abs(this.pastTurretUpdateDelta) <= this.SHOOT_ANGLE_OFF_THRESHOLD)
+        if (Math.abs(this.pastTurretUpdateDelta) <= this.SHOOT_ANGLE_OFF_THRESHOLD && this.register.canSee(this, target))
         {
             this.fire();
         }

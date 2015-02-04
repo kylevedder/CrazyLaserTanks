@@ -28,7 +28,10 @@ public class GroundHolder
         ground = new BaseGround[width][height];
         initGround();
     }
-
+    
+    /**
+     * Generates a new ground for the game to use.
+     */
     private void initGround()
     {
         for (int x = 0; x < this.width; x++)
@@ -47,6 +50,17 @@ public class GroundHolder
             }
         }
     }
+
+    /**
+     * Gets the base array for the ground
+     * @return 
+     */
+    public BaseGround[][] getGroundArray()
+    {
+        return ground;
+    }
+    
+    
 
     /**
      * Converts a given float x and y into ground tile coords. Then takes all

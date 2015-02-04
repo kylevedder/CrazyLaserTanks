@@ -10,6 +10,7 @@ import kylevedder.com.github.entity.BaseEntity;
 import kylevedder.com.github.ground.BaseGround;
 import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.CenteredRectangle;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Shape;
 
 /**
@@ -37,8 +38,10 @@ public class ObjectRegister
      */
     public void add(BaseEntity o)
     {
-        if(o != null)
-        this.objectsList.add(o);
+        if (o != null)
+        {
+            this.objectsList.add(o);
+        }
     }
 
     /**
@@ -116,8 +119,8 @@ public class ObjectRegister
      * Checks to see if an object collides.
      * <p>
      * Note: This method has no way of checking if the passed in object collides
-     * with itself; therefore, this function should only be called by unregistered
-     * items.
+     * with itself; therefore, this function should only be called by
+     * unregistered items.
      * </p>
      *
      * @param shape - Slick shape to collide with.
@@ -125,7 +128,7 @@ public class ObjectRegister
      * @return - BaseEntity of the collision, or null if none found
      */
     public BaseEntity checkCollisionWithEntity(Shape shape, BaseEntity pointer)
-    {        
+    {
         if (shape != null)
         {
             for (BaseEntity objectItem : objectsList)
@@ -141,6 +144,7 @@ public class ObjectRegister
 
     /**
      * Checks if object collides with the ground
+     *
      * @param shape
      * @return - boolean stating if collides
      */
@@ -150,12 +154,50 @@ public class ObjectRegister
         {
             ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(shape.getCenterX(), shape.getCenterY(), 4);
             for (BaseGround ground : tiles)
-            { 
+            {
                 if ((ground.getHitBox().getPolygon()).intersects(shape))
                 {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    /**
+     * Checks to establish a line of vision between two entities.
+     * @param entity1
+     * @param entity2
+     * @return 
+     */
+    public boolean canSee(BaseEntity entity1, BaseEntity entity2)
+    {
+        if (entity1 != null && entity2 != null && ground != null)
+        {
+            Line visionLine = new Line(entity1.getCenterX(), entity1.getCenterY(), entity2.getCenterX(), entity2.getCenterY());
+            //check all ground
+            for (BaseGround[] groundRow : ground.getGroundArray())
+            {
+                for (BaseGround ground : groundRow)
+                {
+                    if ( ground.isCollidable() && (ground.getHitBox().getPolygon()).intersects(visionLine))
+                    {
+                        return false;
+                    }
+                }
+            }
+            
+            //check all entities
+            for (BaseEntity objectItem : objectsList)
+            {
+                if (objectItem != entity1 && objectItem != entity2 && (objectItem.getHitBox().getPolygon()).intersects(visionLine))
+                {
+                    return false;
+                }
+            }
+            
+            //didn't fail the above states, so must be true
+            return true;
         }
         return false;
     }
@@ -263,8 +305,7 @@ public class ObjectRegister
             {
                 tentativeHitBox, finalVector
             };
-        }
-        //no collision
+        } //no collision
         else
         {
             //
