@@ -21,6 +21,8 @@ import org.newdawn.slick.Input;
 public class AITankEntity extends TankEntity
 {
 
+    private int flipSpeedVal = 1;//pos or neg 1;
+    private int flipAngleVal = 0;//in degrees
     private Team enemyTeam = null;
     private float pastTurretUpdateDelta = 0f;
     private final float SHOOT_ANGLE_OFF_THRESHOLD = 0.5f;
@@ -91,6 +93,16 @@ public class AITankEntity extends TankEntity
 
             //regardless of if at acceptable angle to drive, turn toward the target
             this.setVector(tankSpeed, desiredAngle, delta);
+
+            //check to see if vector will collide
+            CenteredRectangle tenitiveHitbox = new CenteredRectangle(hitBox);
+            //update tenitiveHitbox to new location
+            tenitiveHitbox.updateDelta(this.vector.getXComp(), this.vector.getYComp(), this.vector.getAngle() - tenitiveHitbox.getAngle());
+            //if collide, flip speed and angle
+            if (register.checkCollision(tenitiveHitbox, this.hitBox))
+            {
+                System.out.println("AI Collide");
+            }                                    
         }
         else
         {
