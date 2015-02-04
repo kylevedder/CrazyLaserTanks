@@ -150,7 +150,7 @@ public class ObjectRegister
         {
             ArrayList<BaseGround> tiles = ground.getCollidableGroundTiles(shape.getCenterX(), shape.getCenterY(), 4);
             for (BaseGround ground : tiles)
-            {
+            { 
                 if ((ground.getHitBox().getPolygon()).intersects(shape))
                 {
                     return true;

@@ -139,8 +139,6 @@ public class UserTankEntity extends TankEntity
     public void renderHelpers(Graphics g)
     {
         super.renderHelpers(g); //To change body of generated methods, choose Tools | Templates.        
-        g.drawOval(mouseX - 8, mouseY - 8, 16, 16);
-        g.drawOval(mouseX - 12, mouseY - 12, 24, 24);
     }
 
 }

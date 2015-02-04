@@ -7,6 +7,7 @@ package kylevedder.com.github.slickstates;
 
 import kylevedder.com.github.controlls.SinglePlayerKeyListener;
 import kylevedder.com.github.controlls.SinglePlayerMouseListener;
+import kylevedder.com.github.cursor.CursorShoot;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
@@ -63,6 +64,8 @@ public class SlickStateSinglePlayer extends BasicGameState
 
     private InGameMenuNew pauseMenu = null;
     private InGameMenuNew gameOverMenu = null;
+    
+    private CursorShoot cursor = null;
 
     private SinglePlayerMouseListener singlePlayerMouseListener = null;
     private SinglePlayerKeyListener singlePlayerKeyListener = null;
@@ -93,6 +96,9 @@ public class SlickStateSinglePlayer extends BasicGameState
     {
         this.gameOverMenu = null;
         this.paused = false;
+        
+        cursor = new CursorShoot(container.getInput());
+        
         pauseMenu = new InGameMenuNew(container, game, "Paused");
         gameOverMenu = new InGameMenuNew(container, game, "Winner: None");
         camera = new Camera(PLAYER_START_X, PLAYER_START_Y, 1f, MainApp.screenManager);
@@ -127,7 +133,8 @@ public class SlickStateSinglePlayer extends BasicGameState
         ground.render(g, camera);
         spMatch.render(g);
         g.resetTransform();
-        pauseMenu.render(g, paused);
+        cursor.render();
+        pauseMenu.render(g, paused);        
         gameOverMenu.render(g, spMatch.isMatchOver());
 
     }
@@ -167,6 +174,7 @@ public class SlickStateSinglePlayer extends BasicGameState
             container.setMouseGrabbed(true);
             spMatch.update(container.getInput(), delta);
             camera.update(tankUser.getHitBox());
+            cursor.update();
         }
 
         MainApp.screenManager.update(container.getInput());
