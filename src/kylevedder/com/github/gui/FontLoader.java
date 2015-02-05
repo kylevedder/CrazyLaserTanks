@@ -24,18 +24,28 @@ import org.newdawn.slick.util.ResourceLoader;
 public class FontLoader
 {
 
+    private int NUM_RETRYS = 5;
     private UnicodeFont uFont = null;
     private Font awtFont = null;
     private float size = 0f;
-    
+
     private Color color = null;
 
     @SuppressWarnings("unchecked")//STFU about the add ColorEffect
     public FontLoader(String fontPath, float defaultSize)
     {
         this.size = defaultSize;
-        InputStream inputStream = ResourceLoader.getResourceAsStream(fontPath);
-        
+        InputStream inputStream = null;
+        retry:
+        for (int i = 0; i < NUM_RETRYS; i++)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(fontPath);
+            if (inputStream != null)
+            {
+                break retry;
+            }
+        }
+
         color = Color.BLACK;
         try
         {
@@ -96,10 +106,11 @@ public class FontLoader
             return null;
         }
     }
-    
+
     /**
      * Sets the font color
-     * @param color 
+     *
+     * @param color
      */
     @SuppressWarnings("unchecked")//STFU about the add ColorEffect
     public void setColor(Color color)
@@ -107,7 +118,7 @@ public class FontLoader
         this.color = color;
         try
         {
-            this.uFont = new UnicodeFont(awtFont.deriveFont(this.size));            
+            this.uFont = new UnicodeFont(awtFont.deriveFont(this.size));
             this.uFont.getEffects().add(new ColorEffect(color));
             this.uFont.addAsciiGlyphs();
             this.uFont.loadGlyphs();
@@ -120,15 +131,16 @@ public class FontLoader
 
     /**
      * Sets the font color.
+     *
      * @param font
      * @param color
-     * @return 
+     * @return
      */
-     @SuppressWarnings("unchecked")//STFU about the add ColorEffect
+    @SuppressWarnings("unchecked")//STFU about the add ColorEffect
     public static UnicodeFont modifyFontColor(UnicodeFont font, java.awt.Color color)
     {
         try
-        {            
+        {
             font = new UnicodeFont(font.getFont());
             font.getEffects().add(new ColorEffect(color));
             font.addAsciiGlyphs();

@@ -21,8 +21,7 @@ import org.newdawn.slick.Input;
 public class AITankEntity extends TankEntity
 {
 
-    private int flipSpeedVal = 1;//pos or neg 1;
-    private int flipAngleVal = 0;//in degrees
+    private AIDriveState driveState = null;
     private Team enemyTeam = null;
     private float pastTurretUpdateDelta = 0f;
     private final float SHOOT_ANGLE_OFF_THRESHOLD = 0.5f;
@@ -34,6 +33,7 @@ public class AITankEntity extends TankEntity
         super(x, y, angle, register);
         this.enemyTeam = enemyTeam;
         pastTurretUpdateDelta = 0f;
+        driveState = AIDriveState.DRIVE_TO_TARGET;
     }
 
     @Override
@@ -79,30 +79,41 @@ public class AITankEntity extends TankEntity
             float deltaAngle = Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle());
 
             float driveRate = (delta > 0) ? this.getDriveSpeed() / (1000 / delta) : 0;
-
-            //if at acceptable angle to drive
-            if (Math.abs(deltaAngle) <= NO_DRIVE_ANGLE_OFF_THRESHOLD)
+            switch (this.driveState)
             {
+                case DRIVE_TO_TARGET:
 
-                if (Math.abs(distToTarget) >= this.DRIVE_TO_DIST)//drive to target
-                {
-                    tankSpeed = driveRate;
-                }
+                    //if at acceptable angle to drive
+                    if (Math.abs(deltaAngle) <= NO_DRIVE_ANGLE_OFF_THRESHOLD)
+                    {
 
+                        if (Math.abs(distToTarget) >= this.DRIVE_TO_DIST)//drive to target
+                        {
+                            tankSpeed = driveRate;
+                        }
+
+                    }
+
+                    //regardless of if at acceptable angle to drive, turn toward the target
+                    this.setVector(tankSpeed, desiredAngle, delta);
+
+                    //check to see if vector will collide
+                    CenteredRectangle tenitiveHitbox = new CenteredRectangle(hitBox);
+                    //update tenitiveHitbox to new location
+                    tenitiveHitbox.updateDelta(this.vector.getXComp(), this.vector.getYComp(), this.vector.getAngle() - tenitiveHitbox.getAngle());
+                    //if collide, go to collide mode
+                    if (register.checkCollision(tenitiveHitbox, this.hitBox))
+                    {
+                        this.driveState = AIDriveState.BACK_AWAY_FROM_COLLISION;
+                    }
+                    break;                    
+                case BACK_AWAY_FROM_COLLISION:
+                    
+                    break;
+                case CIRCLE_TARGET:
+                    break;
             }
 
-            //regardless of if at acceptable angle to drive, turn toward the target
-            this.setVector(tankSpeed, desiredAngle, delta);
-
-            //check to see if vector will collide
-            CenteredRectangle tenitiveHitbox = new CenteredRectangle(hitBox);
-            //update tenitiveHitbox to new location
-            tenitiveHitbox.updateDelta(this.vector.getXComp(), this.vector.getYComp(), this.vector.getAngle() - tenitiveHitbox.getAngle());
-            //if collide, flip speed and angle
-            if (register.checkCollision(tenitiveHitbox, this.hitBox))
-            {
-                System.out.println("AI Collide");
-            }                                    
         }
         else
         {
@@ -179,4 +190,10 @@ public class AITankEntity extends TankEntity
         return closest;
     }
 
+}
+
+enum AIDriveState
+{
+
+    DRIVE_TO_TARGET, BACK_AWAY_FROM_COLLISION, CIRCLE_TARGET
 }
