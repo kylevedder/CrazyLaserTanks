@@ -108,7 +108,10 @@ public class AITankEntity extends TankEntity
                     }
                     break;                    
                 case BACK_AWAY_FROM_COLLISION:
-                    
+                    if (!register.checkCollision(this.hitBox, this.hitBox))
+                    {
+                        this.driveState = AIDriveState.DRIVE_TO_TARGET;
+                    }
                     break;
                 case CIRCLE_TARGET:
                     break;
