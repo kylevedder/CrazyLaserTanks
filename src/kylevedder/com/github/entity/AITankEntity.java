@@ -78,7 +78,7 @@ public class AITankEntity extends TankEntity
 
             float deltaAngle = Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle());
 
-            float driveRate = (delta > 0) ? this.getDriveSpeed() / (1000 / delta) : 0;
+            float driveRate = (delta > 0) ? this.getDriveSpeed() / 1000 * delta : 0;
             switch (this.driveState)
             {
                 case DRIVE_TO_TARGET:
@@ -105,12 +105,13 @@ public class AITankEntity extends TankEntity
                     if (register.checkCollision(tenitiveHitbox, this.hitBox))
                     {
                         this.driveState = AIDriveState.BACK_AWAY_FROM_COLLISION;
+                        this.vector.setSpeed(0);
                     }
                     break;                    
                 case BACK_AWAY_FROM_COLLISION:
                     if (!register.checkCollision(this.hitBox, this.hitBox))
                     {
-                        this.driveState = AIDriveState.DRIVE_TO_TARGET;
+                        this.driveState = AIDriveState.DRIVE_TO_TARGET;                        
                     }
                     break;
                 case CIRCLE_TARGET:
@@ -133,7 +134,7 @@ public class AITankEntity extends TankEntity
      */
     private void setVector(float speed, float angle, int delta)
     {
-        float turnRate = (delta > 0) ? this.getTurnRate() / (1000 / delta) : 0;
+        float turnRate = (delta > 0) ? this.getTurnRate() / 1000 * delta : 0;
         float deltaAngle = Utils.wrapAngleDelta(angle - this.vector.getAngle());
         deltaAngle = Utils.clampFloat(deltaAngle, -turnRate, turnRate);
 

@@ -104,22 +104,22 @@ public class UserTankEntity extends TankEntity
             //drive forward
             if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W))
             {
-                tankSpeed += this.getDriveSpeed() / (1000 / delta);
+                tankSpeed += this.getDriveSpeed() / 1000 * delta;
             }
             //drive forward
             if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S))
             {
-                tankSpeed -= this.getDriveSpeed() / (1000 / delta);
+                tankSpeed -= this.getDriveSpeed() / 1000 * delta;
             }
             //turn left
             if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A))
             {
-                tankAngleAppend -= this.getTurnRate() / (1000 / delta);
+                tankAngleAppend -= this.getTurnRate() / 1000 * delta;
             }
             //turn right
             if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D))
             {
-                tankAngleAppend += this.getTurnRate() / (1000 / delta);
+                tankAngleAppend += this.getTurnRate() / 1000 * delta;
             }
 
             //speed multiplier
