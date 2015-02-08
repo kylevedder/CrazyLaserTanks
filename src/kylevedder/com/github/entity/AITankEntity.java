@@ -15,7 +15,7 @@ import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Input;
 
 /**
- * Tank Entity
+ *
  *
  * @author Kyle
  */
