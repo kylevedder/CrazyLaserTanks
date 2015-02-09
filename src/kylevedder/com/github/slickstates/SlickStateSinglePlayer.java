@@ -45,7 +45,7 @@ public class SlickStateSinglePlayer extends BasicGameState
     final float PLAYER_START_Y = 500f;
     final float PLAYER_START_ANGLE = 0f;
 
-    final int TEAM_SIZE = 4;
+    final int TEAM_SIZE = 2;
 
     private float tankAngleAppend = 0;
     private float tankSpeed = 0;

@@ -56,26 +56,26 @@ public class SinglePlayerMatch
         //setup your team
         for (int i = 0; i < this.teamSize - 1; i++)
         {
-            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/,objRegister, this.match.opposingTeam);
+            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.yourTeam, this.match.opposingTeam);
             match.addToYourTeam(yourEntity);
             this.yourTeam.add(yourEntity);
-        }        
+        }
         //setup opposing team
         for (int i = 0; i < this.teamSize; i++)
         {
 
-            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.yourTeam);
+            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.opposingTeam, this.match.yourTeam);
             match.addToOpposingTeam(opposingEntity);
             this.opposingTeam.add(opposingEntity);
 
         }
-        
-        for(TankEntity e: yourTeam)
+
+        for (TankEntity e : yourTeam)
         {
             objRegister.add(e);
         }
-        
-        for(TankEntity e: opposingTeam)
+
+        for (TankEntity e : opposingTeam)
         {
             objRegister.add(e);
         }
@@ -90,14 +90,14 @@ public class SinglePlayerMatch
     public void update(Input input, int delta)
     {
         this.player.update(input, delta);
-        for(TankEntity e: yourTeam)
+        for (TankEntity e : yourTeam)
         {
             e.update(input, delta);
         }
-        for(TankEntity e: opposingTeam)
-        {
-            e.update(input, delta);
-        }
+//        for(TankEntity e: opposingTeam)
+//        {
+//            e.update(input, delta);
+//        }
     }
 
     /**
@@ -106,43 +106,45 @@ public class SinglePlayerMatch
      * @param g
      */
     public void render(Graphics g)
-    {                
-        for(TankEntity e: opposingTeam)
+    {
+        for (TankEntity e : opposingTeam)
         {
             e.render();
             e.renderHelpers(g);
-        }    
-        for(TankEntity e: yourTeam)
+        }
+        for (TankEntity e : yourTeam)
         {
             e.render();
             e.renderHelpers(g);
-        }        
+        }
         this.player.render();
         this.player.renderHelpers(g);
-        
-        for(TankEntity e: opposingTeam)
+
+        for (TankEntity e : opposingTeam)
         {
             e.renderProjectiles();
-        }    
-        for(TankEntity e: yourTeam)
+        }
+        for (TankEntity e : yourTeam)
         {
             e.renderProjectiles();
-        }        
-        this.player.renderProjectiles();        
+        }
+        this.player.renderProjectiles();
     }
-    
+
     /**
      * Checks to see if the match is over.
-     * @return 
+     *
+     * @return
      */
     public boolean isMatchOver()
-    {        
+    {
         return this.match.isMatchOver();
     }
-    
+
     /**
      * Gets the victor of the match.
-     * @return 
+     *
+     * @return
      */
     public String getVictor()
     {
