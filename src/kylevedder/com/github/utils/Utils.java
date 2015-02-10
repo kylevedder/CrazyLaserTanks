@@ -52,6 +52,18 @@ public class Utils
     {
         return (float) Math.toDegrees(Math.atan2(other.getCenterY() - anchor.getCenterY(), other.getCenterX() - anchor.getCenterX())) + 90f;
     }
+    
+    /**
+     * Calculates the angle between the anchor and the other item.
+     *
+     * @param anchor
+     * @param other
+     * @return
+     */
+    public static float calculateAngle(float anchorX, float anchorY, float otherX, float otherY)
+    {
+        return (float) Math.toDegrees(Math.atan2(otherY - anchorY, otherX - anchorX)) + 90f;
+    }
 
     /**
      *

@@ -11,6 +11,7 @@ import kylevedder.com.github.entity.AITankEntity;
 import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.BaseGround;
+import kylevedder.com.github.ground.GroundHolder;
 import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.slickstates.SlickStateSinglePlayer;
 import org.newdawn.slick.Graphics;
@@ -35,20 +36,22 @@ public class SinglePlayerMatch
     ArrayList<TankEntity> opposingTeam;
     UserTankEntity player;
     Random r;
+    GroundHolder gh;
 
     /**
      * Generates all the needed entities for a match.
      *
      * @param teamSize
      */
-    public SinglePlayerMatch(int teamSize, SinglePlayerMatchData match, UserTankEntity player, ObjectRegister objRegister)
+    public SinglePlayerMatch(int teamSize, SinglePlayerMatchData match, UserTankEntity player, ObjectRegister objRegister, GroundHolder gh)
     {
         this.teamSize = teamSize;
         this.match = match;
         this.player = player;
+        this.gh = gh;
         r = new Random(System.currentTimeMillis());
         yourTeam = new ArrayList<TankEntity>();
-        opposingTeam = new ArrayList<TankEntity>();
+        opposingTeam = new ArrayList<TankEntity>();        
 
         AITankEntity yourEntity;
         AITankEntity opposingEntity;
@@ -56,7 +59,7 @@ public class SinglePlayerMatch
         //setup your team
         for (int i = 0; i < this.teamSize - 1; i++)
         {
-            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.yourTeam, this.match.opposingTeam);
+            yourEntity = new AITankEntity(YOUR_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.yourTeam, this.match.opposingTeam, gh);
             match.addToYourTeam(yourEntity);
             this.yourTeam.add(yourEntity);
         }
@@ -64,7 +67,7 @@ public class SinglePlayerMatch
         for (int i = 0; i < this.teamSize; i++)
         {
 
-            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.opposingTeam, this.match.yourTeam);
+            opposingEntity = new AITankEntity(OPPOSING_START_X, TANK_SPACING_Y * (i + 1), r.nextInt(360)/*Random Angle*/, objRegister, this.match.opposingTeam, this.match.yourTeam, gh);
             match.addToOpposingTeam(opposingEntity);
             this.opposingTeam.add(opposingEntity);
 

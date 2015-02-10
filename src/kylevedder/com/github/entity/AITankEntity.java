@@ -6,13 +6,18 @@
 package kylevedder.com.github.entity;
 
 import kylevedder.com.github.ground.BaseGround;
+import kylevedder.com.github.ground.GroundHolder;
+import kylevedder.com.github.pathfinding.PathFindingMap;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.physics.CenteredRectangle;
 import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.physics.Vector;
 import kylevedder.com.github.teams.Team;
 import kylevedder.com.github.utils.Utils;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.util.pathfinding.AStarPathFinder;
+import org.newdawn.slick.util.pathfinding.Path;
 
 /**
  *
@@ -25,31 +30,44 @@ public class AITankEntity extends TankEntity
     private AIDriveState driveState = null;
     private AIDriveState prevDriveState = null;
     private Team enemyTeam = null;
+    private GroundHolder gh;
+    private PathFindingMap pfm;
     private float pastTurretUpdateDelta = 0f;
     private final float SHOOT_ANGLE_OFF_THRESHOLD = 0.5f;
     private final float DRIVE_TO_DIST = BaseGround.GROUND_SIZE * 4f;
     private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 30f;
+    private AStarPathFinder pathFinder;
 
-    public AITankEntity(float x, float y, float angle, ObjectRegister register, Team yourTeam, Team enemyTeam)
+    private int MAX_PATH_LENGTH = 40000000;
+
+    public AITankEntity(float x, float y, float angle, ObjectRegister register, Team yourTeam, Team enemyTeam, GroundHolder gh)
     {
         super(x, y, angle, register);
         this.enemyTeam = enemyTeam;
+        this.gh = gh;
+        this.pfm = gh.getPathFindingMap();
+        pathFinder = new AStarPathFinder(pfm, MAX_PATH_LENGTH, false);
         pastTurretUpdateDelta = 0f;
         this.driveState = (AIDriveState.DRIVE_TO_TARGET);
         prevDriveState = AIDriveState.valueOf(driveState.toString());
     }
 
+    Path path;
+
     @Override
     public void update(Input input, int delta)
     {
+
         TankEntity target = this.getClosestEnemy();
+        path = pathFinder.findPath(null, (int)(this.hitBox.getCenterX()), (int)(this.hitBox.getCenterY()),
+                (int)(target.getCenterX()), (int)(target.getCenterY()));
         if (target != null)
         {
             if (!this.destroyed)
             {
                 float prevAngle = this.hitBox.getAngle();
 
-                this.updateDrive(target, delta);
+                this.updateDriveNew(target, delta, path);
                 Object[] objects = register.updateCollision(this.hitBox, this.vector, MainApp.NUM_COLLISION_UPDATES, delta);
                 this.vector = (Vector) objects[1];
                 this.hitBox = (CenteredRectangle) objects[0];
@@ -66,6 +84,35 @@ public class AITankEntity extends TankEntity
 
     float drivenDistance = 0f;
     int driveDirection = 1;
+
+    private void updateDriveNew(TankEntity target, int delta, Path path)
+    {
+        if (!this.destroyed)
+        {
+            if(path != null)
+            if (path.getLength() > 0)
+            {
+                float driveRate = this.getDriveSpeed() / 1000 * delta;
+                float angle = Utils.calculateAngle(hitBox.getCenterX(), hitBox.getCenterY(), gh.groundXtoEntityX(path.getX(0)), gh.groundYtoEntityY(path.getY(0)));
+                System.out.println(angle);
+                this.vector.setAngle(angle);
+                this.vector.setSpeed(driveRate);
+            }
+        }
+    }
+
+    @Override
+    public void renderHelpers(Graphics g)
+    {
+        super.renderHelpers(g); //To change body of generated methods, choose Tools | Templates.
+        if (path != null)
+        {
+            for (int i = 0; i < path.getLength(); i++)
+            {
+                g.fillOval(gh.groundXtoEntityX(path.getX(i)) - 4, gh.groundYtoEntityY(path.getY(i)) - 4, 8, 8);
+            }
+        }
+    }
 
     /**
      * Updates the driving of the enemy

@@ -5,10 +5,13 @@
  */
 package kylevedder.com.github.ground;
 
+import kylevedder.com.github.pathfinding.PathFindingMap;
 import java.util.ArrayList;
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.pathfinding.PathFindingContext;
+import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 /**
  *
@@ -20,6 +23,7 @@ public class GroundHolder
     private int width;
     private int height;
     BaseGround[][] ground = null;
+    private PathFindingMap pathFindingMap;
 
     public GroundHolder(int width, int height)
     {
@@ -27,8 +31,9 @@ public class GroundHolder
         this.height = height;
         ground = new BaseGround[width][height];
         initGround();
+        pathFindingMap = new PathFindingMap(this);
     }
-    
+
     /**
      * Generates a new ground for the game to use.
      */
@@ -51,16 +56,62 @@ public class GroundHolder
         }
     }
 
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
+    }
+
+    public PathFindingMap getPathFindingMap()
+    {
+        return pathFindingMap;
+    }
+
     /**
      * Gets the base array for the ground
-     * @return 
+     *
+     * @return
      */
     public BaseGround[][] getGroundArray()
     {
         return ground;
     }
+
+    /**
+     * Converts an entity X to a ground X
+     *
+     * @param x
+     * @return
+     */
+    public int entityXtoGroundX(float x)
+    {
+        return Utils.clampInt((int) (x - x % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.width - 1);
+    }
+
+    /**
+     * Converts an entity Y to a ground Y
+     *
+     * @param y
+     * @return
+     */
+    public int entityYtoGroundY(float y)
+    {
+        return Utils.clampInt((int) (y - y % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.height - 1);
+    }
+
+    public float groundYtoEntityY(int y)
+    {
+        return y * BaseGround.GROUND_SIZE + BaseGround.GROUND_SIZE / 2;
+    }
     
-    
+    public float groundXtoEntityX(int x)
+    {
+        return x * BaseGround.GROUND_SIZE + BaseGround.GROUND_SIZE / 2;
+    }
 
     /**
      * Converts a given float x and y into ground tile coords. Then takes all
@@ -104,7 +155,8 @@ public class GroundHolder
             {
                 if (Camera.isVisible(ground[x][y].getHitBox(), camera))
                 {
-                    ground[x][y].render();
+                    ground[x][y].render();     
+                    ground[x][y].renderHelpers(g);
                 }
             }
         }

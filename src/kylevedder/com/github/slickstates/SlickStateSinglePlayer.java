@@ -112,7 +112,7 @@ public class SlickStateSinglePlayer extends BasicGameState
 
         match = new SinglePlayerMatchData("Team 1", "Team 2", tankUser, camera);
         match.addToYourTeam(tankUser);
-        spMatch = new SinglePlayerMatch(TEAM_SIZE, match, tankUser, register);
+        spMatch = new SinglePlayerMatch(TEAM_SIZE, match, tankUser, register, ground);
 
         //setup mouse and keyboard
         singlePlayerMouseListener = new SinglePlayerMouseListener(this);
