@@ -5,7 +5,6 @@
  */
 package kylevedder.com.github.pathfinding;
 
-import kylevedder.com.github.ground.BaseGround;
 import kylevedder.com.github.ground.GroundHolder;
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
@@ -26,13 +25,13 @@ public class PathFindingMap implements TileBasedMap
     @Override
     public int getWidthInTiles()
     {
-        return gh.getWidth() * BaseGround.GROUND_SIZE;
+        return gh.getWidth();
     }
 
     @Override
     public int getHeightInTiles()
     {
-        return gh.getHeight() * BaseGround.GROUND_SIZE;
+        return gh.getHeight();
     }
 
     @Override
@@ -43,7 +42,7 @@ public class PathFindingMap implements TileBasedMap
     @Override
     public boolean blocked(PathFindingContext context, int tx, int ty)
     {
-        return gh.getGroundArray()[gh.entityXtoGroundX(tx)][gh.entityYtoGroundY(ty)].isCollidable();
+        return gh.getGroundArray()[tx][ty].isCollidable();
     }
 
     @Override

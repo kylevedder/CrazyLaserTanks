@@ -38,7 +38,7 @@ public class AITankEntity extends TankEntity
     private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 30f;
     private AStarPathFinder pathFinder;
 
-    private int MAX_PATH_LENGTH = 40000000;
+    private int MAX_PATH_LENGTH = 4000;
 
     public AITankEntity(float x, float y, float angle, ObjectRegister register, Team yourTeam, Team enemyTeam, GroundHolder gh)
     {
@@ -59,8 +59,8 @@ public class AITankEntity extends TankEntity
     {
 
         TankEntity target = this.getClosestEnemy();
-        path = pathFinder.findPath(null, (int)(this.hitBox.getCenterX()), (int)(this.hitBox.getCenterY()),
-                (int)(target.getCenterX()), (int)(target.getCenterY()));
+        path = pathFinder.findPath(null, gh.entityXtoGroundX(this.hitBox.getCenterX()), gh.entityYtoGroundY(this.hitBox.getCenterY()),
+                gh.entityXtoGroundX(target.getCenterX()), gh.entityYtoGroundY(target.getCenterY()));
         if (target != null)
         {
             if (!this.destroyed)
