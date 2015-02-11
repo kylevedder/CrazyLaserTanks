@@ -28,7 +28,7 @@ public class SinglePlayerMatch
     private final float YOUR_START_X = BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
     private final float OPPOSING_START_X = SlickStateSinglePlayer.WORLD_WIDTH * BaseGround.GROUND_SIZE - BaseGround.GROUND_SIZE * IN_FROM_EDGE_POSITIONING;
 
-    private final float TANK_SPACING_Y = BaseGround.GROUND_SIZE * 2f;
+    private final float TANK_SPACING_Y = BaseGround.GROUND_SIZE * 4f;
 
     private int teamSize = 0;
     private SinglePlayerMatchData match;

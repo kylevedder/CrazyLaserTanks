@@ -54,6 +54,11 @@ public class GroundHolder
                 }
             }
         }
+        for (int i = 0; i < 10; i++)
+        {
+            ground[20][i] = new CollideGround(20 * BaseGround.GROUND_SIZE, i * BaseGround.GROUND_SIZE);
+        }
+
     }
 
     public int getWidth()
@@ -89,7 +94,8 @@ public class GroundHolder
      */
     public int entityXtoGroundX(float x)
     {
-        return Utils.clampInt((int) (x - x % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.width - 1);
+        //x % BaseGround.GROUND_SIZE + BaseGround.GROUND_SIZE/2
+        return Utils.clampInt((int) (x + BaseGround.GROUND_SIZE / 2) / BaseGround.GROUND_SIZE, 0, this.width - 1);
     }
 
     /**
@@ -100,17 +106,18 @@ public class GroundHolder
      */
     public int entityYtoGroundY(float y)
     {
-        return Utils.clampInt((int) (y - y % BaseGround.GROUND_SIZE) / BaseGround.GROUND_SIZE, 0, this.height - 1);
+        //
+        return Utils.clampInt((int) (y + BaseGround.GROUND_SIZE / 2) / BaseGround.GROUND_SIZE, 0, this.height - 1);
     }
 
     public float groundYtoEntityY(int y)
     {
-        return y * BaseGround.GROUND_SIZE + BaseGround.GROUND_SIZE / 2;
+        return ground[0][y].getHitBox().getCenterY();
     }
-    
+
     public float groundXtoEntityX(int x)
     {
-        return x * BaseGround.GROUND_SIZE + BaseGround.GROUND_SIZE / 2;
+        return ground[x][0].getHitBox().getCenterX();
     }
 
     /**
@@ -155,7 +162,7 @@ public class GroundHolder
             {
                 if (Camera.isVisible(ground[x][y].getHitBox(), camera))
                 {
-                    ground[x][y].render();     
+                    ground[x][y].render();
                     ground[x][y].renderHelpers(g);
                 }
             }

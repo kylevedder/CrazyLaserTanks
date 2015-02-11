@@ -14,6 +14,7 @@ import kylevedder.com.github.physics.ObjectRegister;
 import kylevedder.com.github.physics.Vector;
 import kylevedder.com.github.teams.Team;
 import kylevedder.com.github.utils.Utils;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
@@ -35,7 +36,7 @@ public class AITankEntity extends TankEntity
     private float pastTurretUpdateDelta = 0f;
     private final float SHOOT_ANGLE_OFF_THRESHOLD = 0.5f;
     private final float DRIVE_TO_DIST = BaseGround.GROUND_SIZE * 4f;
-    private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 30f;
+    private final float NO_DRIVE_ANGLE_OFF_THRESHOLD = 10f;
     private AStarPathFinder pathFinder;
 
     private int MAX_PATH_LENGTH = 4000;
@@ -89,14 +90,28 @@ public class AITankEntity extends TankEntity
     {
         if (!this.destroyed)
         {
-            if(path != null)
-            if (path.getLength() > 0)
+            if (path != null)
             {
-                float driveRate = this.getDriveSpeed() / 1000 * delta;
-                float angle = Utils.calculateAngle(hitBox.getCenterX(), hitBox.getCenterY(), gh.groundXtoEntityX(path.getX(0)), gh.groundYtoEntityY(path.getY(0)));
-                System.out.println(angle);
-                this.vector.setAngle(angle);
-                this.vector.setSpeed(driveRate);
+                if (path.getLength() > 1)
+                {
+                    float tankSpeed = 0;
+                    float driveRate = this.getDriveSpeed() / 1000 * delta;
+                    
+                    float desiredAngle = Utils.calculateAngle(hitBox.getCenterX(), hitBox.getCenterY(), gh.groundXtoEntityX(path.getX(1)), gh.groundYtoEntityY(path.getY(1)));
+                    
+                    float turnRate = this.getTurnRate() / 1000 * delta;
+                    float turnDelta = Utils.clampFloat(Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle()), -turnRate, turnRate);
+                    this.vector.addAngle(turnDelta);
+                    if (Math.abs(Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle())) <= NO_DRIVE_ANGLE_OFF_THRESHOLD)
+                    {
+                        tankSpeed = driveRate;
+                    }
+                    this.vector.setSpeed(tankSpeed);
+                }
+                else
+                {
+                    
+                }
             }
         }
     }
@@ -112,6 +127,9 @@ public class AITankEntity extends TankEntity
                 g.fillOval(gh.groundXtoEntityX(path.getX(i)) - 4, gh.groundYtoEntityY(path.getY(i)) - 4, 8, 8);
             }
         }
+        g.fillOval(this.hitBox.getCenterX() - 5, this.hitBox.getCenterY() - 5, 10, 10);
+        g.setColor(Color.green);
+        gh.getGroundArray()[gh.entityXtoGroundX(hitBox.getCenterX())][gh.entityYtoGroundY(hitBox.getCenterY())].renderHelpers(g);
     }
 
     /**
