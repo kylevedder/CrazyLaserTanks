@@ -8,16 +8,12 @@ package kylevedder.com.github.slickstates;
 import kylevedder.com.github.controlls.SinglePlayerKeyListener;
 import kylevedder.com.github.controlls.SinglePlayerMouseListener;
 import kylevedder.com.github.cursor.CursorShoot;
-import kylevedder.com.github.entity.TankEntity;
 import kylevedder.com.github.entity.UserTankEntity;
 import kylevedder.com.github.ground.GroundHolder;
-import kylevedder.com.github.gui.FontLoader;
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.main.MainApp;
 import kylevedder.com.github.menu.InGameMenuNew;
-import kylevedder.com.github.music.MusicPlayer;
 import kylevedder.com.github.physics.ObjectRegister;
-import kylevedder.com.github.reference.Reference;
 import kylevedder.com.github.teams.SinglePlayerMatch;
 import kylevedder.com.github.teams.SinglePlayerMatchData;
 import org.newdawn.slick.Color;
@@ -107,7 +103,7 @@ public class SlickStateSinglePlayer extends BasicGameState
         tankUser = new UserTankEntity(PLAYER_START_X, PLAYER_START_Y, PLAYER_START_ANGLE, register, camera);
         register.add(tankUser);
 
-        ground = new GroundHolder(WORLD_HEIGHT, WORLD_WIDTH);
+        ground = new GroundHolder(WORLD_WIDTH, WORLD_HEIGHT);
         register.addGround(ground);
 
         match = new SinglePlayerMatchData("Team 1", "Team 2", tankUser, camera);

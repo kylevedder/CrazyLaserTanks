@@ -4,7 +4,7 @@
   <image source="tiles/blockingWall.png" width="64" height="64"/>
   <tile id="0">
    <properties>
-    <property name="collideable" value="true"/>
+    <property name="blocking" value="true"/>
    </properties>
   </tile>
  </tileset>
@@ -12,7 +12,7 @@
   <image source="tiles/ground.png" width="64" height="64"/>
   <tile id="0">
    <properties>
-    <property name="collideable" value="false"/>
+    <property name="blocking" value="false"/>
    </properties>
   </tile>
  </tileset>

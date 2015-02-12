@@ -13,6 +13,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 /**
  *
@@ -28,7 +29,7 @@ public class SlickStateMainMenu extends BasicGameState
     private final int LOGO_Y_POS = 100;
     
     private MainMenu menu = null;
-    private GUIRotatingLogo logo = null;        
+    private GUIRotatingLogo logo = null; 
     
     @Override
     public int getID()

@@ -19,6 +19,8 @@ public abstract class BaseGround extends BaseObject
 {
 
     public static final int GROUND_SIZE = 64;
+    
+    boolean pathable = true;
     Image image = null;
 
     protected void init(float x, float y, float scale, Image image)
@@ -27,6 +29,17 @@ public abstract class BaseGround extends BaseObject
         this.hitBox = new CenteredRectangle(x, y, this.image.getWidth(), this.image.getHeight(), 0);
     }
 
+    /**
+     * Checks to see if this be pathed.
+     * @return 
+     */
+    public boolean isPathable()
+    {
+        return pathable;
+    }
+
+    
+    
     /**
      * Get the width of this object.
      *

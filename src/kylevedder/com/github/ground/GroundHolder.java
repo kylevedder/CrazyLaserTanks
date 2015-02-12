@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import kylevedder.com.github.main.Camera;
 import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 

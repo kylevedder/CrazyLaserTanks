@@ -17,6 +17,7 @@ import kylevedder.com.github.utils.Utils;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 import org.newdawn.slick.util.pathfinding.Path;
 
@@ -53,7 +54,8 @@ public class AITankEntity extends TankEntity
         prevDriveState = AIDriveState.valueOf(driveState.toString());
     }
 
-    Path path;
+    Path path = null;
+    Point driveToPoint = null;
 
     @Override
     public void update(Input input, int delta)
@@ -90,15 +92,41 @@ public class AITankEntity extends TankEntity
     {
         if (!this.destroyed)
         {
-            if (path != null)
+            //drive at target
+            if (this.register.canSee(this, target))
             {
-                if (path.getLength() > 1)
+                float angleToTarget = Utils.calculateAngle(this.hitBox, target.getHitBox());
+                float turnRate = this.getTurnRate() / 1000 * delta;
+                float turnDelta = Utils.clampFloat(Utils.wrapAngleDelta(angleToTarget - this.vector.getAngle()), -turnRate, turnRate);
+
+                float distToTarget = Utils.getDistanceBetween(this.hitBox, target.getHitBox());
+                float driveRate = this.getDriveSpeed() / 1000 * delta;
+                float tankSpeed = 0;
+
+                //if at acceptable angle to drive and not too close to target
+                if (Math.abs(turnDelta) <= NO_DRIVE_ANGLE_OFF_THRESHOLD && Math.abs(distToTarget) >= this.DRIVE_TO_DIST)
                 {
+                    tankSpeed = driveRate;
+                }
+
+                this.vector.setSpeed(tankSpeed);
+                this.vector.addAngle(turnDelta);
+            }
+            //take path
+            else if (path != null)
+            {
+                if (path.getLength() > 0)
+                {                          
                     float tankSpeed = 0;
                     float driveRate = this.getDriveSpeed() / 1000 * delta;
+
+                    if(driveToPoint == null || Math.abs(Utils.getDistanceBetween(hitBox, driveToPoint)) < driveRate)
+                    {
+                        driveToPoint = new Point(gh.groundXtoEntityX(path.getX(1)), gh.groundYtoEntityY(path.getY(1)));
+                    }
                     
-                    float desiredAngle = Utils.calculateAngle(hitBox.getCenterX(), hitBox.getCenterY(), gh.groundXtoEntityX(path.getX(1)), gh.groundYtoEntityY(path.getY(1)));
-                    
+                    float desiredAngle = Utils.calculateAngle(hitBox.getCenterX(), hitBox.getCenterY(), driveToPoint.getCenterX(), driveToPoint.getCenterX());
+
                     float turnRate = this.getTurnRate() / 1000 * delta;
                     float turnDelta = Utils.clampFloat(Utils.wrapAngleDelta(desiredAngle - this.vector.getAngle()), -turnRate, turnRate);
                     this.vector.addAngle(turnDelta);
@@ -110,7 +138,7 @@ public class AITankEntity extends TankEntity
                 }
                 else
                 {
-                    
+
                 }
             }
         }

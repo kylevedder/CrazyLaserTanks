@@ -27,6 +27,18 @@ public class Utils
     {
         return (float) Math.sqrt(Math.pow(c1.getCenterX() - c2.getCenterX(), 2) + Math.pow(c1.getCenterY() - c2.getCenterY(), 2));
     }
+    
+    /**
+     * Calculates the distance between the rect and the point.
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public static float getDistanceBetween(CenteredRectangle c1, Point p1)
+    {
+        return (float) Math.sqrt(Math.pow(c1.getCenterX() - p1.getCenterX(), 2) + Math.pow(c1.getCenterY() - p1.getCenterY(), 2));
+    }
 
     /**
      * Calculates the angle between the anchor and the other item for the
